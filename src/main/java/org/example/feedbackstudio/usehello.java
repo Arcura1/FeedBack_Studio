@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class hello {
+public class usehello {
 
     @Autowired
     private userRepository userRepository;
