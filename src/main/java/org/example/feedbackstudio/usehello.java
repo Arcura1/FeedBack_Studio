@@ -22,7 +22,7 @@ public class usehello {
     }
     @GetMapping("/hello")
     public String sayHello() {
-        return "Hello, World!Berke";
+        return "Hello, World!Berketerazi";
     }
 
 }
