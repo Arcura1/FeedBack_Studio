@@ -8,6 +8,7 @@ public class NoteDto {
     private String id;
     private int Xcoordinate;
     private int Ycoordinate;
+    private Long pdfId;
     private String note;
 
     public NoteDto() {
@@ -50,6 +51,12 @@ public class NoteDto {
 
     public void setNote(String note) {
         this.note = note;
+    }
+    public Long getPdfId() {
+        return pdfId;
+    }
+    public void setPdfId(Long pdfId) {
+        this.pdfId = pdfId;
     }
 
 }

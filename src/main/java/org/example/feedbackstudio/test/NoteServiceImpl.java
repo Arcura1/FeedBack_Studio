@@ -42,6 +42,8 @@ public class NoteServiceImpl implements NoteService{
         add.setId(note.getId());
         add.setXcoordinate(note.getXcoordinate());
         add.setYcoordinate(note.getYcoordinate());
+        add.setPdfId(note.getPdfId());
+        add.setNote(note.getNote());
         noteRepository.save(add);
         return "eklendi";
     }

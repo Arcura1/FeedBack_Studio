@@ -10,6 +10,7 @@ public class NoteEntity {
     private String id;
     private int Xcoordinate;
     private int Ycoordinate;
+    private Long pdfId;
     private String note;
 
     public NoteEntity() {
@@ -49,5 +50,11 @@ public class NoteEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+    public Long getPdfId() {
+        return pdfId;
+    }
+    public void setPdfId(Long pdfId) {
+        this.pdfId = pdfId;
     }
 }
