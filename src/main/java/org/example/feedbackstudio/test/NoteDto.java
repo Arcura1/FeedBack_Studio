@@ -6,8 +6,8 @@ import org.springframework.data.annotation.Id;
 public class NoteDto {
     @Id
     private String id;
-    private int Xcoordinate;
-    private int Ycoordinate;
+    private Long Xcoordinate;
+    private Long Ycoordinate;
     private Long pdfId;
     private String note;
 
@@ -15,7 +15,7 @@ public class NoteDto {
 
     }
 
-    public NoteDto(String id, int Xcoordinate, int Ycoordinate) {
+    public NoteDto(String id, Long Xcoordinate, Long Ycoordinate) {
         this.id = id;
         this.Xcoordinate = Xcoordinate;
         this.Ycoordinate = Ycoordinate;
@@ -29,19 +29,19 @@ public class NoteDto {
         this.id = id;
     }
 
-    public int getXcoordinate() {
+    public Long getXcoordinate() {
         return Xcoordinate;
     }
 
-    public void setXcoordinate(int Xcoordinate) {
+    public void setXcoordinate(Long Xcoordinate) {
         this.Xcoordinate = Xcoordinate;
     }
 
-    public int getYcoordinate() {
+    public Long getYcoordinate() {
         return Ycoordinate;
     }
 
-    public void setYcoordinate(int Ycoordinate) {
+    public void setYcoordinate(Long Ycoordinate) {
         this.Ycoordinate = Ycoordinate;
     }
 

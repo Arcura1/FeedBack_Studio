@@ -8,15 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NoteEntity {
     @Id
     private String id;
-    private int Xcoordinate;
-    private int Ycoordinate;
+    private Long Xcoordinate;
+    private Long Ycoordinate;
     private Long pdfId;
     private String note;
 
     public NoteEntity() {
     }
 
-    public NoteEntity(int Xcoordinate, int Ycoordinate) {
+    public NoteEntity(Long Xcoordinate, Long Ycoordinate) {
         this.Xcoordinate = Xcoordinate;
     }
 
@@ -28,19 +28,19 @@ public class NoteEntity {
         this.id = id;
     }
 
-    public int getXcoordinate() {
+    public Long getXcoordinate() {
         return Xcoordinate;
     }
 
-    public void setXcoordinate(int Xcoordinate) {
+    public void setXcoordinate(Long Xcoordinate) {
         this.Xcoordinate = Xcoordinate;
     }
 
-    public int getYcoordinate() {
+    public Long getYcoordinate() {
         return Ycoordinate;
     }
 
-    public void setYcoordinate(int Ycoordinate) {
+    public void setYcoordinate(Long Ycoordinate) {
         this.Ycoordinate = Ycoordinate;
     }
 
