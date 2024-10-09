@@ -3,6 +3,10 @@ package org.example.feedbackstudio.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @Service
 public class NoteServiceImpl implements NoteService{
     @Autowired
@@ -15,12 +19,20 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public String viewAll() {
-        return noteRepository.findAll().toString();
+    public List<String> viewAll() {
+        List<String> result = new ArrayList<String>();
+        Iterable<NoteEntity> oray =noteRepository.findAll();
+        oray.forEach((val)-> {
+            System.out.println(val);
+            result.add(val.getId());
+
+        });
+        return result;
     }
 
     @Override
     public String deleteAll() {
+        noteRepository.deleteAll();
         return "her şey silindi";
     }
 

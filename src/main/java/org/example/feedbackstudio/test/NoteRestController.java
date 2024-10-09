@@ -4,6 +4,8 @@ import org.example.feedbackstudio.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/note")
 public class NoteRestController {
@@ -17,7 +19,7 @@ public class NoteRestController {
 
 
     @GetMapping("/viewAll")
-    public String viewAll() {
+    public List<String> viewAll() {
         return noteService.viewAll();
     }
 
@@ -29,7 +31,7 @@ public class NoteRestController {
     @PutMapping("/add")
     public String add(@RequestBody NoteDto noteDto) {
 
-        return this.noteService.add(noteDto);
+        return this.noteService.add(noteDto).toString();
     }
 
     @DeleteMapping("/delete")
