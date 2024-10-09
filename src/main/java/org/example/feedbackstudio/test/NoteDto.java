@@ -12,6 +12,7 @@ public class NoteDto {
     private String id;
     private int Xcoordinate;
     private int Ycoordinate;
+    private String note;
 
     public NoteDto() {
 
@@ -38,6 +39,12 @@ public class NoteDto {
     }
     public void setYcoordinate(int Ycoordinate) {
         this.Ycoordinate = Ycoordinate;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }

@@ -14,6 +14,7 @@ public class NoteEntity {
     private String id;
     private int Xcoordinate;
     private int Ycoordinate;
+    private String note;
 
     public NoteEntity() {
 
@@ -39,5 +40,10 @@ public class NoteEntity {
     public void setYcoordinate(int Ycoordinate) {
         this.Ycoordinate = Ycoordinate;
     }
-
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
