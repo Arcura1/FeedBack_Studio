@@ -26,7 +26,10 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public String add(NoteDto note) {
-        NoteEntity add= new NoteEntity(note.getId(), note.getEmail(), note.getName());
+        NoteEntity add= new NoteEntity();
+        add.setId(note.getId());
+        add.setXcoordinate(note.getXcoordinate());
+        add.setYcoordinate(note.getYcoordinate());
         noteRepository.save(add);
         return "eklendi";
     }
