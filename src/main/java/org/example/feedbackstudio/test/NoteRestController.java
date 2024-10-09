@@ -2,12 +2,19 @@ package org.example.feedbackstudio.test;
 
 import org.example.feedbackstudio.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+
+
 @RestController
-@RequestMapping("/note")
+
+@CrossOrigin(origins = "*")
 public class NoteRestController {
 
     private final NoteService noteService;
@@ -19,8 +26,10 @@ public class NoteRestController {
 
 
     @GetMapping("/viewAll")
-    public List<String> viewAll() {
-        return noteService.viewAll();
+    public ResponseEntity<List<NoteEntity>> viewAll() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+        return new ResponseEntity<>(noteService.viewAll(), headers, HttpStatus.OK);
     }
 
     @GetMapping("/view")
@@ -31,7 +40,7 @@ public class NoteRestController {
     @PutMapping("/add")
     public String add(@RequestBody NoteDto noteDto) {
 
-        return this.noteService.add(noteDto).toString();
+        return this.noteService.add(noteDto);
     }
 
     @DeleteMapping("/delete")

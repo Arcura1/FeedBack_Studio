@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class NoteServiceImpl implements NoteService{
+public class NoteServiceImpl implements NoteService {
     @Autowired
     private NoteRepository noteRepository;
 
@@ -19,12 +18,12 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public List<String> viewAll() {
-        List<String> result = new ArrayList<String>();
-        Iterable<NoteEntity> oray =noteRepository.findAll();
-        oray.forEach((val)-> {
-            System.out.println(val);
-            result.add(val.getId());
+    public List<NoteEntity> viewAll() {
+        List<NoteEntity> result = new ArrayList<NoteEntity>();
+        Iterable<NoteEntity> oray = noteRepository.findAll();
+        oray.forEach((val) -> {
+
+            result.add(val);
 
         });
         return result;
@@ -38,13 +37,13 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public String add(NoteDto note) {
-        NoteEntity add= new NoteEntity();
+        NoteEntity add = new NoteEntity();
         add.setId(note.getId());
         add.setXcoordinate(note.getXcoordinate());
         add.setYcoordinate(note.getYcoordinate());
         add.setPdfId(note.getPdfId());
         add.setNote(note.getNote());
         noteRepository.save(add);
-        return "eklendi";
+        return add.getPdfId().toString();
     }
 }
