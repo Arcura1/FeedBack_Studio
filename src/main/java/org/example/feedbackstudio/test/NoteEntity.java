@@ -13,6 +13,7 @@ public class NoteEntity {
     private String note;
 
     public NoteEntity() {
+
     }
 
     public NoteEntity(int Xcoordinate, int Ycoordinate) {
