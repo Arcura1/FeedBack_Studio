@@ -25,4 +25,8 @@ public class usehello {
         return "Hello, World!oray";
     }
 
+    @PostMapping("/get-id")
+    public Long getIdFromJson(@RequestBody testDto myData) {
+        return myData.getId();
+    }
 }
