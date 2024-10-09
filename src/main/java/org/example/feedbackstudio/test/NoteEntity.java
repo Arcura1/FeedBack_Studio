@@ -14,6 +14,7 @@ public class NoteEntity {
 
     public NoteEntity() {
 
+
     }
 
     public NoteEntity(int Xcoordinate, int Ycoordinate) {
