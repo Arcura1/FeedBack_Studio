@@ -10,17 +10,8 @@ import java.util.List;
 public class usehello {
 
 
- // Her bir endpoint için ayrı ayrı ekleyebilirsiniz
-    @PostMapping
-    public String createUsera(@RequestBody String user) {
-        return "oray";
-    }
 
 
-    @PostMapping("/user")
-    public List<String> createUser(@RequestBody String user) {
-        return new ArrayList<>();
-    }
 
 
     @GetMapping("/hello")
