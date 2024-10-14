@@ -1,5 +1,9 @@
-package org.example.feedbackstudio.test;
+package org.example.feedbackstudio.note.service;
 
+import org.example.feedbackstudio.note.Model.NoteModel;
+import org.example.feedbackstudio.note.Model.NoteQueryModel;
+import org.example.feedbackstudio.note.entity.NoteEntity;
+import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +17,11 @@ public class NoteServiceImpl implements NoteService {
 
 
     @Override
-    public String view() {
-        return "oray";
+    public NoteModel view() {
+        NoteModel result = new NoteModel();
+
+
+        return result;
     }
 
     @Override
@@ -36,11 +43,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public String add(NoteDto note) {
+    public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
         add.setId(note.getId());
-        add.setXcoordinate(note.getXcoordinate());
-        add.setYcoordinate(note.getYcoordinate());
+        add.setxcoordinate(note.getxcoordinate());
+        add.setycoordinate(note.getycoordinate());
         add.setPdfId(note.getPdfId());
         add.setNote(note.getNote());
         noteRepository.save(add);

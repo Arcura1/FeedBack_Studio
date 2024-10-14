@@ -1,4 +1,4 @@
-package org.example.feedbackstudio.test;
+package org.example.feedbackstudio.note.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,16 +8,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NoteEntity {
     @Id
     private String id;
-    private Long Xcoordinate;
-    private Long Ycoordinate;
+    private Long xcoordinate;
+    private Long ycoordinate;
     private Long pdfId;
     private String note;
 
     public NoteEntity() {
     }
 
-    public NoteEntity(Long Xcoordinate, Long Ycoordinate) {
-        this.Xcoordinate = Xcoordinate;
+    public NoteEntity(Long xcoordinate, Long ycoordinate) {
+        this.xcoordinate = xcoordinate;
     }
 
     public String getId() {
@@ -28,20 +28,20 @@ public class NoteEntity {
         this.id = id;
     }
 
-    public Long getXcoordinate() {
-        return Xcoordinate;
+    public Long getxcoordinate() {
+        return xcoordinate;
     }
 
-    public void setXcoordinate(Long Xcoordinate) {
-        this.Xcoordinate = Xcoordinate;
+    public void setxcoordinate(Long xcoordinate) {
+        this.xcoordinate = xcoordinate;
     }
 
-    public Long getYcoordinate() {
-        return Ycoordinate;
+    public Long getycoordinate() {
+        return ycoordinate;
     }
 
-    public void setYcoordinate(Long Ycoordinate) {
-        this.Ycoordinate = Ycoordinate;
+    public void setycoordinate(Long ycoordinate) {
+        this.ycoordinate = ycoordinate;
     }
 
     public String getNote() {
