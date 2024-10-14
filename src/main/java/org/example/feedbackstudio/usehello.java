@@ -9,20 +9,9 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class usehello {
 
-    @Autowired
-    private userRepository userRepository;
-
- // Her bir endpoint için ayrı ayrı ekleyebilirsiniz
-    @PostMapping
-    public User createUsera(@RequestBody User user) {
-        return userRepository.save(user);
-    }
 
 
-    @PostMapping("/user")
-    public List<User> createUser(@RequestBody User user) {
-        return userRepository.findAll();
-    }
+
 
 
     @GetMapping("/hello")
