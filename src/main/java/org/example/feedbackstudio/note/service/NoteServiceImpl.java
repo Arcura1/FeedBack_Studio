@@ -46,8 +46,8 @@ public class NoteServiceImpl implements NoteService {
     public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
         add.setId(note.getId());
-        add.setxcoordinate(note.getxcoordinate());
-        add.setycoordinate(note.getycoordinate());
+        add.setXcoordinate(note.getXcoordinate());
+        add.setYcoordinate(note.getYcoordinate());
         add.setPdfId(note.getPdfId());
         add.setNote(note.getNote());
         noteRepository.save(add);
