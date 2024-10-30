@@ -23,6 +23,9 @@ public class NoteEntity {
     @DBRef
     private User user;
 
+    @DBRef
+    private PdfInfoEntity PdfInfoEntity;
+
     public NoteEntity() {
     }
 

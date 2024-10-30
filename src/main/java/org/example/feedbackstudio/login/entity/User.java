@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Document(collection = "mongodb-container")
+@Document(collection = "users")
 public class User {
 
     @Id
