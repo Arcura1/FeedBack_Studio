@@ -15,7 +15,6 @@ public class NoteEntity {
     private String id;
     private Long xcoordinate;
     private Long ycoordinate;
-    private Long pdfId;
     private String title;
     private Number page;
 

@@ -2,7 +2,11 @@ package org.example.feedbackstudio.note.RestController;
 
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
+import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.NoteEntity;
+import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.repository.NoteRepository;
+import org.example.feedbackstudio.note.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -26,6 +30,8 @@ public class NoteRestController {
     private final NoteService noteService;
     private final String UPLOAD_DIR = "src/main/resources/static/";
 
+    @Autowired
+    private PdfInfoRepository PdfInfoRepository;
 
     @Autowired
     public NoteRestController(NoteService noteService) {
@@ -78,15 +84,20 @@ public class NoteRestController {
     }
 
     @PostMapping("/uploadPdf")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam PdfUploadQueryModel pdfUploadQueryModel) {
         if (file.isEmpty()) {
             return new ResponseEntity<>("Dosya boş!", HttpStatus.BAD_REQUEST);
         }
+        PdfInfoEntity newPdf = new PdfInfoEntity();
+        newPdf.setTitle(file.getOriginalFilename());
+
 
         // PDF dosyasının ismini alın
         String fileName = file.getOriginalFilename();
         // Dosyanın kaydedileceği tam yol
-        File destinationFile = new File(UPLOAD_DIR + fileName);
+
+        PdfInfoRepository.save(newPdf);
+        File destinationFile = new File(UPLOAD_DIR + newPdf.getId()+fileName);
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın

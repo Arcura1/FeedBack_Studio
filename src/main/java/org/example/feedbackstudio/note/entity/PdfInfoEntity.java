@@ -3,6 +3,7 @@ package org.example.feedbackstudio.note.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -17,6 +18,9 @@ public class PdfInfoEntity {
     private Number Xsize;
     private Number Ysize;
     private Number PageSize;
+
+    @DBRef
+    private HomeworkEntity  homeworkEntity;
 
     public PdfInfoEntity() {
 

@@ -18,6 +18,7 @@ public class User {
     private String email;
     private String phone; // Telefon numarası
     private String password;
+    private String role;
 
     // Constructor
     public User() {}
