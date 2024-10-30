@@ -13,15 +13,17 @@ public class User {
 
     @Id
     private String id;
-    private String firstName; // Ad
-    private String lastName; // Soyad
+    private String firstName;
+    private String lastName;
     private String email;
-    private String phone; // Telefon numarası
+    private String phone;
     private String password;
     private String role;
 
     // Constructor
-    public User() {}
+    public User() {
+        this.role = "student";
+    }
 
     public User(String firstName, String lastName, String email, String phone, String password) {
         this.firstName = firstName;
@@ -29,6 +31,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.role = "student";
     }
 
 }
