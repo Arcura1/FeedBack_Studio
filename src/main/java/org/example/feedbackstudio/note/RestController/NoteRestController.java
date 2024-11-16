@@ -83,6 +83,8 @@ public class NoteRestController {
                 .body(resource);
     }
 
+
+
     @PostMapping("/uploadPdf")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam PdfUploadQueryModel pdfUploadQueryModel) {
         if (file.isEmpty()) {
