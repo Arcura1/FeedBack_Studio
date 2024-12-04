@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.note.RestController;
 
+import org.example.feedbackstudio.MessageSender;
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
@@ -31,6 +32,9 @@ public class NoteRestController {
     private final String UPLOAD_DIR = "src/main/resources/static/";
 
     @Autowired
+    org.example.feedbackstudio.MessageSender messageSender;
+
+    @Autowired
     private PdfInfoRepository PdfInfoRepository;
 
     @Autowired
@@ -53,8 +57,9 @@ public class NoteRestController {
 
     @PutMapping("/add")
     public String add(@RequestBody NoteQueryModel noteDto) {
-
-        return this.noteService.add(noteDto);
+        noteDto.setPdfId(null);
+        messageSender.sendMessageNote(noteDto);
+        return "done";
     }
 
     @DeleteMapping("/delete")
