@@ -37,7 +37,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public HomeworkModel getHomework(String id) {
-        HomeworkEntity homeworkEntityOptional = homeworkRepository.findById(id); // findById kullanımı
+        HomeworkEntity homeworkEntityOptional = null;
+        homeworkEntityOptional = homeworkRepository.findById(id); // findById kullanımı
         if (homeworkEntityOptional!=null) {
             HomeworkEntity homeworkEntity = homeworkEntityOptional;
             return HomeworkConverter.convertToModel(homeworkEntity);
@@ -68,7 +69,16 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public void deleteHomework(String id) {
+        HomeworkEntity homeworkEntityOptional=null;
+        homeworkEntityOptional= homeworkRepository.findById(id);
 
+        if (homeworkEntityOptional != null) {
+            // Öğeyi bulduysanız, silme işlemini yapın
+            homeworkRepository.delete(homeworkEntityOptional);
+        } else {
+            // Eğer öğe bulunmazsa, uygun bir hata fırlatın
+            throw new RuntimeException("Homework not found with ID: " + id);
+        }
     }
 
     @Override
