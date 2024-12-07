@@ -2,6 +2,8 @@ package org.example.feedbackstudio.note.Model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.feedbackstudio.login.entity.User;
+import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 
 @Getter
 @Setter
@@ -11,8 +13,12 @@ public class NoteQueryModel {
     private Long xcoordinate;
     private Long ycoordinate;
     private Long pdfId;
-    private String explanation;
     private String note;
+    private Long page;
+
+    private User user;
+
+    private PdfInfoEntity PdfInfoEntity;
 
     public NoteQueryModel() {
 
