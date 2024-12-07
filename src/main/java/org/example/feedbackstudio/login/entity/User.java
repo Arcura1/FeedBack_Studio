@@ -47,6 +47,7 @@ public class User {
         this.lastName = lastName;
     }
 
+
     public String getEmail() {
         return email;
     }
