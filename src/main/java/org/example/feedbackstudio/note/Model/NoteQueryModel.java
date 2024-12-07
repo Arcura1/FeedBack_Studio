@@ -11,6 +11,7 @@ public class NoteQueryModel {
     private Long xcoordinate;
     private Long ycoordinate;
     private Long pdfId;
+    private String explanation;
     private String note;
 
     public NoteQueryModel() {
