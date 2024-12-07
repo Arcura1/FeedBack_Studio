@@ -8,6 +8,14 @@ import org.example.feedbackstudio.note.entity.HomeworkEntity;
 @Getter
 @Setter
 public class PdfUploadQueryModel {
-    private HomeworkEntity HomeworkEntity;
-    private User User;
+    private String HomeworkId;
+    private String UserId;
+
+    public PdfUploadQueryModel() {
+
+    }
+    public PdfUploadQueryModel(String HomeworkId, String UserId) {
+        this.HomeworkId = HomeworkId;
+        this.UserId = UserId;
+    }
 }
