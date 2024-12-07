@@ -17,7 +17,6 @@ public class NoteEntity {
     private Long ycoordinate;
     private String title;
     private Number page;
-
     private String note;
     @DBRef
     private User user;

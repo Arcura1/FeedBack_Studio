@@ -1,48 +1,68 @@
 package org.example.feedbackstudio.note.RestController;
 
+import lombok.Getter;
+import org.example.feedbackstudio.MessageSender;
+import org.example.feedbackstudio.note.Model.*;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.repository.HomeworkRepository;
+import org.example.feedbackstudio.note.entity.NoteEntity;
+import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.repository.NoteRepository;
+import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.service.HomeworkService;
+import org.example.feedbackstudio.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/homeworks")
+@RequestMapping("/Homework")
 @CrossOrigin(origins = "*")
 public class HomeworkController {
 
     @Autowired
-    private HomeworkRepository repository;
+    private HomeworkService homeworkService;
 
-    @GetMapping
-    public List<HomeworkEntity> getAllHomeworks() {
-        return (List<HomeworkEntity>) repository.findAll();
+    // Create a new Homework
+    @PostMapping("/add")
+    public ResponseEntity<HomeworkModel> createHomework(@RequestBody HomeworkQueryModel homework) {
+        HomeworkModel createdHomework = homeworkService.createHomework(homework);
+        return new ResponseEntity<>(createdHomework, HttpStatus.CREATED);
     }
-
-    @GetMapping("/{id}")
-    public HomeworkEntity getHomeworkById(@PathVariable String id) {
-        return repository.findById(Integer.valueOf(id)).orElse(null);
-    }
-
-    @PostMapping
-    public HomeworkEntity createHomework(@RequestBody HomeworkEntity homework) {
-        return repository.save(homework);
-    }
-
-    @PutMapping("/{id}")
-    public HomeworkEntity updateHomework(@PathVariable String id, @RequestBody HomeworkEntity updatedHomework) {
-        HomeworkEntity existingHomework = repository.findById(Integer.valueOf(id)).orElse(null);
-        if (existingHomework != null) {
-            existingHomework.setTitle(updatedHomework.getTitle());
-            existingHomework.setDescription(updatedHomework.getDescription());
-            return repository.save(existingHomework);
+    @GetMapping("/get")
+    public ResponseEntity<HomeworkModel> getHomework(@RequestParam String homeworkId) {
+        try {
+            HomeworkModel homework = homeworkService.getHomework(homeworkId);
+            return new ResponseEntity<>(homework, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            // Eğer ödev bulunamazsa, 404 Not Found döndürülür
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return null;
+    }
+    @PutMapping("/put")
+    public ResponseEntity<HomeworkQueryModel> updateHomework(@RequestBody HomeworkQueryModel homework) {
+        homeworkService.updateHomework(homework);
+        return new ResponseEntity<>(homework, HttpStatus.OK);
+    }
+    @DeleteMapping("/del")
+    public ResponseEntity<HomeworkModel> deleteHomework(@RequestParam String homeworkId) {
+        homeworkService.deleteHomework(homeworkId);
+        return new ResponseEntity<>(homeworkService.getHomework(homeworkId), HttpStatus.OK);
+    }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<HomeworkModel>> getAllHomework() {
+        List<HomeworkModel> homeworkList = homeworkService.getAllHomework();
+        return new ResponseEntity<>(homeworkList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteHomework(@PathVariable String id) {
-        repository.deleteById(Integer.valueOf(id));
-    }
+
 }

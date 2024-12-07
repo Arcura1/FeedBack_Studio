@@ -14,6 +14,6 @@ public class HomeworkEntity {
     private String id;
     private String title;
     private String description;
-    private User Teacher;
+    private User teacher;
 
 }

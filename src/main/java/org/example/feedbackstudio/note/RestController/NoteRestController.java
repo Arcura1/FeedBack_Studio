@@ -51,8 +51,9 @@ public class NoteRestController {
     }
 
     @GetMapping("/view")
-    public NoteModel view() {
-        return noteService.view();
+    public NoteModel view(@RequestParam String NoteId)
+    {
+        return noteService.view(NoteId);
     }
 
     @PutMapping("/add")

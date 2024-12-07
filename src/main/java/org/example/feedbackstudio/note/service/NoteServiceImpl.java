@@ -2,6 +2,7 @@ package org.example.feedbackstudio.note.service;
 
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
+import org.example.feedbackstudio.note.converter.NoteConverter;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
 import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
@@ -24,13 +25,53 @@ public class NoteServiceImpl implements NoteService {
     private HomeworkRepository homeworkRepository;
 
 
+
     @Override
-    public NoteModel view() {
-        NoteModel result = new NoteModel();
-
-
-        return result;
+    public NoteModel view(String NoteId) {
+        NoteEntity findedNote=null;
+        findedNote = noteRepository.findById(NoteId);
+        if (findedNote!=null) {
+            NoteEntity note = findedNote;
+            return NoteConverter.convertToModel(note);
+        } else {
+            throw new RuntimeException("Note not found with ID: " + NoteId);
+        }
     }
+
+//    @Override
+//    public NoteModel viewByPdf(String pdfId) {
+//        NoteEntity findedNote=null;
+//        findedNote = noteRepository.findById(NoteId);
+//        if (findedNote!=null) {
+//            NoteEntity note = findedNote;
+//            return NoteConverter.convertToModel(note);
+//        } else {
+//            throw new RuntimeException("Note not found with ID: " + NoteId);
+//        }
+//    }
+//
+//    @Override
+//    public NoteModel viewByHomework(String pdfId) {
+//        NoteEntity findedNote=null;
+//        findedNote = noteRepository.findById(NoteId);
+//        if (findedNote!=null) {
+//            NoteEntity note = findedNote;
+//            return NoteConverter.convertToModel(note);
+//        } else {
+//            throw new RuntimeException("Note not found with ID: " + NoteId);
+//        }
+//    }
+    //    @Override
+//    public NoteModel viewByHomeworkAndPage(String pdfId) {
+//        NoteEntity findedNote=null;
+//        findedNote = noteRepository.findById(NoteId);
+//        if (findedNote!=null) {
+//            NoteEntity note = findedNote;
+//            return NoteConverter.convertToModel(note);
+//        } else {
+//            throw new RuntimeException("Note not found with ID: " + NoteId);
+//        }
+//    }
 
     @Override
     public List<NoteEntity> viewAll() {

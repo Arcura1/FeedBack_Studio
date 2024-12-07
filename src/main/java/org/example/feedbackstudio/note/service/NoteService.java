@@ -8,7 +8,7 @@ import org.example.feedbackstudio.note.entity.NoteEntity;
 import java.util.List;
 
 public interface NoteService {
-    public NoteModel view();
+    public NoteModel view(String NoteId);
     public List<NoteEntity> viewAll();
     public String deleteAll();
     public String add(NoteQueryModel note);
