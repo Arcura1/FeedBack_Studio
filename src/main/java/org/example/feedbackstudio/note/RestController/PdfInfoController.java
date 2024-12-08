@@ -1,8 +1,10 @@
 package org.example.feedbackstudio.note.RestController;
 
+import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 import org.example.feedbackstudio.note.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.NoteService;
+import org.example.feedbackstudio.note.service.PdfInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -18,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/pdf")
 @CrossOrigin(origins = "*")
 public class PdfInfoController {
 
@@ -29,6 +32,9 @@ public class PdfInfoController {
 
     @Autowired
     private org.example.feedbackstudio.note.repository.PdfInfoRepository PdfInfoRepository;
+
+    @Autowired
+    private PdfInfoService pdfInfoService;
 
     @Autowired
     public PdfInfoController(NoteService noteService) {
@@ -46,11 +52,29 @@ public class PdfInfoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }
+    @CrossOrigin(origins = "*")
+    @GetMapping("/pdfById")
+    public ResponseEntity<Resource> getPdfById(@RequestParam String PdfId) {
 
 
+
+        File pdfFile = new File("src/main/resources/static/example.pdf");
+        Resource resource = new FileSystemResource(pdfFile);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdfFile.getName() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
+    }
+
+    @PostMapping("/addPdf")
+    public String setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
+        pdfInfoService.add(queryModel);
+        return "done";
+    }
 
     @PostMapping("/uploadPdf")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
+        System.out.println(id);
         if (file.isEmpty()) {
             return new ResponseEntity<>("Dosya boş!", HttpStatus.BAD_REQUEST);
         }
@@ -63,7 +87,7 @@ public class PdfInfoController {
         // Dosyanın kaydedileceği tam yol
 
         PdfInfoRepository.save(newPdf);
-        File destinationFile = new File(UPLOAD_DIR + newPdf.getId()+fileName);
+        File destinationFile = new File(UPLOAD_DIR + newPdf.getId());
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın
