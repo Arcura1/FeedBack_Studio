@@ -11,6 +11,7 @@ import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.example.feedbackstudio.note.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class NoteServiceImpl implements NoteService {
     private HomeworkRepository homeworkRepository;
 
 
-
+    @CrossOrigin(origins = "*")
     @Override
     public NoteModel view(String NoteId) {
         NoteEntity findedNote=null;
