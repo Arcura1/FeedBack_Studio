@@ -48,6 +48,18 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    public HomeworkEntity getHomeworkEntitiy(String id) {
+        HomeworkEntity homeworkEntityOptional = null;
+        homeworkEntityOptional = homeworkRepository.findById(id); // findById kullanımı
+        if (homeworkEntityOptional!=null) {
+            HomeworkEntity homeworkEntity = homeworkEntityOptional;
+            return homeworkEntity;
+        } else {
+            throw new RuntimeException("Homework not found with ID: " + id);
+        }
+    }
+
+    @Override
     public HomeworkModel createHomework(HomeworkQueryModel homework) {
         HomeworkEntity HomeworkEntity = new HomeworkEntity();
         User teacher = userService.getUserById(homework.getTeacherId())

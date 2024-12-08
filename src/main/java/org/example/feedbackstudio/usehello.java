@@ -1,5 +1,6 @@
 package org.example.feedbackstudio;
 
+import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
@@ -13,14 +14,12 @@ public class usehello {
     @Autowired
     MessageSender MessageSender;
 
-    @GetMapping("/oray")
-    public String Hello() {
-        MessageSender.sendMessage("Hello World");
-
+    @PostMapping("/oray")
+    public String Hello(@RequestBody PdfUploadQueryModel oray) {
+        System.out.println("Received query: " + oray);
         return "done";
-//
-//        return "Hello, World!";
     }
+
 
 
     @GetMapping("/hello")
