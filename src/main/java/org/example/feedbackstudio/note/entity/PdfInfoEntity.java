@@ -16,7 +16,6 @@ public class PdfInfoEntity {
     private String id;
     private String title;
     private String content;
-    private String Url;
     private Number Xsize;
     private Number Ysize;
     private Number PageSize;

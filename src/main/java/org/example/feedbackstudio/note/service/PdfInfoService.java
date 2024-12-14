@@ -9,6 +9,6 @@ import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 import java.util.List;
 
 public interface PdfInfoService {
-    void add(PdfUploadQueryModel queryModel);
+    String add(PdfUploadQueryModel queryModel);
     PdfInfoEntity findById(String Id);
 }

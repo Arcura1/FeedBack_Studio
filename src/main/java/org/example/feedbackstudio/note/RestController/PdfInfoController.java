@@ -45,7 +45,7 @@ public class PdfInfoController {
     @CrossOrigin(origins = "*")
     @GetMapping("/pdf")
     public ResponseEntity<Resource> getPdf() {
-        File pdfFile = new File("src/main/resources/static/example.pdf");
+        File pdfFile = new File(UPLOAD_DIR+"example.pdf");
         Resource resource = new FileSystemResource(pdfFile);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdfFile.getName() + "\"")
@@ -56,9 +56,11 @@ public class PdfInfoController {
     @GetMapping("/pdfById")
     public ResponseEntity<Resource> getPdfById(@RequestParam String PdfId) {
 
+        PdfInfoEntity model=pdfInfoService.findById(PdfId);
 
 
-        File pdfFile = new File("src/main/resources/static/example.pdf");
+
+        File pdfFile = new File(UPLOAD_DIR+"example.pdf");
         Resource resource = new FileSystemResource(pdfFile);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdfFile.getName() + "\"")
@@ -68,26 +70,24 @@ public class PdfInfoController {
 
     @PostMapping("/addPdf")
     public String setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
-        pdfInfoService.add(queryModel);
-        return "done";
+        return pdfInfoService.add(queryModel);
     }
 
     @PostMapping("/uploadPdf")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
         System.out.println(id);
+
+        PdfInfoEntity model=pdfInfoService.findById(id);
         if (file.isEmpty()) {
             return new ResponseEntity<>("Dosya boş!", HttpStatus.BAD_REQUEST);
         }
-        PdfInfoEntity newPdf = new PdfInfoEntity();
-        newPdf.setTitle(file.getOriginalFilename());
 
 
         // PDF dosyasının ismini alın
         String fileName = file.getOriginalFilename();
         // Dosyanın kaydedileceği tam yol
 
-        PdfInfoRepository.save(newPdf);
-        File destinationFile = new File(UPLOAD_DIR + newPdf.getId());
+        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId()+"/"+ model.getId());
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın
