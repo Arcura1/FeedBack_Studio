@@ -1,8 +1,12 @@
 package org.example.feedbackstudio.note.RestController;
 
+import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
+import org.example.feedbackstudio.note.entity.HomeworkEntity;
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.service.HomeworkService;
 import org.example.feedbackstudio.note.service.NoteService;
 import org.example.feedbackstudio.note.service.PdfInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,9 @@ public class PdfInfoController {
 
     private final NoteService noteService;
     private final String UPLOAD_DIR = "src/main/resources/static/";
+
+    @Autowired
+    private HomeworkRepository homeworkRepository;
 
     @Autowired
     org.example.feedbackstudio.MessageSender messageSender;
@@ -52,21 +59,29 @@ public class PdfInfoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }
+
+
     @CrossOrigin(origins = "*")
     @GetMapping("/pdfById")
-    public ResponseEntity<Resource> getPdfById(@RequestParam String PdfId) {
+    public ResponseEntity<Resource> getPdfById(@RequestBody PdfShowQueryModel querymodel) {
+        // Dosya yolu oluşturuluyor
+        File pdfFile = new File(UPLOAD_DIR + querymodel.getHomeworkId() + "/" + querymodel.getPdfInfoId() + ".pdf");
 
-        PdfInfoEntity model=pdfInfoService.findById(PdfId);
+        // Dosyanın var olup olmadığını kontrol et
+        if (!pdfFile.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // Dosya bulunamazsa 404 dönülür
+        }
 
-
-
-        File pdfFile = new File(UPLOAD_DIR+"example.pdf");
+        // Dosyayı bir Resource nesnesine dönüştür
         Resource resource = new FileSystemResource(pdfFile);
+
+        // PDF dosyasını yanıt olarak döndür
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdfFile.getName() + "\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }
+
 
     @PostMapping("/addPdf")
     public String setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
@@ -87,7 +102,7 @@ public class PdfInfoController {
         String fileName = file.getOriginalFilename();
         // Dosyanın kaydedileceği tam yol
 
-        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId()+"/"+ model.getId());
+        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId()+"/"+ model.getId()+".pdf");
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın
