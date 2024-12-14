@@ -11,6 +11,7 @@ import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,8 +69,17 @@ public class HomeworkServiceImpl implements HomeworkService {
         HomeworkEntity.setTitle(homework.getTitle());
         HomeworkEntity.setDescription(homework.getDescription());
 
-
         homeworkRepository.save(HomeworkEntity);
+        File folder = new File("src/main/resources/static/"+HomeworkEntity.getId());
+
+        // Klasör oluştur
+        if (!folder.exists()) {
+            boolean created = folder.mkdir(); // mkdir() tek bir klasör oluşturur
+            if (created) {
+                HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
+                return result;
+            }
+        }
         HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
         return result;
     }
