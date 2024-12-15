@@ -18,7 +18,7 @@ public class NoteQueryModel {
 
     private String user;
 
-    private String PdfInfoEntity;
+    private String pdfInfoEntity;
 
     public NoteQueryModel() {
 

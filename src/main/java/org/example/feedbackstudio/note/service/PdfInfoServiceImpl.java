@@ -57,9 +57,15 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     @Override
     public PdfInfoEntity findAllByHU(MixQueryModel queryModel) {
         PdfInfoEntity result = new PdfInfoEntity();
+        pdfInfoRepository.findByhomeworkEntity_id(queryModel.getHomeworkId());
         result =pdfInfoRepository.findByHomeworkEntityIdAndUserId(queryModel.getHomeworkId(), queryModel.getUserId());
 
         return result;
+    }
+
+    @Override
+    public List<PdfInfoEntity> findByHomevork(String homevork) {
+        return pdfInfoRepository.findByhomeworkEntity_id(homevork);
     }
 
 
