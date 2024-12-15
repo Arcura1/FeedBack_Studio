@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.note.RestController;
 
+import org.example.feedbackstudio.note.Model.PdfInfoModel;
 import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
@@ -61,6 +62,8 @@ public class PdfInfoController {
     }
 
 
+
+
     @CrossOrigin(origins = "*")
     @GetMapping("/pdfById")
     public ResponseEntity<Resource> getPdfById(@RequestBody PdfShowQueryModel querymodel) {
@@ -83,11 +86,18 @@ public class PdfInfoController {
     }
 
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/addPdf")
-    public String setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
-        return pdfInfoService.add(queryModel);
+    public ResponseEntity<PdfInfoModel> setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
+        PdfInfoModel pdfInfoModel = new PdfInfoModel();
+        pdfInfoModel.setSetId(pdfInfoService.add(queryModel));
+        return new ResponseEntity<>(pdfInfoModel,HttpStatus.OK);
     }
 
+
+
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/uploadPdf")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
         System.out.println(id);
