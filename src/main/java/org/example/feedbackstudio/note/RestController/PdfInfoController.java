@@ -72,7 +72,7 @@ public class PdfInfoController {
 
     // Cross-Origin ile farklı domain'lerden istek kabul et
     @CrossOrigin(origins = "*")
-    @GetMapping("/findAllByHU")
+    @PostMapping("/findAllByHU")
     public ResponseEntity<PdfInfoEntity> getPdfById(@RequestBody MixQueryModel modela) {
         // Service metodunu çağırarak, mixQueryModel'i kullanabilirsiniz
         MixQueryModel model = new MixQueryModel();
