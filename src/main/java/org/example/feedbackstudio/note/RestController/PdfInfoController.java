@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.example.feedbackstudio.note.Model.MixQueryModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,6 +51,13 @@ public class PdfInfoController {
     }
 
 
+    @GetMapping("/mixQueryModel/{id}")
+    public MixQueryModel getMixQueryModel(@PathVariable String id) {
+        PdfInfoEntity pdfInfoEntity = pdfInfoService.findById(id);
+        return pdfInfoService.convertToMixQueryModel(pdfInfoEntity);
+    }
+
+
     @CrossOrigin(origins = "*")
     @GetMapping("/pdf")
     public ResponseEntity<Resource> getPdf() {
@@ -62,7 +70,24 @@ public class PdfInfoController {
     }
 
 
+    // Cross-Origin ile farklı domain'lerden istek kabul et
+    @CrossOrigin(origins = "*")
+    @GetMapping("/findAllByHU")
+    public ResponseEntity<PdfInfoEntity> getPdfById(@RequestBody MixQueryModel modela) {
+        // Service metodunu çağırarak, mixQueryModel'i kullanabilirsiniz
+        MixQueryModel model = new MixQueryModel();
+        model.setHomeworkId(modela.getHomeworkId());  // örnek olarak, model'in 'homeworkId' alanını set ediyorum
+        model.setUserId(modela.getUserId());  // model'in 'userId' alanını set ediyorum
 
+        // PdfInfoService'yi çağırarak veriyi alıyoruz
+        PdfInfoEntity pdfInfoEntity = pdfInfoService.findAllByHU(model);
+
+        if (pdfInfoEntity != null) {
+            return new ResponseEntity<>(pdfInfoEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/pdfById")
