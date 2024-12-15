@@ -77,6 +77,7 @@ public class NoteRestController {
 
     @PutMapping("/add")
     public String add(@RequestBody NoteQueryModel noteDto) {
+        System.out.println(noteDto);
         messageSender.sendMessageNote(noteDto);
         return "done";
     }

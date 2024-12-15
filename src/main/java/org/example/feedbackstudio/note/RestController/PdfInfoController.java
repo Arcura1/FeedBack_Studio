@@ -24,6 +24,7 @@ import org.example.feedbackstudio.note.Model.MixQueryModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pdf")
@@ -68,7 +69,12 @@ public class PdfInfoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }
-
+    // Cross-Origin ile farklı domain'lerden istek kabul et
+    @CrossOrigin(origins = "*")
+    @GetMapping("/findByH/{h}")
+    public ResponseEntity<List<PdfInfoEntity>> findByH(@PathVariable String h) {
+        return new ResponseEntity<>(pdfInfoService.findByHomevork(h), HttpStatus.OK);
+    }
 
     // Cross-Origin ile farklı domain'lerden istek kabul et
     @CrossOrigin(origins = "*")

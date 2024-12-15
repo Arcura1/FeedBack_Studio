@@ -101,12 +101,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
-        HomeworkEntity homework = new HomeworkEntity();
-        homeworkRepository.save(homework);
-
-
-
-
 
         add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntity()));
         userRepository.findById(note.getUser())
