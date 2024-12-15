@@ -10,6 +10,9 @@ import org.example.feedbackstudio.note.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PdfInfoServiceImpl implements PdfInfoService {
     @Autowired
@@ -50,6 +53,15 @@ public class PdfInfoServiceImpl implements PdfInfoService {
             throw new RuntimeException("Pdf not found with ID: " + Id);
         }
     }
+
+    @Override
+    public PdfInfoEntity findAllByHU(MixQueryModel queryModel) {
+        PdfInfoEntity result = new PdfInfoEntity();
+        result =pdfInfoRepository.findByHomeworkEntityIdAndUserId(queryModel.getHomeworkId(), queryModel.getUserId());
+
+        return result;
+    }
+
 
     public MixQueryModel convertToMixQueryModel(PdfInfoEntity pdfInfoEntity) {
         MixQueryModel mixQueryModel = new MixQueryModel();

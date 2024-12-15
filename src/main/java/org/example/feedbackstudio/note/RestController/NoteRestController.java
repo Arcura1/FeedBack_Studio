@@ -50,6 +50,25 @@ public class NoteRestController {
         return new ResponseEntity<>(noteService.viewAll(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/getByPdf")
+    public ResponseEntity<List<NoteEntity>> findAll(@RequestParam String pdfId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        // Service üzerinden veri al
+        List<NoteEntity> notes = noteService.viewByPdfId(pdfId);
+
+        // Eğer sonuç boşsa 404 döndür
+        if (notes == null || notes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Başarılı bir şekilde sonuçları döndür
+        return new ResponseEntity<>(notes, headers, HttpStatus.OK);
+    }
+
+
+
     @GetMapping("/view")
     public NoteModel view(@RequestParam String NoteId)
     {
@@ -58,7 +77,6 @@ public class NoteRestController {
 
     @PutMapping("/add")
     public String add(@RequestBody NoteQueryModel noteDto) {
-        noteDto.setPdfId(null);
         messageSender.sendMessageNote(noteDto);
         return "done";
     }

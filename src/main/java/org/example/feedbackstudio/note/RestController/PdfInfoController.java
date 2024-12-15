@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.note.RestController;
 
+import org.example.feedbackstudio.note.Model.PdfInfoModel;
 import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
@@ -69,6 +70,25 @@ public class PdfInfoController {
     }
 
 
+    // Cross-Origin ile farklı domain'lerden istek kabul et
+    @CrossOrigin(origins = "*")
+    @GetMapping("/findAllByHU")
+    public ResponseEntity<PdfInfoEntity> getPdfById(@RequestParam String homeworkId, @RequestParam String userId) {
+        // Service metodunu çağırarak, mixQueryModel'i kullanabilirsiniz
+        MixQueryModel model = new MixQueryModel();
+        model.setHomeworkId(homeworkId);  // örnek olarak, model'in 'homeworkId' alanını set ediyorum
+        model.setUserId(userId);  // model'in 'userId' alanını set ediyorum
+
+        // PdfInfoService'yi çağırarak veriyi alıyoruz
+        PdfInfoEntity pdfInfoEntity = pdfInfoService.findAllByHU(model);
+
+        if (pdfInfoEntity != null) {
+            return new ResponseEntity<>(pdfInfoEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @CrossOrigin(origins = "*")
     @GetMapping("/pdfById")
     public ResponseEntity<Resource> getPdfById(@RequestBody PdfShowQueryModel querymodel) {
@@ -91,11 +111,18 @@ public class PdfInfoController {
     }
 
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/addPdf")
-    public String setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
-        return pdfInfoService.add(queryModel);
+    public ResponseEntity<PdfInfoModel> setUploadPdf(@RequestBody PdfUploadQueryModel queryModel) {
+        PdfInfoModel pdfInfoModel = new PdfInfoModel();
+        pdfInfoModel.setSetId(pdfInfoService.add(queryModel));
+        return new ResponseEntity<>(pdfInfoModel,HttpStatus.OK);
     }
 
+
+
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/uploadPdf")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
         System.out.println(id);
