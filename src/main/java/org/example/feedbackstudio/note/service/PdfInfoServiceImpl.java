@@ -24,7 +24,7 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     private final String UPLOAD_DIR = "src/main/resources/static/";
 
     @Override
-    public void add(PdfUploadQueryModel queryModel) {
+    public String add(PdfUploadQueryModel queryModel) {
         PdfInfoEntity save = new PdfInfoEntity();
         save.setTitle(queryModel.getTitle());
         save.setContent(queryModel.getContent());
@@ -35,9 +35,7 @@ public class PdfInfoServiceImpl implements PdfInfoService {
         save.setUser(userService.getUserById(queryModel.getUserId()).get());
         pdfInfoRepository.save(save);
 
-        save.setUrl(UPLOAD_DIR +save.getId());
-        pdfInfoRepository.save(save);
-
+        return save.getId();
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 
 public interface PdfInfoService {
-    void add(PdfUploadQueryModel queryModel);
+    String add(PdfUploadQueryModel queryModel);
     PdfInfoEntity findById(String Id);
 
     // Convert PdfInfoEntity to MixQueryModel
