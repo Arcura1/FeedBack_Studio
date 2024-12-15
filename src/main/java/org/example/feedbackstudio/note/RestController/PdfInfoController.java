@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.example.feedbackstudio.note.Model.MixQueryModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +40,13 @@ public class PdfInfoController {
     @Autowired
     public PdfInfoController(NoteService noteService) {
         this.noteService = noteService;
+    }
+
+
+    @GetMapping("/mixQueryModel/{id}")
+    public MixQueryModel getMixQueryModel(@PathVariable String id) {
+        PdfInfoEntity pdfInfoEntity = pdfInfoService.findById(id);
+        return pdfInfoService.convertToMixQueryModel(pdfInfoEntity);
     }
 
 
