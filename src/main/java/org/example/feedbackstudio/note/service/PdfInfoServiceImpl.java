@@ -2,6 +2,7 @@ package org.example.feedbackstudio.note.service;
 
 
 import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
@@ -49,4 +50,21 @@ public class PdfInfoServiceImpl implements PdfInfoService {
             throw new RuntimeException("Pdf not found with ID: " + Id);
         }
     }
+
+    public MixQueryModel convertToMixQueryModel(PdfInfoEntity pdfInfoEntity) {
+        MixQueryModel mixQueryModel = new MixQueryModel();
+
+        if (pdfInfoEntity != null) {
+            if (pdfInfoEntity.getHomeworkEntity() != null) {
+                mixQueryModel.setHomeworkId(pdfInfoEntity.getHomeworkEntity().getId());
+            }
+            if (pdfInfoEntity.getUser() != null) {
+                mixQueryModel.setUserId(pdfInfoEntity.getUser().getId());
+            }
+        }
+
+        return mixQueryModel;
+    }
+
+
 }
