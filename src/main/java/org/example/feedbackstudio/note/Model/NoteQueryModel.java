@@ -16,9 +16,9 @@ public class NoteQueryModel {
     private String note;
     private Long page;
 
-    private User user;
+    private String user;
 
-    private PdfInfoEntity PdfInfoEntity;
+    private String PdfInfoEntity;
 
     public NoteQueryModel() {
 

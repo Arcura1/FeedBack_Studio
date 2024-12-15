@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.note.service;
 
+import org.example.feedbackstudio.login.dao.UserRepository;
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -24,7 +26,10 @@ public class NoteServiceImpl implements NoteService {
     private PdfInfoRepository pdfInfoRepository;
     @Autowired
     private HomeworkRepository homeworkRepository;
-
+    @Autowired
+    private PdfInfoService pdfInfoService;
+    @Autowired
+    private UserRepository userRepository;
 
     @CrossOrigin(origins = "*")
     @Override
@@ -99,18 +104,31 @@ public class NoteServiceImpl implements NoteService {
         HomeworkEntity homework = new HomeworkEntity();
         homeworkRepository.save(homework);
 
-        PdfInfoEntity adda = new PdfInfoEntity();
 
-        adda.setHomeworkEntity(homework);
-        adda.setHomeworkEntity(null);
-        pdfInfoRepository.save(adda);
 
-        add.setPdfInfoEntity(adda);
+
+
+        add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntity()));
+        userRepository.findById(note.getUser())
+                .ifPresentOrElse(
+                        add::setUser,
+                        () -> {
+                            throw new IllegalArgumentException("User with ID " + note.getUser() + " not found");
+                        }
+                );
         add.setId(note.getId());
         add.setXcoordinate(note.getXcoordinate());
         add.setYcoordinate(note.getYcoordinate());
         add.setNote(note.getNote());
         noteRepository.save(add);
         return add.getPdfInfoEntity().getId().toString();
+    }
+
+    @Override
+    public List<NoteEntity> viewByPdfId(String pdf) {
+        List<NoteEntity> result = new LinkedList<NoteEntity>();
+        result=noteRepository.findByPdfInfoEntityId(pdf);
+
+        return result;
     }
 }

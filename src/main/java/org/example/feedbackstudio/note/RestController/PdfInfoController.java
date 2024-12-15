@@ -70,7 +70,24 @@ public class PdfInfoController {
     }
 
 
+    // Cross-Origin ile farklı domain'lerden istek kabul et
+    @CrossOrigin(origins = "*")
+    @GetMapping("/findAllByHU")
+    public ResponseEntity<PdfInfoEntity> getPdfById(@RequestParam String homeworkId, @RequestParam String userId) {
+        // Service metodunu çağırarak, mixQueryModel'i kullanabilirsiniz
+        MixQueryModel model = new MixQueryModel();
+        model.setHomeworkId(homeworkId);  // örnek olarak, model'in 'homeworkId' alanını set ediyorum
+        model.setUserId(userId);  // model'in 'userId' alanını set ediyorum
 
+        // PdfInfoService'yi çağırarak veriyi alıyoruz
+        PdfInfoEntity pdfInfoEntity = pdfInfoService.findAllByHU(model);
+
+        if (pdfInfoEntity != null) {
+            return new ResponseEntity<>(pdfInfoEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/pdfById")
