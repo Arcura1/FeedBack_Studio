@@ -145,9 +145,13 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public String delByPdfinfo(String id) {
-        List<NoteEntity> silinecek = noteRepository.findByPdfInfoEntityId(id);
-        silinecek.forEach((val)->{
-            noteRepository.delete(val);
+        List<NoteEntity> result=new ArrayList<>();
+        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        deneme.forEach((val)->{
+            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+                noteRepository.delete(val);
+            }
         });
         return "Done";
     }
