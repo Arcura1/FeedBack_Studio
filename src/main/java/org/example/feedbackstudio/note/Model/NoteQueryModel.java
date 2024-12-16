@@ -12,7 +12,7 @@ public class NoteQueryModel {
     private String id;
     private Long xcoordinate;
     private Long ycoordinate;
-    private Long pdfId;
+    private String title;
     private String note;
     private Long page;
 
