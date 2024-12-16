@@ -20,6 +20,7 @@ public class HighlightEntity {
     private int endY;
     private User user;
     private PdfInfoEntity pdfInfo;
+    private int currentPage;
 
     // Constructors
     public HighlightEntity() {

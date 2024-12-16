@@ -53,11 +53,12 @@ public class HighlightController {
         highlight.setStartY(highlightQueryModel.getStartY());
         highlight.setEndX(highlightQueryModel.getEndX());
         highlight.setEndY(highlightQueryModel.getEndY());
+        highlight.setCurrentPage(highlightQueryModel.getCurrentPage());
         highlight.setPdfInfo(pdfInfo);
         highlight.setUser(user);
 
         // Save the highlight and return a response with the created entity
-        HighlightEntity savedHighlight = highlightService.saveHighlight(highlight);
+        HighlightEntity  savedHighlight = highlightService.saveHighlight(highlight);
 
         // Return the saved highlight entity with a 201 Created status
         return new ResponseEntity<>(savedHighlight, HttpStatus.CREATED); // 201 Created
