@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -123,6 +125,21 @@ public class NoteServiceImpl implements NoteService {
         List<NoteEntity> result = new LinkedList<NoteEntity>();
         result=noteRepository.findByPdfInfoEntityId(pdf);
 
+        return result;
+    }
+
+    @Override
+    public List<NoteEntity> viewByPdfInfo(String id) {
+        List<NoteEntity> result=new ArrayList<>();
+        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+        deneme.forEach((val)->{
+            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+                result.add(val);
+            }
+        });
+//        result=noteRepository.findByPdfInfoEntity(pdfInfoRepository.findById(id));
+//        result=noteRepository.findByPdfInfoEntityId(id);
         return result;
     }
 }

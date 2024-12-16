@@ -49,6 +49,21 @@ public class NoteRestController {
         headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
         return new ResponseEntity<>(noteService.viewAll(), headers, HttpStatus.OK);
     }
+    @CrossOrigin(origins = "*")
+    @GetMapping("/viewAll/{id}")
+    public ResponseEntity<List<NoteEntity>> viewAllById(@PathVariable String id) {
+        // HTTP başlıkları oluşturma
+        HttpHeaders headers = new HttpHeaders();
+
+        // NoteService'den veriyi getirme
+        List<NoteEntity> result = noteService.viewByPdfInfo(id);
+
+        // JSON içeriği belirleme
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        // Sonuç döndürme
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    }
 
     @GetMapping("/getByPdf")
     public ResponseEntity<List<NoteEntity>> findAll(@RequestParam String pdfId) {
