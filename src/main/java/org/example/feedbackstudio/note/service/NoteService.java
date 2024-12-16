@@ -14,4 +14,5 @@ public interface NoteService {
     public String add(NoteQueryModel note);
     public List<NoteEntity> viewByPdfId(String pdf);
     public List<NoteEntity> viewByPdfInfo(String id);
+    public String delByPdfinfo(String id);
 }

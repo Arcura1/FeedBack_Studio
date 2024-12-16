@@ -42,6 +42,14 @@ public class NoteRestController {
         this.noteService = noteService;
     }
 
+
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("/delAll/{id}")
+    public ResponseEntity<String> delAll(@PathVariable String id) {
+        noteService.delByPdfinfo(id);
+        return new ResponseEntity<>("silindi", HttpStatus.OK);
+    }
+
     @CrossOrigin(origins = "*")
     @GetMapping("/viewAll")
     public ResponseEntity<List<NoteEntity>> viewAll() {
