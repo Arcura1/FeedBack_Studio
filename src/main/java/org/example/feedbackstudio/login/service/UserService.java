@@ -20,23 +20,58 @@ public class UserService {
 
     private static final String BLACKLIST_KEY_PREFIX = "blacklist:";
 
+    /**
+     * Kullanıcıyı kaydeder, aynı email ve şifreye sahip kullanıcı varsa kara listeye ekler.
+     * @param user Kaydedilecek kullanıcı
+     * @return Kaydedilen kullanıcı
+     */
     public User saveUser(User user) {
-        return userRepository.save(user);
+        // Aynı email ve şifre ile kullanıcı var mı kontrol et
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+            addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
+            throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
+        }
+        return userRepository.save(user); // Yeni kullanıcıyı kaydet
     }
 
+    /**
+     * Kullanıcıyı ID'ye göre getirir.
+     * @param id Kullanıcı ID
+     * @return Kullanıcı opsiyonu
+     */
     public Optional<User> getUserById(String id) {
         return userRepository.findById(id);
     }
 
+    /**
+     * E-posta ile kullanıcı getirir.
+     * @param email E-posta adresi
+     * @return Kullanıcı nesnesi
+     */
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * Kullanıcıyı ID'ye göre siler.
+     * @param id Kullanıcı ID
+     */
     public void deleteUserById(String id) {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Kullanıcı girişini doğrular.
+     * @param email Kullanıcı email
+     * @param password Kullanıcı şifre
+     * @return Kullanıcı nesnesi
+     */
     public User login(String email, String password) {
+        if (isEmailBlacklisted(email)) {
+            throw new IllegalArgumentException("Bu e-posta kara listede.");
+        }
+
         User user = getUserByEmail(email);
         if (user != null && user.getPassword().equals(password)) { // Şifre kontrolü
             return user; // Kullanıcı bulunursa döndür
@@ -51,6 +86,7 @@ public class UserService {
     public void addToBlacklist(String email) {
         String key = BLACKLIST_KEY_PREFIX + email;
         redisTemplate.opsForValue().set(key, "BLACKLISTED", 7, TimeUnit.DAYS); // 7 gün geçerli
+        System.out.println("E-posta kara listeye eklendi: " + email);
     }
 
     /**
