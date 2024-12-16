@@ -53,10 +53,10 @@ public class HomeworkController {
         homeworkService.updateHomework(homework);
         return new ResponseEntity<>(homework, HttpStatus.OK);
     }
-    @DeleteMapping("/del")
-    public ResponseEntity<HomeworkModel> deleteHomework(@RequestParam String homeworkId) {
+    @DeleteMapping("/del/{homeworkId}")
+    public ResponseEntity<String> deleteHomework(@PathVariable String homeworkId) {
         homeworkService.deleteHomework(homeworkId);
-        return new ResponseEntity<>(homeworkService.getHomework(homeworkId), HttpStatus.OK);
+        return new ResponseEntity<>("silindi", HttpStatus.OK);
     }
     @GetMapping("/getAll")
     public ResponseEntity<List<HomeworkModel>> getAllHomework() {
