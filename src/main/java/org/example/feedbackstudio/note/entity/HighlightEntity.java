@@ -2,6 +2,7 @@ package org.example.feedbackstudio.note.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.feedbackstudio.login.entity.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
@@ -17,6 +18,8 @@ public class HighlightEntity {
     private int endX;
     private int startY;
     private int endY;
+    private User user;
+    private PdfInfoEntity pdfInfo;
 
     // Constructors
     public HighlightEntity() {
