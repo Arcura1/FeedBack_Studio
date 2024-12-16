@@ -18,17 +18,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // Kullanıcı oluşturma
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        // Blacklist kontrolü
         if (userService.isEmailBlacklisted(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(user);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Bu e-posta adresi kara listede: " + user.getEmail());
         }
+
         User savedUser = userService.saveUser(user);
-
         return ResponseEntity.ok(savedUser);
-
     }
 
+    // Kullanıcı ID'ye göre getirme
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         return userService.getUserById(id)
@@ -36,37 +39,41 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Kullanıcıyı e-posta ile getirme
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         User user = userService.getUserByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
+    // Kullanıcı girişi
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
 
+        if (userService.isEmailBlacklisted(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Bu e-posta adresi kara listede: " + email);
+        }
 
-
-        User user = userService.login(email, password); // Bu metodu UserService'e eklemelisiniz
+        User user = userService.login(email, password);
         if (user != null) {
             return ResponseEntity.ok(user); // Giriş başarılı
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Giriş başarısız
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("E-posta veya şifre hatalı.");
         }
     }
 
+    // Kullanıcıyı ID'ye göre silme
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
+    // E-postayı kara listeye ekleme
     @PostMapping("/blacklist")
     public ResponseEntity<String> addToBlacklist(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -74,8 +81,9 @@ public class UserController {
         return ResponseEntity.ok("E-posta kara listeye eklendi: " + email);
     }
 
+    // Kara listeyi kontrol etme
     @GetMapping("/blacklist/{email}")
-    @Cacheable("blacklist")
+    @Cacheable("blacklist") // Redis cache kullanımı
     public ResponseEntity<String> checkBlacklist(@PathVariable String email) {
         boolean isBlacklisted = userService.isEmailBlacklisted(email);
         if (isBlacklisted) {
