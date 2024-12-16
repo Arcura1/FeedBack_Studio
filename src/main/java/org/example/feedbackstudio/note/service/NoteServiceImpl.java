@@ -118,6 +118,7 @@ public class NoteServiceImpl implements NoteService {
         add.setNote(note.getNote());
         add.setPage(note.getPage());
         add.setNote(note.getNote());
+        add.setTitle(note.getTitle());
         noteRepository.save(add);
         return add.getPdfInfoEntity().getId().toString();
     }
