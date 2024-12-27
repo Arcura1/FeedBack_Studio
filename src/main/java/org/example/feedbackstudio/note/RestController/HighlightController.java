@@ -64,8 +64,12 @@ public class HighlightController {
         return new ResponseEntity<>(savedHighlight, HttpStatus.CREATED); // 201 Created
     }
 
-
-
+    @CrossOrigin(origins = "*")
+    @GetMapping("/viewH/{id}")
+    public ResponseEntity<List<HighlightEntity>> getBypdfId(@PathVariable String id) {
+    highlightService.getAllHighlightsByPdfId(id);
+    return new ResponseEntity<>(highlightService.getAllHighlightsByPdfId(id), HttpStatus.OK);
+    }
 
     // Belirli bir startX ve startY'ye göre highlight'ları getiren endpoint (GET)
     @GetMapping("/coordinates")
