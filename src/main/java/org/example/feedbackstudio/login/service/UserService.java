@@ -23,7 +23,6 @@ public class UserService {
     /**
      * Kullanıcıyı kaydeder, aynı email ve şifreye sahip kullanıcı varsa kara listeye ekler.
      * @param user Kaydedilecek kullanıcı
-     * @return Kaydedilen kullanıcı
      */
     public User saveUser(User user) {
         // Aynı email ve şifre ile kullanıcı var mı kontrol et
