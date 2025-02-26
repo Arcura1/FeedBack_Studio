@@ -45,7 +45,7 @@ public class NoteRestController {
 
     @CrossOrigin(origins = "*")
     @DeleteMapping("/delAll/{id}")
-    public ResponseEntity<String> delAll(@PathVariable Long id) {
+    public ResponseEntity<String> delAll(@PathVariable String id) {
         noteService.delByPdfinfo(id);
         return new ResponseEntity<>("silindi", HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class NoteRestController {
     }
     @CrossOrigin(origins = "*")
     @GetMapping("/viewAll/{id}")
-    public ResponseEntity<List<NoteEntity>> viewAllById(@PathVariable Long id) {
+    public ResponseEntity<List<NoteEntity>> viewAllById(@PathVariable String id) {
         // HTTP başlıkları oluşturma
         HttpHeaders headers = new HttpHeaders();
 
@@ -74,7 +74,7 @@ public class NoteRestController {
     }
 
     @GetMapping("/getByPdf")
-    public ResponseEntity<List<NoteEntity>> findAll(@RequestParam Long pdfId) {
+    public ResponseEntity<List<NoteEntity>> findAll(@RequestParam String pdfId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 
@@ -93,7 +93,7 @@ public class NoteRestController {
 
 
     @GetMapping("/view")
-    public NoteModel view(@RequestParam Long NoteId)
+    public NoteModel view(@RequestParam String NoteId)
     {
         return noteService.view(NoteId);
     }

@@ -1,48 +1,35 @@
 package org.example.feedbackstudio.note.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.feedbackstudio.login.entity.User;
-
-import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "notes")
+@Document(collection = "Notes")
 public class NoteEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "x_coordinate", nullable = false)
+    private String id;
     private Long xcoordinate;
-
-    @Column(name = "y_coordinate", nullable = false)
     private Long ycoordinate;
-
-    @Column(name = "title", length = 255, nullable = false)
     private String title;
-
-    @Column(name = "page", nullable = false)
-    private Long page;
-
-    @Column(name = "note", columnDefinition = "TEXT", nullable = false)
+    private Number page;
     private String note;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @DBRef
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pdf_info_id", nullable = false)
-    private PdfInfoEntity pdfInfoEntity;
+    @DBRef
+    private PdfInfoEntity PdfInfoEntity;
+
+    public NoteEntity() {
+    }
 
     public NoteEntity(Long xcoordinate, Long ycoordinate) {
         this.xcoordinate = xcoordinate;
     }
+
+
 }

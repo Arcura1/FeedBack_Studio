@@ -27,12 +27,12 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     private final String UPLOAD_DIR = "src/main/resources/static/";
 
     @Override
-    public Long add(PdfUploadQueryModel queryModel) {
+    public String add(PdfUploadQueryModel queryModel) {
         PdfInfoEntity save = new PdfInfoEntity();
         save.setTitle(queryModel.getTitle());
         save.setContent(queryModel.getContent());
-        save.setXSize(queryModel.getXsize());
-        save.setYSize(queryModel.getYsize());
+        save.setXsize(queryModel.getXsize());
+        save.setYsize(queryModel.getYsize());
         save.setPageSize(queryModel.getPageSize());
         save.setHomeworkEntity(homeworkService.getHomeworkEntitiy(queryModel.getHomeworkId()));
         save.setUser(userService.getUserById(queryModel.getUserId()).get());
@@ -42,11 +42,11 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     }
 
     @Override
-    public PdfInfoEntity findById(Long Id) {
+    public PdfInfoEntity findById(String Id) {
         PdfInfoEntity geted = new PdfInfoEntity();
         geted=null;
 
-        geted = pdfInfoRepository.findById(Id).get();
+        geted = pdfInfoRepository.findById(Id);
         if (geted!=null) {
             return geted;
         } else {
@@ -64,7 +64,7 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     }
 
     @Override
-    public List<PdfInfoEntity> findByHomevork(Long homevork) {
+    public List<PdfInfoEntity> findByHomevork(String homevork) {
         return pdfInfoRepository.findByhomeworkEntity_id(homevork);
     }
 

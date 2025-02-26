@@ -39,7 +39,7 @@ public class HomeworkController {
         return new ResponseEntity<>(createdHomework, HttpStatus.CREATED);
     }
     @GetMapping("/get")
-    public ResponseEntity<HomeworkModel> getHomework(@RequestParam Long homeworkId) {
+    public ResponseEntity<HomeworkModel> getHomework(@RequestParam String homeworkId) {
         try {
             HomeworkModel homework = homeworkService.getHomework(homeworkId);
             return new ResponseEntity<>(homework, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class HomeworkController {
         return new ResponseEntity<>(homework, HttpStatus.OK);
     }
     @DeleteMapping("/del/{homeworkId}")
-    public ResponseEntity<String> deleteHomework(@PathVariable Long homeworkId) {
+    public ResponseEntity<String> deleteHomework(@PathVariable String homeworkId) {
         homeworkService.deleteHomework(homeworkId);
         return new ResponseEntity<>("silindi", HttpStatus.OK);
     }

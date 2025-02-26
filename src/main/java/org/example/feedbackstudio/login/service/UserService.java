@@ -40,7 +40,7 @@ public class UserService {
      * @param id Kullanıcı ID
      * @return Kullanıcı opsiyonu
      */
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(String id) {
         return userRepository.findById(id);
     }
 
@@ -57,7 +57,7 @@ public class UserService {
      * Kullanıcıyı ID'ye göre siler.
      * @param id Kullanıcı ID
      */
-    public void deleteUserById(Long id) {
+    public void deleteUserById(String id) {
         userRepository.deleteById(id);
     }
 

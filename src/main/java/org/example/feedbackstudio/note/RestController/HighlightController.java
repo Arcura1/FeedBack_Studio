@@ -42,7 +42,7 @@ public class HighlightController {
         }
 
         // Find the PdfInfoEntity by ID. If not found, return a 404 Not Found error.
-        PdfInfoEntity pdfInfo = pdfInfoRepository.findById(highlightQueryModel.getPdfId()).get();
+        PdfInfoEntity pdfInfo = pdfInfoRepository.findById(highlightQueryModel.getPdfId());
         if (pdfInfo == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found
         }
@@ -66,7 +66,7 @@ public class HighlightController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/viewH/{id}")
-    public ResponseEntity<List<HighlightEntity>> getBypdfId(@PathVariable Long id) {
+    public ResponseEntity<List<HighlightEntity>> getBypdfId(@PathVariable String id) {
     highlightService.getAllHighlightsByPdfId(id);
     return new ResponseEntity<>(highlightService.getAllHighlightsByPdfId(id), HttpStatus.OK);
     }

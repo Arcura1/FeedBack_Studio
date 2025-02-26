@@ -8,11 +8,11 @@ import org.example.feedbackstudio.note.entity.NoteEntity;
 import java.util.List;
 
 public interface NoteService {
-    public NoteModel view(Long NoteId);
+    public NoteModel view(String NoteId);
     public List<NoteEntity> viewAll();
     public String deleteAll();
     public String add(NoteQueryModel note);
-    public List<NoteEntity> viewByPdfId(Long pdf);
-    public List<NoteEntity> viewByPdfInfo(Long id);
-    public String delByPdfinfo(Long id);
+    public List<NoteEntity> viewByPdfId(String pdf);
+    public List<NoteEntity> viewByPdfInfo(String id);
+    public String delByPdfinfo(String id);
 }

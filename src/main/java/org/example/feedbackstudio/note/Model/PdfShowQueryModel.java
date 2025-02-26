@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PdfShowQueryModel {
-    private Long homeworkId;
-    private Long pdfInfoId;
+    private String homeworkId;
+    private String pdfInfoId;
 }

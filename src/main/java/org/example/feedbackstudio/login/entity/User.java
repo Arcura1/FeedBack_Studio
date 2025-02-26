@@ -1,36 +1,24 @@
 package org.example.feedbackstudio.login.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "users") // PostgreSQL'de tablo adı küçük harf olmalı
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // PostgreSQL'de kimlik sütunu için uygun veri tipi
-
-    @Column(name = "first_name", nullable = false)
+    private String id;
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
-    @Column(name = "phone", unique = true)
     private String phone;
-
-    @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "role", nullable = false)
     private String role;
 
     public User(String firstName, String lastName, String email, String phone, String password, String role) {
@@ -40,5 +28,55 @@ public class User {
         this.phone = phone;
         this.password = password;
         this.role = role != null ? role : "student";
+    }
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

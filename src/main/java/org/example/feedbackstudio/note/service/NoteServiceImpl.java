@@ -35,9 +35,9 @@ public class NoteServiceImpl implements NoteService {
 
     @CrossOrigin(origins = "*")
     @Override
-    public NoteModel view(Long NoteId) {
+    public NoteModel view(String NoteId) {
         NoteEntity findedNote=null;
-        findedNote = noteRepository.findById(NoteId).get();
+        findedNote = noteRepository.findById(NoteId);
         if (findedNote!=null) {
             NoteEntity note = findedNote;
             return NoteConverter.convertToModel(note);
@@ -124,7 +124,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<NoteEntity> viewByPdfId(Long pdf) {
+    public List<NoteEntity> viewByPdfId(String pdf) {
         List<NoteEntity> result = new LinkedList<NoteEntity>();
         result=noteRepository.findByPdfInfoEntityId(pdf);
 
@@ -132,7 +132,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<NoteEntity> viewByPdfInfo(Long id) {
+    public List<NoteEntity> viewByPdfInfo(String id) {
         List<NoteEntity> result=new ArrayList<>();
         List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
@@ -147,7 +147,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public String delByPdfinfo(Long id) {
+    public String delByPdfinfo(String id) {
         List<NoteEntity> result=new ArrayList<>();
         List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

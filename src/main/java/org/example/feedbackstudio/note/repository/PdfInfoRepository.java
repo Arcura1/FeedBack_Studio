@@ -1,14 +1,13 @@
 package org.example.feedbackstudio.note.repository;
 
 import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface PdfInfoRepository extends JpaRepository<PdfInfoEntity,Long> {
-    public Optional<PdfInfoEntity> findById(Long Id);
+public interface PdfInfoRepository extends CrudRepository<PdfInfoEntity,Integer> {
+    public PdfInfoEntity findById(String Id);
     PdfInfoEntity findByTitle(String title);
-    List<PdfInfoEntity> findByhomeworkEntity_id(Long homeworkEntity_id);
-    PdfInfoEntity findByHomeworkEntityIdAndUserId(Long homeworkId, Long userId);
+    List<PdfInfoEntity> findByhomeworkEntity_id(String homeworkEntity_id);
+    PdfInfoEntity findByHomeworkEntityIdAndUserId(String homeworkId, String userId);
 }

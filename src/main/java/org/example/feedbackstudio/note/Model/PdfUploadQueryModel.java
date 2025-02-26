@@ -11,17 +11,17 @@ public class PdfUploadQueryModel {
 
     private String title;
     private String content;
-    private Integer xsize;
-    private Integer ysize;
-    private Integer pageSize;
+    private Number xsize;
+    private Number ysize;
+    private Number pageSize;
 
-    private Long homeworkId;
-    private Long userId;
+    private String homeworkId;
+    private String userId;
 
     public PdfUploadQueryModel() {
 
     }
-    public PdfUploadQueryModel(Long HomeworkId, Long UserId) {
+    public PdfUploadQueryModel(String HomeworkId, String UserId) {
         this.homeworkId = HomeworkId;
         this.userId = UserId;
     }
