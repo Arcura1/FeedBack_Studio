@@ -7,10 +7,10 @@ import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 import java.util.List;
 
 public interface PdfInfoService {
-    String add(PdfUploadQueryModel queryModel);
-    PdfInfoEntity findById(String Id);
+    Long add(PdfUploadQueryModel queryModel);
+    PdfInfoEntity findById(Long Id);
     PdfInfoEntity findAllByHU(MixQueryModel queryModel);
-    List<PdfInfoEntity> findByHomevork(String homevork);
+    List<PdfInfoEntity> findByHomevork(Long homevork);
     // Convert PdfInfoEntity to MixQueryModel
     MixQueryModel convertToMixQueryModel(PdfInfoEntity pdfInfoEntity); // Yeni metodu ekliyoruz
 }

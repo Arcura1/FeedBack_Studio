@@ -9,7 +9,7 @@ import org.example.feedbackstudio.login.entity.User;
 @Setter
 public class HomeworkModel {
 
-    private String id;
+    private Long id;
     private String title;
     private String description;
     private User teacher;

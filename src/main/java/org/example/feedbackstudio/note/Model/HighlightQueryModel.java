@@ -11,7 +11,7 @@ public class HighlightQueryModel {
     private int endX;
     private int startY;
     private int endY;
-    private String pdfId;
-    private String userId;
+    private Long pdfId;
+    private Long userId;
     private int currentPage;
 }

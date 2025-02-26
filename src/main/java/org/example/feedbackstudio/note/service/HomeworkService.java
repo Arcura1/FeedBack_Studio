@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface HomeworkService {
     public List<HomeworkModel> getAllHomework();
-    public HomeworkModel getHomework(String id);
-    public HomeworkEntity getHomeworkEntitiy(String id);
+    public HomeworkModel getHomework(Long id);
+    public HomeworkEntity getHomeworkEntitiy(Long id);
     public HomeworkModel createHomework(HomeworkQueryModel homework);
     public HomeworkModel updateHomework(HomeworkQueryModel homework);
-    public void deleteHomework(String id);
+    public void deleteHomework(Long id);
     public List<HomeworkModel> getHomeworkByQueryModel(HomeworkQueryModel homeworkQueryModel);
 
 }

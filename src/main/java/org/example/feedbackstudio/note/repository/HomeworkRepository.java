@@ -1,9 +1,11 @@
 package org.example.feedbackstudio.note.repository;
 
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HomeworkRepository extends CrudRepository<HomeworkEntity, Integer> {
-    HomeworkEntity findById(String Id);
+import java.util.Optional;
+
+public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> {
+    Optional<HomeworkEntity> findById(Long Id);
 
 }
