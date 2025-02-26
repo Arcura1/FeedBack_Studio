@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface HighlightService {
     List<HighlightEntity> getAllHighlights();
-    List<HighlightEntity> getAllHighlightsByPdfId(String id);
+    List<HighlightEntity> getAllHighlightsByPdfId(Long id);
     List<HighlightEntity> getHighlightsByCoordinates(int startX, int startY);
     HighlightEntity saveHighlight(HighlightEntity highlightEntity);
 }

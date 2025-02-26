@@ -90,7 +90,7 @@ public class PdfInfoController {
     // Cross-Origin ile farklı domain'lerden istek kabul et
     @CrossOrigin(origins = "*")
     @GetMapping("/findByH/{h}")
-    public ResponseEntity<List<PdfInfoEntity>> findByH(@PathVariable String h) {
+    public ResponseEntity<List<PdfInfoEntity>> findByH(@PathVariable Long h) {
         return new ResponseEntity<>(pdfInfoService.findByHomevork(h), HttpStatus.OK);
     }
 
@@ -128,7 +128,7 @@ public class PdfInfoController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/uploadPdf")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") Long id) {
         System.out.println(id);
 
         PdfInfoEntity model=pdfInfoService.findById(id);

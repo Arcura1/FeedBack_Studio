@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PdfInfoModel {
-    private String setId;
+    private Long setId;
 }

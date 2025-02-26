@@ -1,46 +1,53 @@
 package org.example.feedbackstudio.note.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.example.feedbackstudio.login.entity.User;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-@Getter
-@Setter
 
-@Document(collection = "highlights")
+@Entity
+@Table(name = "highlights")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class HighlightEntity {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // PostgreSQL için uygun kimlik üretme
+    private Long id;
 
+    @Column(name = "start_x", nullable = false)
     private int startX;
+
+    @Column(name = "end_x", nullable = false)
     private int endX;
+
+    @Column(name = "start_y", nullable = false)
     private int startY;
+
+    @Column(name = "end_y", nullable = false)
     private int endY;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pdf_info_id", nullable = false)
     private PdfInfoEntity pdfInfo;
+
+    @Column(name = "current_page", nullable = false)
     private int currentPage;
-
-    // Constructors
-    public HighlightEntity() {
-    }
-
-    public HighlightEntity(int startX, int endX, int startY, int endY) {
-        this.startX = startX;
-        this.endX = endX;
-        this.startY = startY;
-        this.endY = endY;
-    }
 
     @Override
     public String toString() {
         return "HighlightEntity{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", startX=" + startX +
                 ", endX=" + endX +
                 ", startY=" + startY +
                 ", endY=" + endY +
+                ", currentPage=" + currentPage +
                 '}';
     }
 }

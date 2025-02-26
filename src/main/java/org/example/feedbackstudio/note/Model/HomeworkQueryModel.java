@@ -9,5 +9,5 @@ import org.example.feedbackstudio.login.entity.User;
 public class HomeworkQueryModel {
     private String title;
     private String description;
-    private String teacherId;;
+    private Long teacherId;;
 }

@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class MixQueryModel {
 
-    private String homeworkId;
-    private String userId;
+    private Long homeworkId;
+    private Long userId;
 }

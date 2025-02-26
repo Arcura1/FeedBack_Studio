@@ -9,22 +9,22 @@ import org.example.feedbackstudio.note.entity.PdfInfoEntity;
 @Setter
 public class NoteQueryModel {
 
-    private String id;
+    private Long id;
     private Long xcoordinate;
     private Long ycoordinate;
     private String title;
     private String note;
     private Long page;
 
-    private String user;
+    private Long user;
 
-    private String pdfInfoEntity;
+    private Long pdfInfoEntity;
 
     public NoteQueryModel() {
 
     }
 
-    public NoteQueryModel(String id, Long xcoordinate, Long ycoordinate) {
+    public NoteQueryModel(Long id, Long xcoordinate, Long ycoordinate) {
         this.id = id;
         this.xcoordinate = xcoordinate;
         this.ycoordinate = ycoordinate;
