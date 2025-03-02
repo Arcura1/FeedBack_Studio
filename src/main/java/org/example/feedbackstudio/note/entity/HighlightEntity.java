@@ -2,7 +2,8 @@ package org.example.feedbackstudio.note.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.feedbackstudio.login.entity.User;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 
 @Entity
 @Table(name = "highlights")
@@ -28,12 +29,19 @@ public class HighlightEntity {
     @Column(name = "end_y", nullable = false)
     private int endY;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+
+    @Column(name = "user_id", insertable = true, updatable = false)
+    private Long userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",  insertable = false, updatable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pdf_info_id", nullable = false)
+    @Column(name = "pdf_info_id", insertable = true, updatable = false)
+    private Long pdfInfoId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pdf_info_id",  insertable = false, updatable = false)
     private PdfInfoEntity pdfInfo;
 
     @Column(name = "current_page", nullable = false)

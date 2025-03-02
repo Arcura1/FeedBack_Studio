@@ -1,7 +1,7 @@
-package org.example.feedbackstudio.login.rest;
+package org.example.feedbackstudio.login.user.rest;
 
-import org.example.feedbackstudio.login.entity.User;
-import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.login.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;

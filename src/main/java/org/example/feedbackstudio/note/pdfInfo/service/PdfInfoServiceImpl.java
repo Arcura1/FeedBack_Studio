@@ -1,16 +1,15 @@
-package org.example.feedbackstudio.note.service;
+package org.example.feedbackstudio.note.pdfInfo.service;
 
 
-import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class clasroomQueryModel {
+public class ClasroomQueryModel {
 
         private String name;
         private Integer floor;

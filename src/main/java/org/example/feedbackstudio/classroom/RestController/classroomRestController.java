@@ -1,7 +1,7 @@
 package org.example.feedbackstudio.classroom.RestController;
 
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
-import org.example.feedbackstudio.classroom.model.clasroomQueryModel;
+import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
 import org.example.feedbackstudio.classroom.service.classroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class classroomRestController {
     // --- CREATE ---
     // Yeni bir sınıf oluştur
     @PostMapping
-    public ResponseEntity<classroomEntity> createClassroom(@RequestBody clasroomQueryModel model) {
+    public ResponseEntity<classroomEntity> createClassroom(@RequestBody ClasroomQueryModel model) {
         classroomEntity createdClassroom = classroomService.createClassroom(model);
         return ResponseEntity.ok(createdClassroom);
     }
@@ -48,7 +48,7 @@ public class classroomRestController {
     // --- UPDATE ---
     @PutMapping("/{id}")
     public ResponseEntity<classroomEntity> updateClassroom(@PathVariable Long id,
-                                                           @RequestBody clasroomQueryModel updatedClassroom) {
+                                                           @RequestBody ClasroomQueryModel updatedClassroom) {
         try {
             classroomEntity updated = classroomService.updateClassroom(id, updatedClassroom);
             return ResponseEntity.ok(updated);

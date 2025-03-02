@@ -1,7 +1,7 @@
-package org.example.feedbackstudio.login.service;
+package org.example.feedbackstudio.login.user.service;
 
-import org.example.feedbackstudio.login.dao.UserRepository;
-import org.example.feedbackstudio.login.entity.User;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
+import org.example.feedbackstudio.login.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

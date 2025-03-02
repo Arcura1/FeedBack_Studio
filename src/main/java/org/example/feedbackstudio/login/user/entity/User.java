@@ -1,4 +1,4 @@
-package org.example.feedbackstudio.login.entity;
+package org.example.feedbackstudio.login.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

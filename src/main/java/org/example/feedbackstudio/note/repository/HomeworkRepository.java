@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> {
-    Optional<HomeworkEntity> findById(Long Id);
-
+    Optional<HomeworkEntity> findById(Long id); // "Id" yerine "id" yazıldı.
 }

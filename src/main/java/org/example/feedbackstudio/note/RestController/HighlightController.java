@@ -1,11 +1,11 @@
 package org.example.feedbackstudio.note.RestController;
 
-import org.example.feedbackstudio.login.dao.UserRepository;
-import org.example.feedbackstudio.login.entity.User;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
+import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.note.Model.HighlightQueryModel;
 import org.example.feedbackstudio.note.entity.HighlightEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.HighlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,8 +54,8 @@ public class HighlightController {
         highlight.setEndX(highlightQueryModel.getEndX());
         highlight.setEndY(highlightQueryModel.getEndY());
         highlight.setCurrentPage(highlightQueryModel.getCurrentPage());
-        highlight.setPdfInfo(pdfInfo);
-        highlight.setUser(user);
+        highlight.setPdfInfoId(pdfInfo.getId());
+        highlight.setUserId(user.getId());
 
         // Save the highlight and return a response with the created entity
         HighlightEntity  savedHighlight = highlightService.saveHighlight(highlight);

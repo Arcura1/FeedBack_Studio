@@ -1,15 +1,14 @@
 package org.example.feedbackstudio.note.service;
 
-import org.example.feedbackstudio.login.dao.UserRepository;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
 import org.example.feedbackstudio.note.entity.NoteEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.example.feedbackstudio.note.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.NoteRepository;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;

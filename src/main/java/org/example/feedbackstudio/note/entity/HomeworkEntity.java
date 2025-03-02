@@ -2,8 +2,7 @@ package org.example.feedbackstudio.note.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.feedbackstudio.login.entity.User;
-import java.util.UUID;
+import org.example.feedbackstudio.login.user.entity.User;
 
 @Getter
 @Setter
@@ -24,7 +23,10 @@ public class HomeworkEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @Column(name = "teacher_id", insertable = true, updatable = false)
+    private Long teacherId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     private User teacher;
 }

@@ -1,7 +1,7 @@
 package org.example.feedbackstudio.classroom.service;
 
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
-import org.example.feedbackstudio.classroom.model.clasroomQueryModel;
+import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
 import org.example.feedbackstudio.classroom.repository.ClassroomRepository;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
@@ -21,7 +21,7 @@ public class classroomServiceImpl implements classroomService{
     private OrganizationRepository organizationRepository;
 
     @Override
-    public classroomEntity createClassroom(clasroomQueryModel model) {
+    public classroomEntity createClassroom(ClasroomQueryModel model) {
         classroomEntity existingClassroom = new classroomEntity();
         existingClassroom.setName(model.getName());
         existingClassroom.setFloor(model.getFloor());
@@ -31,9 +31,7 @@ public class classroomServiceImpl implements classroomService{
         existingClassroom.setHasWhiteboard(model.getHasWhiteboard());
         existingClassroom.setHasAirConditioning(model.getHasAirConditioning());
         existingClassroom.setDescription(model.getDescription());
-        organizationEntity organization = organizationRepository.findById(model.getOrganizationId())
-                .orElseThrow(() -> new RuntimeException("Organization not found"));
-        existingClassroom.setOrganization(organization);
+        existingClassroom.setOrganizationId(model.getOrganizationId());
         return classroomRepository.save(existingClassroom);
     }
 
@@ -48,7 +46,7 @@ public class classroomServiceImpl implements classroomService{
     }
 
     @Override
-    public classroomEntity updateClassroom(Long id, clasroomQueryModel updatedClassroom) {
+    public classroomEntity updateClassroom(Long id, ClasroomQueryModel updatedClassroom) {
         return classroomRepository.findById(id)
                 .map(existingClassroom -> {
                     existingClassroom.setName(updatedClassroom.getName());

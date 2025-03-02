@@ -2,9 +2,8 @@ package org.example.feedbackstudio.note.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.feedbackstudio.login.entity.User;
-
-import java.util.UUID;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 
 @Getter
 @Setter
@@ -34,12 +33,18 @@ public class NoteEntity {
     @Column(name = "note", columnDefinition = "TEXT", nullable = false)
     private String note;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "user_id",  insertable = true, updatable = false)
+    private Long userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",  insertable = false, updatable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pdf_info_id", nullable = false)
+    @JoinColumn(name = "pdf_info_id",  insertable = true, updatable = false)
+    private Long pdfInfoEntityId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pdf_info_id",  insertable = false, updatable = false)
     private PdfInfoEntity pdfInfoEntity;
 
     public NoteEntity(Long xcoordinate, Long ycoordinate) {

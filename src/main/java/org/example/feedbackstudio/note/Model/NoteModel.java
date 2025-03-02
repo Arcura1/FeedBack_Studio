@@ -2,8 +2,8 @@ package org.example.feedbackstudio.note.Model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.feedbackstudio.login.entity.User;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 
 
 @Getter
