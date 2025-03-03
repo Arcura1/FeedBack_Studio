@@ -26,7 +26,7 @@ public class MessageReceiver {
 //    @RabbitListener(queues = "note")
 //    public String add(@RequestBody NoteQueryModel noteDto) {
 //        System.out.println("Received: " + noteDto);
-//        return "done";
+//        return "done";djkflsa
 //    }
 @RabbitListener(queues = "note-queue")
 public void receiveMessage(NoteQueryModel noteDto, Channel channel, Message message) throws IOException {
