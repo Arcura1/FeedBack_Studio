@@ -1,15 +1,12 @@
-package org.example.feedbackstudio.note.RestController;
+package org.example.feedbackstudio.note.pdfInfo.controller;
 
-import org.example.feedbackstudio.note.Model.PdfInfoModel;
+import org.example.feedbackstudio.note.pdfInfo.model.PdfInfoModel;
 import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.repository.HomeworkRepository;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
-import org.example.feedbackstudio.note.service.HomeworkService;
 import org.example.feedbackstudio.note.service.NoteService;
-import org.example.feedbackstudio.note.service.PdfInfoService;
+import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -41,7 +38,7 @@ public class PdfInfoController {
     org.example.feedbackstudio.MessageSender messageSender;
 
     @Autowired
-    private org.example.feedbackstudio.note.repository.PdfInfoRepository PdfInfoRepository;
+    private org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository PdfInfoRepository;
 
     @Autowired
     private PdfInfoService pdfInfoService;
@@ -90,7 +87,7 @@ public class PdfInfoController {
     // Cross-Origin ile farklı domain'lerden istek kabul et
     @CrossOrigin(origins = "*")
     @GetMapping("/findByH/{h}")
-    public ResponseEntity<List<PdfInfoEntity>> findByH(@PathVariable String h) {
+    public ResponseEntity<List<PdfInfoEntity>> findByH(@PathVariable Long h) {
         return new ResponseEntity<>(pdfInfoService.findByHomevork(h), HttpStatus.OK);
     }
 
@@ -128,7 +125,7 @@ public class PdfInfoController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/uploadPdf")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") String id) {
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("Id") Long id) {
         System.out.println(id);
 
         PdfInfoEntity model=pdfInfoService.findById(id);

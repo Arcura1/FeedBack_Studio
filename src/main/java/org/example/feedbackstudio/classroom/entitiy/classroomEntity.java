@@ -50,8 +50,12 @@ public class classroomEntity {
     @Column(length = 500)
     private String description;
 
+    // Organization ID doğrudan tutulacak
+    @Column(name = "organization_id", insertable = true, updatable = false)
+    private Long organizationId;
+
     // Organization entity ile ilişki
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private organizationEntity organization;
 }

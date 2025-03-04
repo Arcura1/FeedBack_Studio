@@ -2,14 +2,14 @@ package org.example.feedbackstudio.note.Model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.feedbackstudio.login.entity.User;
+import org.example.feedbackstudio.login.user.entity.User;
 
 
 @Getter
 @Setter
 public class HomeworkModel {
 
-    private String id;
+    private Long id;
     private String title;
     private String description;
     private User teacher;

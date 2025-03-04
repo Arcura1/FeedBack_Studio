@@ -1,4 +1,4 @@
-package org.example.feedbackstudio.note.Model;
+package org.example.feedbackstudio.note.pdfInfo.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PdfInfoModel {
-    private String setId;
+    private Long setId;
 }

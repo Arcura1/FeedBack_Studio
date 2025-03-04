@@ -1,27 +1,16 @@
 package org.example.feedbackstudio.note.RestController;
 
-import org.example.feedbackstudio.MessageSender;
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
-import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.entity.NoteEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.NoteRepository;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -45,7 +34,7 @@ public class NoteRestController {
 
     @CrossOrigin(origins = "*")
     @DeleteMapping("/delAll/{id}")
-    public ResponseEntity<String> delAll(@PathVariable String id) {
+    public ResponseEntity<String> delAll(@PathVariable Long id) {
         noteService.delByPdfinfo(id);
         return new ResponseEntity<>("silindi", HttpStatus.OK);
     }
@@ -59,7 +48,7 @@ public class NoteRestController {
     }
     @CrossOrigin(origins = "*")
     @GetMapping("/viewAll/{id}")
-    public ResponseEntity<List<NoteEntity>> viewAllById(@PathVariable String id) {
+    public ResponseEntity<List<NoteEntity>> viewAllById(@PathVariable Long id) {
         // HTTP başlıkları oluşturma
         HttpHeaders headers = new HttpHeaders();
 
@@ -74,7 +63,7 @@ public class NoteRestController {
     }
 
     @GetMapping("/getByPdf")
-    public ResponseEntity<List<NoteEntity>> findAll(@RequestParam String pdfId) {
+    public ResponseEntity<List<NoteEntity>> findAll(@RequestParam Long pdfId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 
@@ -93,7 +82,7 @@ public class NoteRestController {
 
 
     @GetMapping("/view")
-    public NoteModel view(@RequestParam String NoteId)
+    public NoteModel view(@RequestParam Long NoteId)
     {
         return noteService.view(NoteId);
     }

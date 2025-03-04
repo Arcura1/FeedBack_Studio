@@ -1,20 +1,17 @@
 package org.example.feedbackstudio.note.service;
 
-import org.example.feedbackstudio.login.entity.User;
-import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.note.Model.HomeworkModel;
 import org.example.feedbackstudio.note.Model.HomeworkQueryModel;
 import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.repository.HomeworkRepository;
-import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HomeworkServiceImpl implements HomeworkService {
@@ -37,9 +34,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public HomeworkModel getHomework(String id) {
+    public HomeworkModel getHomework(Long id) {
         HomeworkEntity homeworkEntityOptional = null;
-        homeworkEntityOptional = homeworkRepository.findById(id); // findById kullanımı
+        homeworkEntityOptional = homeworkRepository.findById(id).get(); // findById kullanımı
         if (homeworkEntityOptional!=null) {
             HomeworkEntity homeworkEntity = homeworkEntityOptional;
             return HomeworkConverter.convertToModel(homeworkEntity);
@@ -49,9 +46,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public HomeworkEntity getHomeworkEntitiy(String id) {
+    public HomeworkEntity getHomeworkEntitiy(Long id) {
         HomeworkEntity homeworkEntityOptional = null;
-        homeworkEntityOptional = homeworkRepository.findById(id); // findById kullanımı
+        homeworkEntityOptional = homeworkRepository.findById(id).get(); // findById kullanımı
         if (homeworkEntityOptional!=null) {
             HomeworkEntity homeworkEntity = homeworkEntityOptional;
             return homeworkEntity;
@@ -63,9 +60,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public HomeworkModel createHomework(HomeworkQueryModel homework) {
         HomeworkEntity HomeworkEntity = new HomeworkEntity();
-        User teacher = userService.getUserById(homework.getTeacherId())
-                .orElseThrow(() -> new RuntimeException("Teacher not found with ID: " + homework.getTeacherId()));
-        HomeworkEntity.setTeacher(teacher);
+        HomeworkEntity.setTeacherId(homework.getTeacherId());
         HomeworkEntity.setTitle(homework.getTitle());
         HomeworkEntity.setDescription(homework.getDescription());
 
@@ -90,9 +85,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public void deleteHomework(String id) {
+    public void deleteHomework(Long id) {
         HomeworkEntity homeworkEntityOptional=null;
-        homeworkEntityOptional= homeworkRepository.findById(id);
+        homeworkEntityOptional= homeworkRepository.findById(id).get();
 
         if (homeworkEntityOptional != null) {
             // Öğeyi bulduysanız, silme işlemini yapın

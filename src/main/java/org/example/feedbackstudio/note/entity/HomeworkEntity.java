@@ -1,19 +1,32 @@
 package org.example.feedbackstudio.note.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.example.feedbackstudio.login.entity.User;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
+import org.example.feedbackstudio.login.user.entity.User;
 
 @Getter
 @Setter
-@Document(collection = "HomeWork")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "homework")
 public class HomeworkEntity {
-    @Id
-    private String id;
-    private String title;
-    private String description;
-    private User teacher;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // UUID için AUTO kullanılıyor
+    private Long id;
+
+    @Column(name = "title", nullable = false, length = 255)
+    private String title;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "teacher_id", insertable = true, updatable = false)
+    private Long teacherId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    private User teacher;
 }

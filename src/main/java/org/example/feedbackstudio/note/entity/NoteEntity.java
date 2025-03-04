@@ -1,35 +1,53 @@
 package org.example.feedbackstudio.note.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.example.feedbackstudio.login.entity.User;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 
 @Getter
 @Setter
-@Document(collection = "Notes")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "notes")
 public class NoteEntity {
+
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "x_coordinate", nullable = false)
     private Long xcoordinate;
+
+    @Column(name = "y_coordinate", nullable = false)
     private Long ycoordinate;
+
+    @Column(name = "title", length = 255, nullable = false)
     private String title;
-    private Number page;
+
+    @Column(name = "page", nullable = false)
+    private Long page;
+
+    @Column(name = "note", columnDefinition = "TEXT", nullable = false)
     private String note;
-    @DBRef
+
+    @Column(name = "user_id",  insertable = true, updatable = false)
+    private Long userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",  insertable = false, updatable = false)
     private User user;
 
-    @DBRef
-    private PdfInfoEntity PdfInfoEntity;
+    @JoinColumn(name = "pdf_info_id",  insertable = true, updatable = false)
+    private Long pdfInfoEntityId;
 
-    public NoteEntity() {
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pdf_info_id",  insertable = false, updatable = false)
+    private PdfInfoEntity pdfInfoEntity;
 
     public NoteEntity(Long xcoordinate, Long ycoordinate) {
         this.xcoordinate = xcoordinate;
     }
-
-
 }

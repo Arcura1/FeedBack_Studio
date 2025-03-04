@@ -1,24 +1,13 @@
 package org.example.feedbackstudio.note.RestController;
 
-import lombok.Getter;
-import org.example.feedbackstudio.MessageSender;
 import org.example.feedbackstudio.note.Model.*;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.entity.NoteEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.NoteRepository;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.HomeworkService;
-import org.example.feedbackstudio.note.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +28,7 @@ public class HomeworkController {
         return new ResponseEntity<>(createdHomework, HttpStatus.CREATED);
     }
     @GetMapping("/get")
-    public ResponseEntity<HomeworkModel> getHomework(@RequestParam String homeworkId) {
+    public ResponseEntity<HomeworkModel> getHomework(@RequestParam Long homeworkId) {
         try {
             HomeworkModel homework = homeworkService.getHomework(homeworkId);
             return new ResponseEntity<>(homework, HttpStatus.OK);
@@ -54,7 +43,7 @@ public class HomeworkController {
         return new ResponseEntity<>(homework, HttpStatus.OK);
     }
     @DeleteMapping("/del/{homeworkId}")
-    public ResponseEntity<String> deleteHomework(@PathVariable String homeworkId) {
+    public ResponseEntity<String> deleteHomework(@PathVariable Long homeworkId) {
         homeworkService.deleteHomework(homeworkId);
         return new ResponseEntity<>("silindi", HttpStatus.OK);
     }

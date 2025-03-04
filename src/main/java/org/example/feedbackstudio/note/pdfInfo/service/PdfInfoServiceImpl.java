@@ -1,16 +1,15 @@
-package org.example.feedbackstudio.note.service;
+package org.example.feedbackstudio.note.pdfInfo.service;
 
 
-import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,12 +26,12 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     private final String UPLOAD_DIR = "src/main/resources/static/";
 
     @Override
-    public String add(PdfUploadQueryModel queryModel) {
+    public Long add(PdfUploadQueryModel queryModel) {
         PdfInfoEntity save = new PdfInfoEntity();
         save.setTitle(queryModel.getTitle());
         save.setContent(queryModel.getContent());
-        save.setXsize(queryModel.getXsize());
-        save.setYsize(queryModel.getYsize());
+        save.setXSize(queryModel.getXsize());
+        save.setYSize(queryModel.getYsize());
         save.setPageSize(queryModel.getPageSize());
         save.setHomeworkEntity(homeworkService.getHomeworkEntitiy(queryModel.getHomeworkId()));
         save.setUser(userService.getUserById(queryModel.getUserId()).get());
@@ -42,11 +41,11 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     }
 
     @Override
-    public PdfInfoEntity findById(String Id) {
+    public PdfInfoEntity findById(Long Id) {
         PdfInfoEntity geted = new PdfInfoEntity();
         geted=null;
 
-        geted = pdfInfoRepository.findById(Id);
+        geted = pdfInfoRepository.findById(Id).get();
         if (geted!=null) {
             return geted;
         } else {
@@ -64,7 +63,7 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     }
 
     @Override
-    public List<PdfInfoEntity> findByHomevork(String homevork) {
+    public List<PdfInfoEntity> findByHomevork(Long homevork) {
         return pdfInfoRepository.findByhomeworkEntity_id(homevork);
     }
 

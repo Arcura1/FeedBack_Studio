@@ -1,7 +1,7 @@
-package org.example.feedbackstudio.login.rest;
+package org.example.feedbackstudio.login.user.rest;
 
-import org.example.feedbackstudio.login.entity.User;
-import org.example.feedbackstudio.login.service.UserService;
+import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.login.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class UserController {
 
     // Kullanıcı ID'ye göre getirme
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -68,7 +68,7 @@ public class UserController {
 
     // Kullanıcıyı ID'ye göre silme
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }

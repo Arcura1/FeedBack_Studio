@@ -1,15 +1,14 @@
 package org.example.feedbackstudio.note.service;
 
-import org.example.feedbackstudio.login.dao.UserRepository;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
 import org.example.feedbackstudio.note.entity.NoteEntity;
-import org.example.feedbackstudio.note.entity.PdfInfoEntity;
+import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.example.feedbackstudio.note.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.NoteRepository;
-import org.example.feedbackstudio.note.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,9 +34,9 @@ public class NoteServiceImpl implements NoteService {
 
     @CrossOrigin(origins = "*")
     @Override
-    public NoteModel view(String NoteId) {
+    public NoteModel view(Long NoteId) {
         NoteEntity findedNote=null;
-        findedNote = noteRepository.findById(NoteId);
+        findedNote = noteRepository.findById(NoteId).get();
         if (findedNote!=null) {
             NoteEntity note = findedNote;
             return NoteConverter.convertToModel(note);
@@ -124,7 +123,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<NoteEntity> viewByPdfId(String pdf) {
+    public List<NoteEntity> viewByPdfId(Long pdf) {
         List<NoteEntity> result = new LinkedList<NoteEntity>();
         result=noteRepository.findByPdfInfoEntityId(pdf);
 
@@ -132,7 +131,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<NoteEntity> viewByPdfInfo(String id) {
+    public List<NoteEntity> viewByPdfInfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
         List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
@@ -147,7 +146,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public String delByPdfinfo(String id) {
+    public String delByPdfinfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
         List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

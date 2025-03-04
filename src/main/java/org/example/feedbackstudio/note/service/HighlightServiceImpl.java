@@ -19,7 +19,7 @@ public class HighlightServiceImpl implements HighlightService {
     }
 
     @Override
-    public List<HighlightEntity> getAllHighlightsByPdfId(String id) {
+    public List<HighlightEntity> getAllHighlightsByPdfId(Long id) {
         List<HighlightEntity> temp=highlightRepository.findAll();
         List<HighlightEntity> result=new ArrayList<HighlightEntity>();
         temp.forEach(val->{
