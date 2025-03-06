@@ -32,7 +32,7 @@ public class PdfInfoEntity {
     @Column(name = "page_size", nullable = false)
     private Integer pageSize;
 
-    @JoinColumn(name = "homework_id",  insertable = true, updatable = false)
+    @Column(name = "homework_id",  insertable = true, updatable = false)
     private Long homeworkEntityId;
 
     @ManyToOne(fetch = FetchType.EAGER)

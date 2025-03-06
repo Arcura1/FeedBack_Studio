@@ -17,14 +17,12 @@ public class roleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//
-//    // Sınıf veya derslik için tanımlayıcı isim
-//    @Column(nullable = false, unique = true)
-//    private String name;
-//
-//    // Bulunduğu kat
-//    @Column(nullable = false)
-//    private Integer floor;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(length = 255)
+    private String description; // Yetkinin açıklaması (isteğe bağlı)
 
 
 }

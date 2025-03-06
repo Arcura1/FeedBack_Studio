@@ -138,7 +138,7 @@ public class PdfInfoController {
         String fileName = file.getOriginalFilename();
         // Dosyanın kaydedileceği tam yol
 
-        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId()+"/"+ model.getId()+".pdf");
+        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId().toString()+"/"+ model.getId().toString()+".pdf");
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın

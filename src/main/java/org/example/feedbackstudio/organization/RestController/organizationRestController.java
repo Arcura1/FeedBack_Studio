@@ -64,6 +64,7 @@ public class organizationRestController {
             organizationEntity.setName(organizationDetails.getName());
             organizationEntity.setAddress(organizationDetails.getAddress());
             organizationEntity.setEmail(organizationDetails.getEmail());
+            organizationEntity.setUserId(organizationDetails.getUserId());
             organizationEntity updatedOrganization = organizationRepository.save(organizationEntity);
             return ResponseEntity.ok(updatedOrganization);
         } else {

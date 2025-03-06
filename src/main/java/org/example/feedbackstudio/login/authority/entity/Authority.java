@@ -2,6 +2,9 @@ package org.example.feedbackstudio.login.authority.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
+import org.example.feedbackstudio.login.authority.authorityenum.OperationType;
+import org.example.feedbackstudio.organization.entity.organizationEntity;
 
 @Entity
 @Table(name = "authorities")
@@ -21,4 +24,28 @@ public class Authority {
 
     @Column(length = 255)
     private String description; // Yetkinin açıklaması (isteğe bağlı)
+
+    @Enumerated(EnumType.STRING)  // Enum'ı String olarak saklar (örn: "ADD_HOMEWORK")
+    @Column(nullable = false)
+    private OperationType operationType;
+
+    // Organization ID doğrudan tutulacak
+    @Column(name = "classroom_id", insertable = true, updatable = false)
+    private Long classroomId;
+
+    // Organization entity ile ilişki
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "classroom_id", insertable = false, updatable = false)
+    private classroomEntity classroom;
+
+    // Organization ID doğrudan tutulacak
+    @Column(name = "organization_id", insertable = true, updatable = false)
+    private Long organizationId;
+
+    // Organization entity ile ilişki
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", insertable = false, updatable = false)
+    private organizationEntity organization;
+
+
 }

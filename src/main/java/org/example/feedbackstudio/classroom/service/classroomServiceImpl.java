@@ -57,9 +57,7 @@ public class classroomServiceImpl implements classroomService{
                     existingClassroom.setHasWhiteboard(updatedClassroom.getHasWhiteboard());
                     existingClassroom.setHasAirConditioning(updatedClassroom.getHasAirConditioning());
                     existingClassroom.setDescription(updatedClassroom.getDescription());
-                    organizationEntity organization = organizationRepository.findById(updatedClassroom.getOrganizationId())
-                            .orElseThrow(() -> new RuntimeException("Organization not found"));
-                    existingClassroom.setOrganization(organization);
+                    existingClassroom.setOrganizationId(updatedClassroom.getOrganizationId());
                     return classroomRepository.save(existingClassroom);
                 }).orElseThrow(() -> new RuntimeException("Classroom not found"));
     }
