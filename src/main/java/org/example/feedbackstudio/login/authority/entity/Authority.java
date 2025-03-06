@@ -3,7 +3,7 @@ package org.example.feedbackstudio.login.authority.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
-import org.example.feedbackstudio.login.authority.authorityenum.OperationType;
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 
 @Entity
@@ -27,7 +27,7 @@ public class Authority {
 
     @Enumerated(EnumType.STRING)  // Enum'ı String olarak saklar (örn: "ADD_HOMEWORK")
     @Column(nullable = false)
-    private OperationType operationType;
+    private AuthorityType authorityType;
 
     // Organization ID doğrudan tutulacak
     @Column(name = "classroom_id", insertable = true, updatable = false)
@@ -46,6 +46,4 @@ public class Authority {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private organizationEntity organization;
-
-
 }
