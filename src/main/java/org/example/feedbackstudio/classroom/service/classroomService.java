@@ -12,4 +12,5 @@ public interface classroomService {
     Optional<classroomEntity> getClassroomById(Long id);
     classroomEntity updateClassroom(Long id, ClasroomQueryModel updatedClassroom);
     void deleteClassroom(Long id);
+    List<classroomEntity> getClassroomsByUserId(Long userId);
 }

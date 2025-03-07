@@ -36,6 +36,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findById(id).map(existing -> {
             existing.setName(role.getName());
             existing.setDescription(role.getDescription());
+            existing.setRoleTypeEnum(role.getRoleTypeEnum());
             return roleRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Role not found with ID: " + id));
     }

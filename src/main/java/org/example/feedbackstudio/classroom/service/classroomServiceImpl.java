@@ -32,6 +32,7 @@ public class classroomServiceImpl implements classroomService{
         existingClassroom.setHasAirConditioning(model.getHasAirConditioning());
         existingClassroom.setDescription(model.getDescription());
         existingClassroom.setOrganizationId(model.getOrganizationId());
+        existingClassroom.setUserId(model.getUserId());
         return classroomRepository.save(existingClassroom);
     }
 
@@ -58,6 +59,7 @@ public class classroomServiceImpl implements classroomService{
                     existingClassroom.setHasAirConditioning(updatedClassroom.getHasAirConditioning());
                     existingClassroom.setDescription(updatedClassroom.getDescription());
                     existingClassroom.setOrganizationId(updatedClassroom.getOrganizationId());
+                    existingClassroom.setUserId(updatedClassroom.getUserId());
                     return classroomRepository.save(existingClassroom);
                 }).orElseThrow(() -> new RuntimeException("Classroom not found"));
     }
@@ -65,5 +67,10 @@ public class classroomServiceImpl implements classroomService{
     @Override
     public void deleteClassroom(Long id) {
         classroomRepository.deleteById(id);
+    }
+
+    @Override
+    public List<classroomEntity> getClassroomsByUserId(Long userId) {
+        return classroomRepository.findByUserId(userId);
     }
 }

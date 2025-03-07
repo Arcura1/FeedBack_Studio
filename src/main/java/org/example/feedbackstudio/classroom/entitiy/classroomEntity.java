@@ -3,6 +3,7 @@ package org.example.feedbackstudio.classroom.entitiy;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 
 @Entity
@@ -58,4 +59,12 @@ public class classroomEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private organizationEntity organization;
+
+    @Column(name = "user_id", insertable = true, updatable = false)
+    private Long userId;
+
+    // Organization entity ile ilişki
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
 import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 
 @Entity
@@ -28,6 +29,10 @@ public class Authority {
     @Enumerated(EnumType.STRING)  // Enum'ı String olarak saklar (örn: "ADD_HOMEWORK")
     @Column(nullable = false)
     private AuthorityType authorityType;
+
+    @Enumerated(EnumType.STRING)  // Enum'ı String olarak saklar (örn: "ADD_HOMEWORK")
+    @Column(nullable = true)
+    private EffectTypeEnum effectTypeEnum;
 
     // Organization ID doğrudan tutulacak
     @Column(name = "classroom_id", insertable = true, updatable = false)

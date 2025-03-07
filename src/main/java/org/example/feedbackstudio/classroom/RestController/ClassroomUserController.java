@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/classroom-users")
+@CrossOrigin(origins = "*")
 public class ClassroomUserController {
 
     private final ClassroomUserService classroomUserService;

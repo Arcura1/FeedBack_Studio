@@ -63,4 +63,9 @@ public class classroomRestController {
         classroomService.deleteClassroom(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/user/{userId}")
+    public List<classroomEntity> getClassroomsByUserId(@PathVariable Long userId) {
+        return classroomService.getClassroomsByUserId(userId);
+    }
 }
