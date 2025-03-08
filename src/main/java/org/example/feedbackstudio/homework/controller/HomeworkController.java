@@ -1,7 +1,8 @@
-package org.example.feedbackstudio.note.RestController;
+package org.example.feedbackstudio.homework.controller;
 
-import org.example.feedbackstudio.note.Model.*;
-import org.example.feedbackstudio.note.service.HomeworkService;
+import org.example.feedbackstudio.homework.model.HomeworkModel;
+import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
+import org.example.feedbackstudio.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,11 @@ public class HomeworkController {
     @GetMapping("/getAll")
     public ResponseEntity<List<HomeworkModel>> getAllHomework() {
         List<HomeworkModel> homeworkList = homeworkService.getAllHomework();
+        return new ResponseEntity<>(homeworkList, HttpStatus.OK);
+    }
+    @GetMapping("/getAllByT")
+    public ResponseEntity<List<HomeworkModel>> getAllHomeworkByT(@RequestParam Long teacherId) {
+        List<HomeworkModel> homeworkList = homeworkService.getHomeworkByTeacher(teacherId);
         return new ResponseEntity<>(homeworkList, HttpStatus.OK);
     }
 

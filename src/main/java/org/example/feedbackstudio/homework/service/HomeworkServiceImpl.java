@@ -1,17 +1,17 @@
-package org.example.feedbackstudio.note.service;
+package org.example.feedbackstudio.homework.service;
 
-import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.login.user.service.UserService;
-import org.example.feedbackstudio.note.Model.HomeworkModel;
-import org.example.feedbackstudio.note.Model.HomeworkQueryModel;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
-import org.example.feedbackstudio.note.repository.HomeworkRepository;
+import org.example.feedbackstudio.homework.model.HomeworkModel;
+import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
+import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
+import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HomeworkServiceImpl implements HomeworkService {
@@ -32,6 +32,20 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
         return models;
     }
+
+    @Override
+    public List<HomeworkModel> getHomeworkByTeacher(Long teacher) {
+        List<HomeworkEntity> entities = homeworkRepository.findByTeacherId(teacher); // findByTeacherId artık List döndürüyor
+        List<HomeworkModel> models = new ArrayList<>();
+
+        for (HomeworkEntity entity : entities) {
+            models.add(HomeworkConverter.convertToModel(entity));
+        }
+
+        return models;
+    }
+
+
 
     @Override
     public HomeworkModel getHomework(Long id) {
@@ -63,6 +77,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         HomeworkEntity.setTeacherId(homework.getTeacherId());
         HomeworkEntity.setTitle(homework.getTitle());
         HomeworkEntity.setDescription(homework.getDescription());
+        HomeworkEntity.setClassroomId(homework.getClassroomId());
 
         homeworkRepository.save(HomeworkEntity);
         File folder = new File("src/main/resources/static/"+HomeworkEntity.getId());

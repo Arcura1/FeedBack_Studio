@@ -3,7 +3,7 @@ package org.example.feedbackstudio.note.pdfInfo.entitiy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.feedbackstudio.login.user.entity.User;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
+import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 
 @Getter
 @Setter

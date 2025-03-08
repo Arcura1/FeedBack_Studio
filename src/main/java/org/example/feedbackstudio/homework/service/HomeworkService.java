@@ -1,13 +1,14 @@
-package org.example.feedbackstudio.note.service;
+package org.example.feedbackstudio.homework.service;
 
-import org.example.feedbackstudio.note.Model.HomeworkModel;
-import org.example.feedbackstudio.note.Model.HomeworkQueryModel;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
+import org.example.feedbackstudio.homework.model.HomeworkModel;
+import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
+import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 
 import java.util.List;
 
 public interface HomeworkService {
     public List<HomeworkModel> getAllHomework();
+    public List<HomeworkModel> getHomeworkByTeacher(Long teacher);
     public HomeworkModel getHomework(Long id);
     public HomeworkEntity getHomeworkEntitiy(Long id);
     public HomeworkModel createHomework(HomeworkQueryModel homework);

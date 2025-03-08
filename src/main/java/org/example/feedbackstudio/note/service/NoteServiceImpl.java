@@ -6,7 +6,7 @@ import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
 import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
-import org.example.feedbackstudio.note.repository.HomeworkRepository;
+import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

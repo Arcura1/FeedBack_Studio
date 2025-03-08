@@ -6,7 +6,7 @@ import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
-import org.example.feedbackstudio.note.service.HomeworkService;
+import org.example.feedbackstudio.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
