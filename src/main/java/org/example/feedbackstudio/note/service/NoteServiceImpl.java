@@ -103,12 +103,12 @@ public class NoteServiceImpl implements NoteService {
     public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
 
-        add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntity()));
-        userRepository.findById(note.getUser())
+        add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntityId()));
+        userRepository.findById(note.getUserId())
                 .ifPresentOrElse(
                         add::setUser,
                         () -> {
-                            throw new IllegalArgumentException("User with ID " + note.getUser() + " not found");
+                            throw new IllegalArgumentException("User with ID " + note.getUserId() + " not found");
                         }
                 );
         add.setId(note.getId());

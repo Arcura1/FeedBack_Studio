@@ -40,7 +40,7 @@ public class NoteEntity {
     @JoinColumn(name = "user_id",  insertable = false, updatable = false)
     private User user;
 
-    @JoinColumn(name = "pdf_info_id",  insertable = true, updatable = false)
+    @Column(name = "pdf_info_id",  insertable = true, updatable = false)
     private Long pdfInfoEntityId;
 
     @ManyToOne(fetch = FetchType.EAGER)
