@@ -1,6 +1,8 @@
 package org.example.feedbackstudio.login.user.rest;
 
+import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.login.user.model.UserDTO;
 import org.example.feedbackstudio.login.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -8,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,6 +48,18 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<UserDTO>> getUserByType(@PathVariable RoleTypeEnum type) {
+        Optional<List<UserDTO>> result = userService.getUserByType(type);
+
+        if (result.isPresent() && !result.get().isEmpty()) {
+            return ResponseEntity.ok(result.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Boş bir yanıt döndür
+        }
+    }
+
     // Kullanıcı girişi
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
@@ -57,7 +71,7 @@ public class UserController {
                     .body("Bu e-posta adresi kara listede: " + email);
         }
 
-        User user = userService.login(email, password);
+        UserDTO user = userService.login(email, password);
         if (user != null) {
             return ResponseEntity.ok(user); // Giriş başarılı
         } else {

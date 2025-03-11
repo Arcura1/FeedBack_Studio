@@ -7,5 +7,6 @@ public enum RoleTypeEnum {
 
     STUDENT,
     GUEST,
+    CUSTOM,
 
 }

@@ -1,13 +1,18 @@
 package org.example.feedbackstudio.login.user.service;
 
+import org.example.feedbackstudio.login.role.repository.RoleRepository;
+import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
+import org.example.feedbackstudio.login.user.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -19,6 +24,8 @@ public class UserService {
     private RedisTemplate<String, String> redisTemplate;
 
     private static final String BLACKLIST_KEY_PREFIX = "blacklist:";
+    @Autowired
+    private RoleRepository roleRepository;
 
     /**
      * Kullanıcıyı kaydeder, aynı email ve şifreye sahip kullanıcı varsa kara listeye ekler.
@@ -32,6 +39,7 @@ public class UserService {
             addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
             throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
         }
+        user.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.GUEST).getId());
         return userRepository.save(user); // Yeni kullanıcıyı kaydet
     }
 
@@ -44,6 +52,28 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+
+
+    public Optional<List<UserDTO>> getUserByType(RoleTypeEnum type) {
+        List<User> users = userRepository.findByRoleName(type);
+
+        if (users.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<UserDTO> userDTOs = users.stream()
+                .map(user -> new UserDTO(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getPhone(),
+                        user.getRole()
+                ))
+                .collect(Collectors.toList());
+
+        return Optional.of(userDTOs);
+    }
     /**
      * E-posta ile kullanıcı getirir.
      * @param email E-posta adresi
@@ -61,20 +91,27 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+
     /**
      * Kullanıcı girişini doğrular.
      * @param email Kullanıcı email
      * @param password Kullanıcı şifre
      * @return Kullanıcı nesnesi
      */
-    public User login(String email, String password) {
+    public UserDTO login(String email, String password) {
         if (isEmailBlacklisted(email)) {
             throw new IllegalArgumentException("Bu e-posta kara listede.");
         }
 
         User user = getUserByEmail(email);
         if (user != null && user.getPassword().equals(password)) { // Şifre kontrolü
-            return user; // Kullanıcı bulunursa döndür
+            UserDTO u = new UserDTO();
+            u.setId(user.getId());
+            u.setEmail(user.getEmail());
+            u.setFirstName(user.getFirstName());
+            u.setLastName(user.getLastName());
+            u.setRole(roleRepository.findById(user.getRoleId()).get().getRoleTypeEnum().toString());
+            return u; // Kullanıcı bulunursa döndür
         }
         return null; // Kullanıcı bulunamazsa veya şifre yanlışsa null döndür
     }
