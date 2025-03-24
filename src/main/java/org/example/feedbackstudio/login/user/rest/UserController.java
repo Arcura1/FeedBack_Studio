@@ -106,4 +106,31 @@ public class UserController {
             return ResponseEntity.ok("E-posta kara listede değil.");
         }
     }
+
+    // Tüm kullanıcıları getir
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/update-role/{id}")
+    public ResponseEntity<User> updateUserRole(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String newRole = request.get("role");
+
+        Optional<User> userOptional = userService.getUserById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setRole(newRole);
+            User updatedUser = userService.saveUser(user);
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
+
 }

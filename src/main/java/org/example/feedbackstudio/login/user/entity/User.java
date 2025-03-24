@@ -51,4 +51,9 @@ public class User {
         this.password = password;
         this.role = role != null ? role : "student";
     }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 }

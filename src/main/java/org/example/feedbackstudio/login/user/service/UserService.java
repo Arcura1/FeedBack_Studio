@@ -33,14 +33,7 @@ public class UserService {
      * @return Kaydedilen kullanıcı
      */
     public User saveUser(User user) {
-        // Aynı email ve şifre ile kullanıcı var mı kontrol et
-        User existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
-            addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
-            throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
-        }
-        user.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.GUEST).getId());
-        return userRepository.save(user); // Yeni kullanıcıyı kaydet
+        return userRepository.save(user);
     }
 
     /**
@@ -135,4 +128,9 @@ public class UserService {
         String key = BLACKLIST_KEY_PREFIX + email;
         return redisTemplate.hasKey(key);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }
