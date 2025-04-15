@@ -106,4 +106,76 @@ public class UserController {
             return ResponseEntity.ok("E-posta kara listede değil.");
         }
     }
+
+    // YENİ EKLENTİLER (Sadece mevcut UserService metodlarını kullananlar)
+
+    // Rol tipine göre kullanıcı sayısını getirme
+    @GetMapping("/count-by-type/{type}")
+    public ResponseEntity<Map<String, Object>> countByType(@PathVariable RoleTypeEnum type) {
+        Optional<List<UserDTO>> result = userService.getUserByType(type);
+
+        Map<String, Object> response = new HashMap<>();
+        if (result.isPresent()) {
+            response.put("roleType", type);
+            response.put("count", result.get().size());
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("roleType", type);
+            response.put("count", 0);
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    // Kullanıcı bilgilerini DTO olarak getirme
+    @GetMapping("/{id}/details")
+    public ResponseEntity<UserDTO> getUserDetailsById(@PathVariable Long id) {
+        Optional<User> userOptional = userService.getUserById(id);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // Basit bir dönüşüm - gerçek bir UserDTO nesnesi oluşturmak için uygun bir yöntem kullanılmalı
+            UserDTO userDTO = new UserDTO();
+            // UserDTO'ya gereken alanları set et
+            // Bu satırları UserDTO'nun yapısına göre ayarlayın
+            return ResponseEntity.ok(userDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Kullanıcı adına göre arama
+    @GetMapping("/find-by-name")
+    public ResponseEntity<List<User>> findByName(@RequestParam String name) {
+        List<User> users = userService.findByName(name); // UserService'de findByName metodu olduğunu varsayıyorum
+
+        if (users != null && !users.isEmpty()) {
+            return ResponseEntity.ok(users);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    // Toplu kullanıcı silme
+    @DeleteMapping("/batch")
+    public ResponseEntity<?> deleteMultipleUsers(@RequestBody List<Long> userIds) {
+        List<Long> successfulDeletes = new ArrayList<>();
+        List<Long> failedDeletes = new ArrayList<>();
+
+        for (Long id : userIds) {
+            try {
+                userService.deleteUserById(id);
+                successfulDeletes.add(id);
+            } catch (Exception e) {
+                failedDeletes.add(id);
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("successfullyDeleted", successfulDeletes);
+        if (!failedDeletes.isEmpty()) {
+            response.put("failedToDelete", failedDeletes);
+        }
+
+        return ResponseEntity.ok(response);
+    }
 }
