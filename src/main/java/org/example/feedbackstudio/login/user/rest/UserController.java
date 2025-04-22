@@ -40,6 +40,20 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    // Kullanıcı ID'ye göre getirme
+
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getAllUsers() {
+        Optional<List<User>> users = userService.getUsers();
+
+        if (users.isPresent()) {
+            return ResponseEntity.ok(users.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Veya boş liste dönülebilir
+        }
+    }
+
 
     // Kullanıcıyı e-posta ile getirme
     @GetMapping("/email/{email}")
@@ -106,4 +120,26 @@ public class UserController {
             return ResponseEntity.ok("E-posta kara listede değil.");
         }
     }
+    // Kullanıcıyı güncelleme
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        Optional<User> existingUserOptional = userService.getUserById(id);
+
+        if (existingUserOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");
+        }
+
+        User existingUser = existingUserOptional.get();
+
+        // Burada güncellenecek alanları manuel olarak set ediyorsun
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setRole(updatedUser.getRole());
+
+        User savedUser = userService.saveUser(existingUser);
+        return ResponseEntity.ok(savedUser);
+    }
+
 }

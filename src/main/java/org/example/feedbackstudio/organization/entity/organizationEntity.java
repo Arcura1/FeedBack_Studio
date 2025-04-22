@@ -28,11 +28,5 @@ public class organizationEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "user_id", insertable = true, updatable = false)
-    private Long userId;
 
-    // Organization entity ile ilişki
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
 }

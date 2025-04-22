@@ -3,6 +3,11 @@ package org.example.feedbackstudio.classroom.service;
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
 import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
 import org.example.feedbackstudio.classroom.repository.ClassroomRepository;
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
+import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,10 @@ public class classroomServiceImpl implements classroomService{
 
     @Autowired
     private ClassroomRepository classroomRepository;
+    @Autowired
+    private AuthorityRepository authorityRepository;
+    @Autowired
+    private AuthorityService authorityService;
 
     @Autowired
     private OrganizationRepository organizationRepository;
@@ -33,7 +42,19 @@ public class classroomServiceImpl implements classroomService{
         existingClassroom.setDescription(model.getDescription());
         existingClassroom.setOrganizationId(model.getOrganizationId());
         existingClassroom.setUserId(model.getUserId());
-        return classroomRepository.save(existingClassroom);
+        classroomEntity tempa=classroomRepository.save(existingClassroom);
+
+        for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
+            Authority temp = new Authority();
+            temp.setClassroom(tempa);
+            temp.setAuthorityType(AuthorityType.CLASSROOM);
+            temp.setClassroomId(tempa.getId());
+            temp.setDescription("description");
+            temp.setName(tempa.getName().toLowerCase() + " " + roleType.toString());
+            temp.setEffectTypeEnum(roleType);
+            authorityService.saveAuthority(temp);
+        }
+        return tempa ;
     }
 
     @Override
@@ -66,6 +87,7 @@ public class classroomServiceImpl implements classroomService{
 
     @Override
     public void deleteClassroom(Long id) {
+        authorityRepository.deleteAllByClassroomId(id);
         classroomRepository.deleteById(id);
     }
 

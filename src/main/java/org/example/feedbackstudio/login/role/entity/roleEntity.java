@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
+import org.example.feedbackstudio.organization.entity.organizationEntity;
 
 @Entity
 @Table(name = "roles")
@@ -30,5 +31,13 @@ public class roleEntity {
     @Column(nullable = false)
     private RoleTypeEnum roleTypeEnum;
 
+    // Organization ID doğrudan tutulacak
+    @Column(name = "organization_id", insertable = true, updatable = false)
+    private Long organizationId;
+
+    // Organization entity ile ilişki
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id", insertable = false, updatable = false)
+    private organizationEntity organization;
 
 }

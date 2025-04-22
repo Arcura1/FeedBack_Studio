@@ -1,5 +1,11 @@
 package org.example.feedbackstudio.organization.RestController;
 
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
+import org.example.feedbackstudio.login.authority.service.AuthorityService;
+import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +23,13 @@ public class organizationRestController {
 
 
     private final OrganizationRepository organizationRepository;
+    private final AuthorityService authorityService;
+    private final AuthorityRepository authorityRepository;
 
-    public organizationRestController(OrganizationRepository organizationRepository) {
+    public organizationRestController(OrganizationRepository organizationRepository, AuthorityService authorityService, AuthorityRepository authorityRepository) {
         this.organizationRepository = organizationRepository;
+        this.authorityService = authorityService;
+        this.authorityRepository = authorityRepository;
     }
 
     // --- CREATE ---
@@ -28,6 +38,16 @@ public class organizationRestController {
     @PostMapping
     public ResponseEntity<organizationEntity> createOrganization(@RequestBody organizationEntity organization) {
         organizationEntity savedOrganization = organizationRepository.save(organization);
+        for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
+            Authority temp=new Authority();
+            temp.setOrganization(savedOrganization);
+            temp.setAuthorityType(AuthorityType.ORGANIZATION);
+            temp.setOrganizationId(savedOrganization.getId());
+            temp.setDescription("description");
+            temp.setName(savedOrganization.getName().toLowerCase()+" "+roleType.toString());
+            temp.setEffectTypeEnum(roleType);
+            authorityService.saveAuthority(temp);
+        }
         return ResponseEntity.ok(savedOrganization);
     }
 
@@ -64,7 +84,6 @@ public class organizationRestController {
             organizationEntity.setName(organizationDetails.getName());
             organizationEntity.setAddress(organizationDetails.getAddress());
             organizationEntity.setEmail(organizationDetails.getEmail());
-            organizationEntity.setUserId(organizationDetails.getUserId());
             organizationEntity updatedOrganization = organizationRepository.save(organizationEntity);
             return ResponseEntity.ok(updatedOrganization);
         } else {
@@ -79,6 +98,7 @@ public class organizationRestController {
     public ResponseEntity<Void> deleteOrganization(@PathVariable Long id) {
         if(organizationRepository.existsById(id)) {
             organizationRepository.deleteById(id);
+            authorityRepository.deleteAllByOrganizationId(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

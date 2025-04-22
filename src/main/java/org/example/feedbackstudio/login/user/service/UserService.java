@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -39,8 +40,11 @@ public class UserService {
             addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
             throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
         }
-        user.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.GUEST).getId());
-        return userRepository.save(user); // Yeni kullanıcıyı kaydet
+        if (!Objects.equals(user.getRole(), RoleTypeEnum.CUSTOM.toString())) {
+            user.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(user.getRole())).getId());
+            return userRepository.save(user); // Yeni kullanıcıyı kaydet
+        }
+        return null;
     }
 
     /**
@@ -52,6 +56,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<List<User>> getUsers() {
+        List<User> users = userRepository.findAll();
+        return users.isEmpty() ? Optional.empty() : Optional.of(users);
+    }
 
 
     public Optional<List<UserDTO>> getUserByType(RoleTypeEnum type) {
@@ -68,7 +76,8 @@ public class UserService {
                         user.getLastName(),
                         user.getEmail(),
                         user.getPhone(),
-                        user.getRole()
+                        user.getRole(),
+                        null
                 ))
                 .collect(Collectors.toList());
 
@@ -110,6 +119,7 @@ public class UserService {
             u.setEmail(user.getEmail());
             u.setFirstName(user.getFirstName());
             u.setLastName(user.getLastName());
+            u.setCreate(null);
             u.setRole(roleRepository.findById(user.getRoleId()).get().getRoleTypeEnum().toString());
             return u; // Kullanıcı bulunursa döndür
         }

@@ -1,6 +1,7 @@
 package org.example.feedbackstudio.login.authority.controller;
 
 import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryModel;
 import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,4 +54,11 @@ public class AuthorityController {
         authorityService.deleteAuthority(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/query")
+    public ResponseEntity<List<Authority>> queryAuthorities(@RequestBody AuthorityQueryModel queryModel) {
+        List<Authority> results = authorityService.queryAuthorities(queryModel);
+        return ResponseEntity.ok(results);
+    }
+
 }
