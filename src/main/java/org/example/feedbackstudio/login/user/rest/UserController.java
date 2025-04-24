@@ -1,6 +1,8 @@
 package org.example.feedbackstudio.login.user.rest;
 
+import org.example.feedbackstudio.login.role.repository.RoleRepository;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.login.user.model.UserDTO;
 import org.example.feedbackstudio.login.user.service.UserService;
@@ -19,6 +21,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Kullanıcı oluşturma
     @PostMapping("/create")
@@ -137,9 +143,11 @@ public class UserController {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());
+        existingUser.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(updatedUser.getRole().toString())).getId());
 
-        User savedUser = userService.saveUser(existingUser);
-        return ResponseEntity.ok(savedUser);
+        User saved=userRepository.save(existingUser);
+//        User savedUser = userService.saveUser(existingUser);
+        return ResponseEntity.ok(saved);
     }
 
 }
