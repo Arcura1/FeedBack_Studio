@@ -1,10 +1,10 @@
 package org.example.feedbackstudio.login.authority.authorityenum;
 
 public enum AuthorityType {
-    CUSTOM,
     ORGANIZATION,
     CLASSROOM,
-    AUTHORITY,
     ROLE,
-    USER
+    HOMEWORK,
+    PDF_EDIT,
+    CLASSROOM_USER
 }

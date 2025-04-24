@@ -1,6 +1,7 @@
 package org.example.feedbackstudio.login.role.controller;
 
 import org.example.feedbackstudio.login.role.entity.roleEntity;
+import org.example.feedbackstudio.login.role.model.RoleQueryRequest;
 import org.example.feedbackstudio.login.role.service.RoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,18 @@ public class RoleController {
         return role.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @GetMapping("/{roleType}")
+    public ResponseEntity<List<roleEntity>> getRolesByRoleType(@PathVariable String roleType) {
+        Optional<List<roleEntity>> roles = roleService.getRolesByRoleType(roleType);
+        return roles.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
+    @PostMapping("/query")
+    public ResponseEntity<List<roleEntity>> queryRoles(@RequestBody RoleQueryRequest request) {
+        List<roleEntity> roles = roleService.queryRoles(request);
+        return ResponseEntity.ok(roles);
+    }
     // 📌 Update - Rol Güncelle
     @PutMapping("/{id}")
     public ResponseEntity<roleEntity> updateRole(@PathVariable Long id, @RequestBody roleEntity role) {

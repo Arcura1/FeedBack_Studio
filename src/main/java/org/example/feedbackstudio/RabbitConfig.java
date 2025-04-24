@@ -11,6 +11,16 @@ import org.springframework.messaging.converter.MessageConverter;
 @Configuration
 public class RabbitConfig {
 
+    // pdf_processor kuyruğu adı
+    public static final String PDF_QUEUE = "pdf_processor";
+
+    // Queue'yu tanımla (kalıcı değil)
+    @Bean
+    public Queue pdfProcessorQueue() {
+        return new Queue(PDF_QUEUE, false);
+    }
+
+
     @Bean
     public Queue queue() {
         return new Queue("hello-queue");
