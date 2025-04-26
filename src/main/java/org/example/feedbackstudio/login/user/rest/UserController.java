@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.login.user.rest;
 
+import org.example.feedbackstudio.login.role.entity.roleEntity;
 import org.example.feedbackstudio.login.role.repository.RoleRepository;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
@@ -143,7 +144,9 @@ public class UserController {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());
-        existingUser.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(updatedUser.getRole().toString())).getId());
+        roleEntity temp = roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(updatedUser.getRole().toString()));
+        existingUser.setRoleEntity(temp);
+        existingUser.setRoleId(temp.getId());
 
         User saved=userRepository.save(existingUser);
 //        User savedUser = userService.saveUser(existingUser);

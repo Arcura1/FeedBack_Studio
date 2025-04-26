@@ -1,5 +1,7 @@
 package org.example.feedbackstudio.homework.service;
 
+import org.example.feedbackstudio.homework.model.query.HomeworkQueryDTO;
+import org.example.feedbackstudio.homework.service.Specification.HomeworkSpecification;
 import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.homework.model.HomeworkModel;
 import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
@@ -116,6 +118,12 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public List<HomeworkModel> getHomeworkByQueryModel(HomeworkQueryModel homeworkQueryModel) {
         return List.of();
+    }
+
+    @Override
+    public List<HomeworkEntity> searchHomeworks(HomeworkQueryDTO query) {
+            // Specification ile sorguyu oluşturuyoruz
+            return homeworkRepository.findAll(HomeworkSpecification.filter(query));
     }
 
 

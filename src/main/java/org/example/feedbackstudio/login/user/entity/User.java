@@ -35,10 +35,9 @@ public class User {
     private String role;
 
     // role ID doğrudan tutulacak
-    @Column(name = "role_id", insertable = true, updatable = false)
+    @Column(name = "role_id", insertable = true, updatable = true)
     private Long roleId;
 
-    // role entity ile ilişki
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private roleEntity roleEntity;

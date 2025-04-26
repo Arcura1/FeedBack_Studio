@@ -1,7 +1,9 @@
 package org.example.feedbackstudio.homework.controller;
 
+import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 import org.example.feedbackstudio.homework.model.HomeworkModel;
 import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
+import org.example.feedbackstudio.homework.model.query.HomeworkQueryDTO;
 import org.example.feedbackstudio.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,6 +60,9 @@ public class HomeworkController {
         List<HomeworkModel> homeworkList = homeworkService.getHomeworkByTeacher(teacherId);
         return new ResponseEntity<>(homeworkList, HttpStatus.OK);
     }
-
+    @PostMapping("/search")
+    public List<HomeworkEntity> searchHomeworks(@RequestBody HomeworkQueryDTO query) {
+        return homeworkService.searchHomeworks(query);
+    }
 
 }

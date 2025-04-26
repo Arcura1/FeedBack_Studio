@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.login.role.service;
 
+import jakarta.transaction.Transactional;
 import org.example.feedbackstudio.login.role.entity.roleEntity;
 import org.example.feedbackstudio.login.role.model.RoleQueryRequest;
 import org.example.feedbackstudio.login.role.repository.RoleRepository;
@@ -59,4 +60,12 @@ public class RoleServiceImpl implements RoleService {
     public List<roleEntity> queryRoles(RoleQueryRequest request) {
         return roleRepository.findAll(RoleSpecification.filterBy(request));
     }
+
+    @Override
+    @Transactional
+    public void deleteAllByOrganizationId(Long organizationId) {
+        roleRepository.deleteAllByOrganizationId(organizationId);
+    }
+
+
 }

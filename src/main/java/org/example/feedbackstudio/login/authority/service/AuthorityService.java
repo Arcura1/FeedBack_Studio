@@ -13,5 +13,6 @@ public interface AuthorityService {
     Authority updateAuthority(Long id, Authority authority);
     void deleteAuthority(Long id);
     List<Authority> queryAuthorities(AuthorityQueryModel queryModel);
+    void deleteAllByOrganizationId(Long organizationId);
 
 }

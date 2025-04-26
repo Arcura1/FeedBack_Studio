@@ -14,4 +14,5 @@ public interface RoleService {
     void deleteRole(Long id);
     Optional<List<roleEntity>>getRolesByRoleType(String RoleType);
     List<roleEntity> queryRoles(RoleQueryRequest request);
+    void deleteAllByOrganizationId(Long organizationId);
 }

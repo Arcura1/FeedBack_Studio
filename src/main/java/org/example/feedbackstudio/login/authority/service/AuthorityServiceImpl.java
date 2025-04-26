@@ -1,6 +1,7 @@
 package org.example.feedbackstudio.login.authority.service;
 
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.example.feedbackstudio.login.authority.entity.Authority;
 import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryModel;
 import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
@@ -78,5 +79,11 @@ public class AuthorityServiceImpl implements AuthorityService {
         };
 
         return authorityRepository.findAll(spec);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllByOrganizationId(Long organizationId) {
+        authorityRepository.deleteAllByOrganizationId(organizationId);
     }
 }
