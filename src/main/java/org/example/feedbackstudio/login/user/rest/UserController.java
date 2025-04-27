@@ -3,6 +3,7 @@ package org.example.feedbackstudio.login.user.rest;
 import org.example.feedbackstudio.login.role.entity.roleEntity;
 import org.example.feedbackstudio.login.role.repository.RoleRepository;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
+import org.example.feedbackstudio.login.role.service.RoleService;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.login.user.model.UserDTO;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private UserRepository userRepository;
 
@@ -144,9 +147,16 @@ public class UserController {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());
-        roleEntity temp = roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(updatedUser.getRole().toString()));
-        existingUser.setRoleEntity(temp);
-        existingUser.setRoleId(temp.getId());
+        Optional<roleEntity> temp = roleService.getRoleById(updatedUser.getRoleId());
+
+        if (temp.isPresent()) {
+            existingUser.setRoleEntity(temp.get());
+            existingUser.setRoleId(temp.get().getId());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol bulunamadı.");
+        }
+
+
 
         User saved=userRepository.save(existingUser);
 //        User savedUser = userService.saveUser(existingUser);

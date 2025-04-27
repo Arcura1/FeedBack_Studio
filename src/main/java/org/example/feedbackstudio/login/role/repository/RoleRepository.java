@@ -15,4 +15,5 @@ public interface RoleRepository extends JpaRepository<roleEntity, Long>, JpaSpec
     roleEntity findByRoleTypeEnum(RoleTypeEnum roleTypeEnum);
     Optional<List<roleEntity>> getAllByRoleTypeEnum(RoleTypeEnum roleTypeEnum);
     void deleteAllByOrganizationId(Long organizationId);
+    roleEntity findByRoleTypeEnumAndOrganizationId(RoleTypeEnum roleTypeEnum, Long organizationId);
 }

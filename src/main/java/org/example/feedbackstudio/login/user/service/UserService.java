@@ -30,6 +30,7 @@ public class UserService {
 
     /**
      * Kullanıcıyı kaydeder, aynı email ve şifreye sahip kullanıcı varsa kara listeye ekler.
+     *
      * @param user Kaydedilecek kullanıcı
      * @return Kaydedilen kullanıcı
      */
@@ -40,15 +41,21 @@ public class UserService {
             addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
             throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
         }
-        if (!Objects.equals(user.getRole(), RoleTypeEnum.CUSTOM.toString())) {
-            user.setRoleId(roleRepository.findByRoleTypeEnum(RoleTypeEnum.valueOf(user.getRole())).getId());
-            return userRepository.save(user); // Yeni kullanıcıyı kaydet
+        if (user.getRoleId() == null && Objects.equals(user.getRole(), "GUEST")) {
+            if (!Objects.equals(user.getRole(), RoleTypeEnum.CUSTOM.toString())) {
+                user.setRoleId(roleRepository.findByRoleTypeEnumAndOrganizationId(RoleTypeEnum.valueOf(user.getRole()), null).getId());
+                return userRepository.save(user); // Yeni kullanıcıyı kaydet
+            }
+        } else {
+            return userRepository.save(user);
         }
+
         return null;
     }
 
     /**
      * Kullanıcıyı ID'ye göre getirir.
+     *
      * @param id Kullanıcı ID
      * @return Kullanıcı opsiyonu
      */
@@ -83,8 +90,10 @@ public class UserService {
 
         return Optional.of(userDTOs);
     }
+
     /**
      * E-posta ile kullanıcı getirir.
+     *
      * @param email E-posta adresi
      * @return Kullanıcı nesnesi
      */
@@ -94,6 +103,7 @@ public class UserService {
 
     /**
      * Kullanıcıyı ID'ye göre siler.
+     *
      * @param id Kullanıcı ID
      */
     public void deleteUserById(Long id) {
@@ -103,7 +113,8 @@ public class UserService {
 
     /**
      * Kullanıcı girişini doğrular.
-     * @param email Kullanıcı email
+     *
+     * @param email    Kullanıcı email
      * @param password Kullanıcı şifre
      * @return Kullanıcı nesnesi
      */
@@ -128,6 +139,7 @@ public class UserService {
 
     /**
      * E-posta adresini Redis üzerinden kara listeye ekler.
+     *
      * @param email E-posta adresi
      */
     public void addToBlacklist(String email) {
@@ -138,6 +150,7 @@ public class UserService {
 
     /**
      * E-postanın kara listede olup olmadığını kontrol eder.
+     *
      * @param email E-posta adresi
      * @return boolean Kara listede mi?
      */
