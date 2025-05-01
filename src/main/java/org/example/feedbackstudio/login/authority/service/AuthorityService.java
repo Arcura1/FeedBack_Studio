@@ -16,6 +16,6 @@ public interface AuthorityService {
     void deleteAllByOrganizationId(Long organizationId);
     List<Authority> searchAuthorities(AuthorityQueryDTO dto);
     List<Authority> getAuthByRole(Long roleId);
-
+    List<Authority> queryAuthorities(AuthorityQueryModel queryModel);
 
 }

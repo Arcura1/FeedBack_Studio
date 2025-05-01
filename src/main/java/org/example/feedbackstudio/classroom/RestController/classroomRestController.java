@@ -2,6 +2,7 @@ package org.example.feedbackstudio.classroom.RestController;
 
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
 import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
+import org.example.feedbackstudio.classroom.model.query.ClassroomQueryModel;
 import org.example.feedbackstudio.classroom.service.classroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,5 +68,11 @@ public class classroomRestController {
     @GetMapping("/user/{userId}")
     public List<classroomEntity> getClassroomsByUserId(@PathVariable Long userId) {
         return classroomService.getClassroomsByUserId(userId);
+    }
+
+
+    @PostMapping("/search")
+    public ResponseEntity<List<classroomEntity>> searchClassrooms(@RequestBody ClassroomQueryModel queryModel) {
+        return ResponseEntity.ok(classroomService.searchClassrooms(queryModel));
     }
 }

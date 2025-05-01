@@ -65,8 +65,13 @@ public class AuthorityController {
         authorityService.deleteAuthority(id);
         return ResponseEntity.noContent().build();
     }
-
     @PostMapping("/query")
+    public ResponseEntity<List<Authority>> queryAuthorities(@RequestBody AuthorityQueryModel queryModel) {
+        List<Authority> results = authorityService.queryAuthorities(queryModel);
+        return ResponseEntity.ok(results);
+    }
+
+    @PostMapping("/search")
     public ResponseEntity<List<Authority>> queryAuthorities(@RequestBody AuthorityQueryDTO queryModel) {
         List<Authority> results = authorityService.searchAuthorities(queryModel);
         return ResponseEntity.ok(results);

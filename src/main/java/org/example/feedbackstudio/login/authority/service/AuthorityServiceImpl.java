@@ -59,6 +59,37 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public List<Authority> queryAuthorities(AuthorityQueryModel queryModel) {
+        Specification<Authority> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (queryModel.getName() != null) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + queryModel.getName().toLowerCase() + "%"));
+            }
+
+            if (queryModel.getAuthorityType() != null) {
+                predicates.add(cb.equal(root.get("authorityType"), queryModel.getAuthorityType()));
+            }
+
+            if (queryModel.getEffectTypeEnum() != null) {
+                predicates.add(cb.equal(root.get("effectTypeEnum"), queryModel.getEffectTypeEnum()));
+            }
+
+            if (queryModel.getClassroomId() != null) {
+                predicates.add(cb.equal(root.get("classroomId"), queryModel.getClassroomId()));
+            }
+
+            if (queryModel.getOrganizationId() != null) {
+                predicates.add(cb.equal(root.get("organizationId"), queryModel.getOrganizationId()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return authorityRepository.findAll(spec);
+    }
+
+    @Override
     @Transactional
     public List<Authority> searchAuthorities(AuthorityQueryDTO dto) {
         Specification<Authority> spec = (root, query, cb) -> {

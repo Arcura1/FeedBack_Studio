@@ -1,7 +1,9 @@
 package org.example.feedbackstudio.classroom.service;
 
+import org.example.feedbackstudio.classroom.Specification.ClassroomSpecification;
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
 import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
+import org.example.feedbackstudio.classroom.model.query.ClassroomQueryModel;
 import org.example.feedbackstudio.classroom.repository.ClassroomRepository;
 import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
 import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
@@ -11,6 +13,7 @@ import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,4 +98,51 @@ public class classroomServiceImpl implements classroomService{
     public List<classroomEntity> getClassroomsByUserId(Long userId) {
         return classroomRepository.findByUserId(userId);
     }
+
+
+    @Override
+    public List<classroomEntity> searchClassrooms(ClassroomQueryModel queryModel) {
+        Specification<classroomEntity> spec = ClassroomSpecification.withFilters(queryModel);
+        return classroomRepository.findAll(spec);
+    }
+
+    private Specification<classroomEntity> buildSpecification(ClassroomQueryModel model) {
+        return (root, query, cb) -> {
+            var predicates = cb.conjunction();  // Predicate başlangıcı
+
+            // Name filtresi, küçük harfe dönüştürülerek arama yapılır
+            if (model.getName() != null && !model.getName().isEmpty()) {
+                String nameFilter = "%" + model.getName().toLowerCase() + "%";
+                predicates.getExpressions().add(cb.like(cb.lower(root.get("name")), nameFilter));
+            }
+
+            // Diğer filtreler
+            if (model.getFloor() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("floor"), model.getFloor()));
+            }
+
+            if (model.getHasProjector() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasProjector"), model.getHasProjector()));
+            }
+
+            if (model.getHasWhiteboard() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasWhiteboard"), model.getHasWhiteboard()));
+            }
+
+            if (model.getHasAirConditioning() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasAirConditioning"), model.getHasAirConditioning()));
+            }
+
+            if (model.getOrganizationId() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("organizationId"), model.getOrganizationId()));
+            }
+
+            if (model.getUserId() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("userId"), model.getUserId()));
+            }
+
+            return predicates;
+        };
+    }
+
 }
