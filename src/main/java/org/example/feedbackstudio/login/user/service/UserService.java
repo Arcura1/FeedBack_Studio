@@ -42,15 +42,14 @@ public class UserService {
             throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
         }
         if (user.getRoleId() == null && Objects.equals(user.getRole(), "GUEST")) {
-            if (!Objects.equals(user.getRole(), RoleTypeEnum.CUSTOM.toString())) {
+
                 user.setRoleId(roleRepository.findByRoleTypeEnumAndOrganizationId(RoleTypeEnum.valueOf(user.getRole()), null).getId());
                 return userRepository.save(user); // Yeni kullanıcıyı kaydet
-            }
+
         } else {
             return userRepository.save(user);
         }
 
-        return null;
     }
 
     /**
@@ -84,7 +83,8 @@ public class UserService {
                         user.getEmail(),
                         user.getPhone(),
                         user.getRole(),
-                        null
+                        null,
+                        user.getRoleEntity().getOrganizationId()
                 ))
                 .collect(Collectors.toList());
 
@@ -131,6 +131,7 @@ public class UserService {
             u.setFirstName(user.getFirstName());
             u.setLastName(user.getLastName());
             u.setCreate(null);
+            u.setOrganizationId(user.getRoleEntity().getOrganizationId());
             u.setRole(roleRepository.findById(user.getRoleId()).get().getRoleTypeEnum().toString());
             return u; // Kullanıcı bulunursa döndür
         }
