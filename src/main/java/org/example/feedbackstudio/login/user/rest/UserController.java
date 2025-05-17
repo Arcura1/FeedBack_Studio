@@ -7,9 +7,12 @@ import org.example.feedbackstudio.login.role.service.RoleService;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.login.user.model.UserDTO;
+import org.example.feedbackstudio.login.user.model.UserQueryModel;
 import org.example.feedbackstudio.login.user.service.UserService;
+import org.example.feedbackstudio.login.user.service.UserSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -163,4 +166,20 @@ public class UserController {
         return ResponseEntity.ok(saved);
     }
 
+    @PostMapping("/search")
+    public List<User> searchUsers(@RequestBody UserQueryModel query) {
+        Specification<User> spec = Specification
+                .where(UserSpecifications.hasId(query.getId()))
+                .and(UserSpecifications.hasFirstName(query.getFirstName()))
+                .and(UserSpecifications.hasLastName(query.getLastName()))
+                .and(UserSpecifications.hasEmail(query.getEmail()))
+                .and(UserSpecifications.hasPhone(query.getPhone()))
+                .and(UserSpecifications.hasPassword(query.getPassword()))
+                .and(UserSpecifications.hasRole(query.getRole()))
+                .and(UserSpecifications.hasRoleId(query.getRoleId()))
+                .and(UserSpecifications.hasRoleType(query.getRoleType()));
+
+
+        return userRepository.findAll(spec);
+    }
 }

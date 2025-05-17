@@ -104,6 +104,8 @@ public class NoteServiceImpl implements NoteService {
         NoteEntity add = new NoteEntity();
 
         add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntityId()));
+        add.setPdfInfoEntityId(note.getPdfInfoEntityId());
+        add.setUserId(note.getUserId());
         userRepository.findById(note.getUserId())
                 .ifPresentOrElse(
                         add::setUser,
@@ -133,25 +135,28 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<NoteEntity> viewByPdfInfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
-        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        deneme.forEach((val)->{
-            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
-                result.add(val);
-            }
-        });
+        noteRepository.findByPdfInfoEntityId(id);
+        result.addAll(noteRepository.findByPdfInfoEntityId(id));
+        return result;
+
+//        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
+//                .collect(Collectors.toList());
+//        deneme.forEach((val)->{
+//            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+//                result.add(val);
+//            }
+//        });
 //        result=noteRepository.findByPdfInfoEntity(pdfInfoRepository.findById(id));
 //        result=noteRepository.findByPdfInfoEntityId(id);
-        return result;
+//        return result;
     }
 
     @Override
     public String delByPdfinfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
-        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        List<NoteEntity> deneme =noteRepository.findByPdfInfoEntityId(id);
         deneme.forEach((val)->{
-            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+            if(val.getPdfInfoEntity().getId().equals(id)) {
                 noteRepository.delete(val);
             }
         });
