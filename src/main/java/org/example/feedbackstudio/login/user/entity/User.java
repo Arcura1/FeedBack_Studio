@@ -2,6 +2,7 @@ package org.example.feedbackstudio.login.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.feedbackstudio.login.role.entity.roleEntity;
 
 @Entity
 @Table(name = "users") // PostgreSQL'de tablo adı küçük harf olmalı
@@ -32,6 +33,14 @@ public class User {
 
     @Column(name = "role", nullable = false)
     private String role;
+
+    // role ID doğrudan tutulacak
+    @Column(name = "role_id", insertable = true, updatable = true)
+    private Long roleId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    private roleEntity roleEntity;
 
     public User(String firstName, String lastName, String email, String phone, String password, String role) {
         this.firstName = firstName;

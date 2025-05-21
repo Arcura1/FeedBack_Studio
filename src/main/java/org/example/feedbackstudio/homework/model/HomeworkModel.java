@@ -1,4 +1,4 @@
-package org.example.feedbackstudio.note.Model;
+package org.example.feedbackstudio.homework.model;
 
 import lombok.Getter;
 import lombok.Setter;

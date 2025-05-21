@@ -16,5 +16,6 @@ public class ClasroomQueryModel {
         private Boolean hasAirConditioning;
         private String description;
         private Long organizationId; // Sadece Organization ID alıyoruz
+        private Long userId;
 
 }

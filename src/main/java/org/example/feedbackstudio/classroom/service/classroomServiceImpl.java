@@ -1,11 +1,19 @@
 package org.example.feedbackstudio.classroom.service;
 
+import org.example.feedbackstudio.classroom.Specification.ClassroomSpecification;
 import org.example.feedbackstudio.classroom.entitiy.classroomEntity;
 import org.example.feedbackstudio.classroom.model.ClasroomQueryModel;
+import org.example.feedbackstudio.classroom.model.query.ClassroomQueryModel;
 import org.example.feedbackstudio.classroom.repository.ClassroomRepository;
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
+import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +24,10 @@ public class classroomServiceImpl implements classroomService{
 
     @Autowired
     private ClassroomRepository classroomRepository;
+    @Autowired
+    private AuthorityRepository authorityRepository;
+    @Autowired
+    private AuthorityService authorityService;
 
     @Autowired
     private OrganizationRepository organizationRepository;
@@ -32,7 +44,20 @@ public class classroomServiceImpl implements classroomService{
         existingClassroom.setHasAirConditioning(model.getHasAirConditioning());
         existingClassroom.setDescription(model.getDescription());
         existingClassroom.setOrganizationId(model.getOrganizationId());
-        return classroomRepository.save(existingClassroom);
+        existingClassroom.setUserId(model.getUserId());
+        classroomEntity tempa=classroomRepository.save(existingClassroom);
+
+        for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
+            Authority temp = new Authority();
+            temp.setClassroom(tempa);
+            temp.setAuthorityType(AuthorityType.CLASSROOM);
+            temp.setClassroomId(tempa.getId());
+            temp.setDescription("description");
+            temp.setName(tempa.getName().toLowerCase() + " " + roleType.toString());
+            temp.setEffectTypeEnum(roleType);
+            authorityService.saveAuthority(temp);
+        }
+        return tempa ;
     }
 
     @Override
@@ -57,15 +82,67 @@ public class classroomServiceImpl implements classroomService{
                     existingClassroom.setHasWhiteboard(updatedClassroom.getHasWhiteboard());
                     existingClassroom.setHasAirConditioning(updatedClassroom.getHasAirConditioning());
                     existingClassroom.setDescription(updatedClassroom.getDescription());
-                    organizationEntity organization = organizationRepository.findById(updatedClassroom.getOrganizationId())
-                            .orElseThrow(() -> new RuntimeException("Organization not found"));
-                    existingClassroom.setOrganization(organization);
+                    existingClassroom.setOrganizationId(updatedClassroom.getOrganizationId());
+                    existingClassroom.setUserId(updatedClassroom.getUserId());
                     return classroomRepository.save(existingClassroom);
                 }).orElseThrow(() -> new RuntimeException("Classroom not found"));
     }
 
     @Override
     public void deleteClassroom(Long id) {
+        authorityRepository.deleteAllByClassroomId(id);
         classroomRepository.deleteById(id);
     }
+
+    @Override
+    public List<classroomEntity> getClassroomsByUserId(Long userId) {
+        return classroomRepository.findByUserId(userId);
+    }
+
+
+    @Override
+    public List<classroomEntity> searchClassrooms(ClassroomQueryModel queryModel) {
+        Specification<classroomEntity> spec = ClassroomSpecification.withFilters(queryModel);
+        return classroomRepository.findAll(spec);
+    }
+
+    private Specification<classroomEntity> buildSpecification(ClassroomQueryModel model) {
+        return (root, query, cb) -> {
+            var predicates = cb.conjunction();  // Predicate başlangıcı
+
+            // Name filtresi, küçük harfe dönüştürülerek arama yapılır
+            if (model.getName() != null && !model.getName().isEmpty()) {
+                String nameFilter = "%" + model.getName().toLowerCase() + "%";
+                predicates.getExpressions().add(cb.like(cb.lower(root.get("name")), nameFilter));
+            }
+
+            // Diğer filtreler
+            if (model.getFloor() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("floor"), model.getFloor()));
+            }
+
+            if (model.getHasProjector() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasProjector"), model.getHasProjector()));
+            }
+
+            if (model.getHasWhiteboard() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasWhiteboard"), model.getHasWhiteboard()));
+            }
+
+            if (model.getHasAirConditioning() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("hasAirConditioning"), model.getHasAirConditioning()));
+            }
+
+            if (model.getOrganizationId() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("organizationId"), model.getOrganizationId()));
+            }
+
+            if (model.getUserId() != null) {
+                predicates.getExpressions().add(cb.equal(root.get("userId"), model.getUserId()));
+            }
+
+            return predicates;
+        };
+    }
+
 }

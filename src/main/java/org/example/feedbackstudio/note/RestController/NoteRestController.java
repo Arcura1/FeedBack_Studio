@@ -5,6 +5,7 @@ import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.example.feedbackstudio.note.service.NoteService;
+import org.springdoc.core.service.GenericResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class NoteRestController {
 
     @Autowired
     private PdfInfoRepository PdfInfoRepository;
+    @Autowired
+    private GenericResponseService responseBuilder;
 
     @Autowired
     public NoteRestController(NoteService noteService) {
@@ -88,10 +91,10 @@ public class NoteRestController {
     }
 
     @PutMapping("/add")
-    public String add(@RequestBody NoteQueryModel noteDto) {
+    public ResponseEntity<String> add(@RequestBody NoteQueryModel noteDto) {
         System.out.println(noteDto);
         messageSender.sendMessageNote(noteDto);
-        return "done";
+        return ResponseEntity.ok("done");
     }
 
     @DeleteMapping("/delete")

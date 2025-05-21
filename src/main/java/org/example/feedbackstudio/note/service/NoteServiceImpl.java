@@ -6,7 +6,7 @@ import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
 import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
-import org.example.feedbackstudio.note.repository.HomeworkRepository;
+import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,12 +103,14 @@ public class NoteServiceImpl implements NoteService {
     public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
 
-        add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntity()));
-        userRepository.findById(note.getUser())
+        add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntityId()));
+        add.setPdfInfoEntityId(note.getPdfInfoEntityId());
+        add.setUserId(note.getUserId());
+        userRepository.findById(note.getUserId())
                 .ifPresentOrElse(
                         add::setUser,
                         () -> {
-                            throw new IllegalArgumentException("User with ID " + note.getUser() + " not found");
+                            throw new IllegalArgumentException("User with ID " + note.getUserId() + " not found");
                         }
                 );
         add.setId(note.getId());
@@ -133,25 +135,28 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<NoteEntity> viewByPdfInfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
-        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        deneme.forEach((val)->{
-            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
-                result.add(val);
-            }
-        });
+        noteRepository.findByPdfInfoEntityId(id);
+        result.addAll(noteRepository.findByPdfInfoEntityId(id));
+        return result;
+
+//        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
+//                .collect(Collectors.toList());
+//        deneme.forEach((val)->{
+//            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+//                result.add(val);
+//            }
+//        });
 //        result=noteRepository.findByPdfInfoEntity(pdfInfoRepository.findById(id));
 //        result=noteRepository.findByPdfInfoEntityId(id);
-        return result;
+//        return result;
     }
 
     @Override
     public String delByPdfinfo(Long id) {
         List<NoteEntity> result=new ArrayList<>();
-        List<NoteEntity> deneme = StreamSupport.stream(noteRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        List<NoteEntity> deneme =noteRepository.findByPdfInfoEntityId(id);
         deneme.forEach((val)->{
-            if(val.getPdfInfoEntity().getId().toString().equals(id)) {
+            if(val.getPdfInfoEntity().getId().equals(id)) {
                 noteRepository.delete(val);
             }
         });

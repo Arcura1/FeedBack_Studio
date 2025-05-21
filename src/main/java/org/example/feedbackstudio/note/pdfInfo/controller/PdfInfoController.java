@@ -4,7 +4,7 @@ import org.example.feedbackstudio.note.pdfInfo.model.PdfInfoModel;
 import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
-import org.example.feedbackstudio.note.repository.HomeworkRepository;
+import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.service.NoteService;
 import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +138,7 @@ public class PdfInfoController {
         String fileName = file.getOriginalFilename();
         // Dosyanın kaydedileceği tam yol
 
-        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId()+"/"+ model.getId()+".pdf");
+        File destinationFile = new File(UPLOAD_DIR +model.getHomeworkEntity().getId().toString()+"/"+ model.getId().toString()+".pdf");
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             // PDF dosyasını OutputStream'e yazın

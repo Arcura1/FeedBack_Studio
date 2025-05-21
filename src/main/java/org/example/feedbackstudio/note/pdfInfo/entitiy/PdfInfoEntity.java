@@ -3,7 +3,7 @@ package org.example.feedbackstudio.note.pdfInfo.entitiy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.feedbackstudio.login.user.entity.User;
-import org.example.feedbackstudio.note.entity.HomeworkEntity;
+import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class PdfInfoEntity {
     @Column(name = "page_size", nullable = false)
     private Integer pageSize;
 
-    @JoinColumn(name = "homework_id",  insertable = true, updatable = false)
+    @Column(name = "homework_id",  insertable = true, updatable = false)
     private Long homeworkEntityId;
 
     @ManyToOne(fetch = FetchType.EAGER)

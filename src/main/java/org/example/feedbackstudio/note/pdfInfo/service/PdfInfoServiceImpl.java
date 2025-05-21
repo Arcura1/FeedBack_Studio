@@ -6,7 +6,7 @@ import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
-import org.example.feedbackstudio.note.service.HomeworkService;
+import org.example.feedbackstudio.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +33,9 @@ public class PdfInfoServiceImpl implements PdfInfoService {
         save.setXSize(queryModel.getXsize());
         save.setYSize(queryModel.getYsize());
         save.setPageSize(queryModel.getPageSize());
+        save.setHomeworkEntityId(queryModel.getHomeworkId());
         save.setHomeworkEntity(homeworkService.getHomeworkEntitiy(queryModel.getHomeworkId()));
-        save.setUser(userService.getUserById(queryModel.getUserId()).get());
+        save.setUserId((queryModel.getUserId()));
         pdfInfoRepository.save(save);
 
         return save.getId();

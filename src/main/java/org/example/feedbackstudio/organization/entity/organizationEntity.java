@@ -3,6 +3,7 @@ package org.example.feedbackstudio.organization.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.feedbackstudio.login.user.entity.User;
 
 @Entity
 @Table(name = "organizations")
@@ -26,4 +27,6 @@ public class organizationEntity {
 
     @Column(nullable = false)
     private String email;
+
+
 }

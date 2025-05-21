@@ -1,4 +1,4 @@
-package org.example.feedbackstudio;
+package org.example.feedbackstudio.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
