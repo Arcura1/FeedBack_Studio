@@ -18,9 +18,6 @@ public class pdfAnalayzerController {
     @CrossOrigin(origins = "*")
     @PostMapping("/{pdfId}/{userId}")
     public ResponseEntity<String> getPdf(@PathVariable String pdfId,@PathVariable String userId) {
-
-        service.analayzePdf( Long.parseLong(pdfId), Long.parseLong(userId));
-
-        return new ResponseEntity<>("Sıraya Alındı", HttpStatus.OK);
+        return new ResponseEntity<>(service.analayzePdf( Long.parseLong(pdfId), Long.parseLong(userId)), HttpStatus.OK);
     }
 }

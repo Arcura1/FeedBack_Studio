@@ -41,7 +41,6 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
 
     @Override
     public String analayzePdf(Long pdfId, Long userId) {
-
         // Kullanıcı kontrolü
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
@@ -52,6 +51,8 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
         Optional<PdfInfoEntity> optionalPdfInfo = pdfInfoRepository.findById(pdfId);
         if (optionalPdfInfo.isEmpty()) {
             return "PDF not found";
+        }else if(optionalPdfInfo.get().getAnalayzed()!=null&&optionalPdfInfo.get().getAnalayzed()==true){
+            return "It is already Analayzed";
         }
 
         PdfInfoEntity pdfInfoEntity = optionalPdfInfo.get();

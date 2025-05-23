@@ -5,6 +5,7 @@ import org.example.feedbackstudio.note.Model.NoteModel;
 import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.converter.NoteConverter;
 import org.example.feedbackstudio.note.entity.NoteEntity;
+import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.example.feedbackstudio.note.repository.NoteRepository;
@@ -120,8 +121,12 @@ public class NoteServiceImpl implements NoteService {
         add.setPage(note.getPage());
         add.setNote(note.getNote());
         add.setTitle(note.getTitle());
-        note.getLastAdd();
         noteRepository.save(add);
+        if(note.getLastAdd()){
+            PdfInfoEntity temp =pdfInfoService.findById(note.getPdfInfoEntityId());
+            temp.setAnalayzed(true);
+            pdfInfoRepository.save(temp);
+        };
         return add.getPdfInfoEntity().getId().toString();
     }
 
