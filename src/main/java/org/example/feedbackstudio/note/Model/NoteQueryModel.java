@@ -18,6 +18,8 @@ public class NoteQueryModel {
 
     private Long pdfInfoEntityId;
 
+    private Boolean lastAdd;
+
     public NoteQueryModel() {
 
     }

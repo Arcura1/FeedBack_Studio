@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -87,5 +89,15 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
         }
 
         return "PDF processing request sent.";
+    }
+
+    private List<String> getExamplesForqueue(){
+        List<String> examples = new ArrayList<>();
+
+
+
+
+
+        return examples;
     }
 }
