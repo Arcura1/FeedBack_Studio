@@ -29,20 +29,10 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
 
     @Override
     public roleAuthorityEntitiy saveRoleAuthority(RoleAuthorityRequestModel model) {
-        roleEntity role = roleRepository.findById(model.getRoleId())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        Authority authority = authorityRepository.findById(model.getAuthorityId())
-                .orElseThrow(() -> new RuntimeException("Authority not found"));
-
-        roleAuthorityEntitiy entity = roleAuthorityEntitiy.builder()
-                .role(role)
-                .roleId(model.getRoleId())
-                .authority(authority)
-                .authorityId(model.getAuthorityId())
-                .build();
-
-        return roleAuthorityRepository.save(entity);
+        roleAuthorityEntitiy roleAuthorityEntity = new roleAuthorityEntitiy();
+        roleAuthorityEntity.setAuthorityId(model.getAuthorityId());
+        roleAuthorityEntity.setRoleId(model.getRoleId());
+        return roleAuthorityRepository.save(roleAuthorityEntity);
     }
 
     @Override

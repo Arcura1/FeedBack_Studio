@@ -1,11 +1,18 @@
 package org.example.feedbackstudio.login.user.rest;
 
+import org.example.feedbackstudio.login.role.entity.roleEntity;
+import org.example.feedbackstudio.login.role.repository.RoleRepository;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
+import org.example.feedbackstudio.login.role.service.RoleService;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.login.user.model.UserDTO;
+import org.example.feedbackstudio.login.user.model.UserQueryModel;
 import org.example.feedbackstudio.login.user.service.UserService;
+import org.example.feedbackstudio.login.user.service.UserSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +26,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UserRepository userRepository;
 
     // Kullanıcı oluşturma
     @PostMapping("/create")
@@ -40,6 +53,20 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    // Kullanıcı ID'ye göre getirme
+
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getAllUsers() {
+        Optional<List<User>> users = userService.getUsers();
+
+        if (users.isPresent()) {
+            return ResponseEntity.ok(users.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Veya boş liste dönülebilir
+        }
+    }
+
 
     // Kullanıcıyı e-posta ile getirme
     @GetMapping("/email/{email}")
@@ -106,76 +133,53 @@ public class UserController {
             return ResponseEntity.ok("E-posta kara listede değil.");
         }
     }
+    // Kullanıcıyı güncelleme
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        Optional<User> existingUserOptional = userService.getUserById(id);
 
-    // YENİ EKLENTİLER (Sadece mevcut UserService metodlarını kullananlar)
-
-    // Rol tipine göre kullanıcı sayısını getirme
-    @GetMapping("/count-by-type/{type}")
-    public ResponseEntity<Map<String, Object>> countByType(@PathVariable RoleTypeEnum type) {
-        Optional<List<UserDTO>> result = userService.getUserByType(type);
-
-        Map<String, Object> response = new HashMap<>();
-        if (result.isPresent()) {
-            response.put("roleType", type);
-            response.put("count", result.get().size());
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("roleType", type);
-            response.put("count", 0);
-            return ResponseEntity.ok(response);
+        if (existingUserOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");
         }
+
+        User existingUser = existingUserOptional.get();
+
+        // Burada güncellenecek alanları manuel olarak set ediyorsun
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setRole(updatedUser.getRole());
+        Optional<roleEntity> temp = roleService.getRoleById(updatedUser.getRoleId());
+
+        if (temp.isPresent()) {
+            existingUser.setRoleEntity(temp.get());
+            existingUser.setRoleId(temp.get().getId());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol bulunamadı.");
+        }
+
+
+
+        User saved=userRepository.save(existingUser);
+//        User savedUser = userService.saveUser(existingUser);
+        return ResponseEntity.ok(saved);
     }
 
-    // Kullanıcı bilgilerini DTO olarak getirme
-    @GetMapping("/{id}/details")
-    public ResponseEntity<UserDTO> getUserDetailsById(@PathVariable Long id) {
-        Optional<User> userOptional = userService.getUserById(id);
+    @PostMapping("/search")
+    public List<User> searchUsers(@RequestBody UserQueryModel query) {
+        Specification<User> spec = Specification
+                .where(UserSpecifications.hasId(query.getId()))
+                .and(UserSpecifications.hasFirstName(query.getFirstName()))
+                .and(UserSpecifications.hasLastName(query.getLastName()))
+                .and(UserSpecifications.hasEmail(query.getEmail()))
+                .and(UserSpecifications.hasPhone(query.getPhone()))
+                .and(UserSpecifications.hasPassword(query.getPassword()))
+                .and(UserSpecifications.hasRole(query.getRole()))
+                .and(UserSpecifications.hasRoleId(query.getRoleId()))
+                .and(UserSpecifications.hasRoleType(query.getRoleType()));
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            // Basit bir dönüşüm - gerçek bir UserDTO nesnesi oluşturmak için uygun bir yöntem kullanılmalı
-            UserDTO userDTO = new UserDTO();
-            // UserDTO'ya gereken alanları set et
-            // Bu satırları UserDTO'nun yapısına göre ayarlayın
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    // Kullanıcı adına göre arama
-    @GetMapping("/find-by-name")
-    public ResponseEntity<List<User>> findByName(@RequestParam String name) {
-        List<User> users = userService.findByName(name); // UserService'de findByName metodu olduğunu varsayıyorum
-
-        if (users != null && !users.isEmpty()) {
-            return ResponseEntity.ok(users);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    // Toplu kullanıcı silme
-    @DeleteMapping("/batch")
-    public ResponseEntity<?> deleteMultipleUsers(@RequestBody List<Long> userIds) {
-        List<Long> successfulDeletes = new ArrayList<>();
-        List<Long> failedDeletes = new ArrayList<>();
-
-        for (Long id : userIds) {
-            try {
-                userService.deleteUserById(id);
-                successfulDeletes.add(id);
-            } catch (Exception e) {
-                failedDeletes.add(id);
-            }
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("successfullyDeleted", successfulDeletes);
-        if (!failedDeletes.isEmpty()) {
-            response.put("failedToDelete", failedDeletes);
-        }
-
-        return ResponseEntity.ok(response);
+        return userRepository.findAll(spec);
     }
 }

@@ -3,6 +3,7 @@ package org.example.feedbackstudio.note.RestController;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.note.Model.HighlightQueryModel;
+import org.example.feedbackstudio.note.Model.NoteQueryModel;
 import org.example.feedbackstudio.note.entity.HighlightEntity;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
@@ -86,5 +87,11 @@ public class HighlightController {
 
         // Sonuç varsa 200 OK ile listeleri gönderiyoruz
         return new ResponseEntity<>(highlights, HttpStatus.OK); // 200 OK
+    }
+
+    @DeleteMapping("/delAll/{id}")
+    public ResponseEntity<String> delAll(@PathVariable Long id) {
+        highlightService.deleteHighlightByPd(id);
+        return new ResponseEntity<>("silindi", HttpStatus.OK);
     }
 }

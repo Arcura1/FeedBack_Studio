@@ -8,5 +8,7 @@ public interface HighlightRepository extends JpaRepository<HighlightEntity, Long
     // Bu metot, belirli bir startX ve startY'ye göre highlight'ları alır
     List<HighlightEntity> findByStartXAndStartY(int startX, int startY);
 
+    List<HighlightEntity> findHighlightEntitiesByPdfInfoId(Long pdfInfoId);
+    void deleteByPdfInfoId(Long pdfInfoId);
     // Diğer özelleştirilmiş sorgu metotlarını buraya ekleyebilirsiniz
 }

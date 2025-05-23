@@ -12,4 +12,5 @@ public interface HighlightService {
     List<HighlightEntity> getAllHighlightsByPdfId(Long id);
     List<HighlightEntity> getHighlightsByCoordinates(int startX, int startY);
     HighlightEntity saveHighlight(HighlightEntity highlightEntity);
+    public String deleteHighlightByPd(Long id);
 }

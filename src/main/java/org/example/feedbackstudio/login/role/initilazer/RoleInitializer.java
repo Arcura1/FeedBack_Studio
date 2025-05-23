@@ -21,6 +21,9 @@ public class RoleInitializer implements CommandLineRunner {
     public void run(String... args) {
         createRoleIfNotExists(RoleTypeEnum.GUEST, "Guest Role");
         createRoleIfNotExists(RoleTypeEnum.ADMIN, "Admin Role");
+        createRoleIfNotExists(RoleTypeEnum.TEACHER, "TEACHER Role");
+        createRoleIfNotExists(RoleTypeEnum.STUDENT, "STUDENT Role");
+        createRoleIfNotExists(RoleTypeEnum.EXECUTIVE, "EXECUTIVE Role");
     }
 
     private void createRoleIfNotExists(RoleTypeEnum roleType, String description) {

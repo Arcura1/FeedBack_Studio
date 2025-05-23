@@ -1,6 +1,8 @@
 package org.example.feedbackstudio.login.authority.service;
 
 import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryDTO;
+import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +13,9 @@ public interface AuthorityService {
     Optional<Authority> getAuthorityById(Long id);
     Authority updateAuthority(Long id, Authority authority);
     void deleteAuthority(Long id);
+    void deleteAllByOrganizationId(Long organizationId);
+    List<Authority> searchAuthorities(AuthorityQueryDTO dto);
+    List<Authority> getAuthByRole(Long roleId);
+    List<Authority> queryAuthorities(AuthorityQueryModel queryModel);
+
 }

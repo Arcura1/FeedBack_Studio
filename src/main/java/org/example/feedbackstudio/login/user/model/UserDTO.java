@@ -13,5 +13,9 @@ public class UserDTO {
     private String email;
     private String phone;
     private String role;
-
+    private Boolean create;
+    private Long organizationId;
+//    private boolean read;
+//    private boolean update;
+//    private boolean delete;
 }

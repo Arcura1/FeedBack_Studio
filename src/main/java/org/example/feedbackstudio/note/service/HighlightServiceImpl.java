@@ -1,6 +1,7 @@
 package org.example.feedbackstudio.note.service;
 
 import org.example.feedbackstudio.note.entity.HighlightEntity;
+import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.repository.HighlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,4 +42,22 @@ public class HighlightServiceImpl implements HighlightService {
     public HighlightEntity saveHighlight(HighlightEntity highlightEntity) {
         return highlightRepository.save(highlightEntity);
     }
+
+    @Override
+    public String deleteHighlightByPd(Long id) {
+
+        List<HighlightEntity> deneme =highlightRepository.findHighlightEntitiesByPdfInfoId(id);
+        deneme.forEach((val)->{
+            if(val.getPdfInfo().getId().equals(id)) {
+                highlightRepository.delete(val);
+            }
+        });
+        highlightRepository.deleteByPdfInfoId(id);
+        return "done";
+    }
+
+//    @Override
+//    public void deleteHighlightBypdfInfoId(Long id) {
+////        highlightRepository.deleteByPdfInfoId(id);
+//    }
 }
