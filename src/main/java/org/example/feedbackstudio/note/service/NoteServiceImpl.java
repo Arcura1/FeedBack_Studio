@@ -122,7 +122,7 @@ public class NoteServiceImpl implements NoteService {
         add.setNote(note.getNote());
         add.setTitle(note.getTitle());
         noteRepository.save(add);
-        if(note.getLastAdd()){
+        if(note.getLastAdd()!=null&&note.getLastAdd()){
             PdfInfoEntity temp =pdfInfoService.findById(note.getPdfInfoEntityId());
             temp.setAnalayzed(true);
             pdfInfoRepository.save(temp);
