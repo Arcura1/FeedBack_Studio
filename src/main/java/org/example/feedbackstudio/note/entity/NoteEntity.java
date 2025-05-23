@@ -24,9 +24,6 @@ public class NoteEntity {
     @Column(name = "y_coordinate", nullable = false)
     private Long ycoordinate;
 
-    @Column(name = "analayzed", nullable = true)
-    private Boolean analayzed;
-
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 

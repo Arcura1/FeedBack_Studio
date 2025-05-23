@@ -32,6 +32,10 @@ public class PdfInfoEntity {
     @Column(name = "page_size", nullable = false)
     private Integer pageSize;
 
+    @Column(name = "analayzed", nullable = true)
+    private Boolean analayzed;
+
+
     @Column(name = "homework_id",  insertable = true, updatable = false)
     private Long homeworkEntityId;
 
