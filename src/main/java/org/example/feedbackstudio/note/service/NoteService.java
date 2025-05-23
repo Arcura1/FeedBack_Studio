@@ -15,4 +15,5 @@ public interface NoteService {
     public List<NoteEntity> viewByPdfId(Long pdf);
     public List<NoteEntity> viewByPdfInfo(Long id);
     public String delByPdfinfo(Long id);
+    public String analyzeByPdfinfo(Long id);
 }

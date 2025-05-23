@@ -8,6 +8,8 @@ import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.login.role.entity.roleEntity;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.login.role.service.RoleService;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
+import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.organization.entity.organizationEntity;
 import org.example.feedbackstudio.organization.model.OrganizationQueryDTO;
 import org.example.feedbackstudio.organization.repository.OrganizationRepository;
@@ -27,6 +29,8 @@ public class organizationRestController {
 
     @Autowired
     private organizationService organizationService;
+    @Autowired
+    private UserRepository userRepository;
 
     private final OrganizationRepository organizationRepository;
     private final AuthorityService authorityService;
@@ -64,6 +68,10 @@ public class organizationRestController {
             temp.setEffectTypeEnum(roleType);
             authorityService.saveAuthority(temp);
         }
+        User executive = new User();
+        executive = userRepository.findById(savedOrganization.getId()).get();
+
+        executive.getRole();
         return ResponseEntity.ok(savedOrganization);
     }
 

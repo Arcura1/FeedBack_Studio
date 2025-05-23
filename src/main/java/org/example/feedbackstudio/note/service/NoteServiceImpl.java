@@ -162,4 +162,9 @@ public class NoteServiceImpl implements NoteService {
         });
         return "Done";
     }
+
+    @Override
+    public String analyzeByPdfinfo(Long id) {
+        return "";
+    }
 }

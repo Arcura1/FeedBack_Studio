@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     User findByEmail(String email);
 
+    User findById(long id);
+
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roleEntity r WHERE r.roleTypeEnum = :roleType")
     List<User> findByRoleName(@Param("roleType") RoleTypeEnum roleType);
 }
