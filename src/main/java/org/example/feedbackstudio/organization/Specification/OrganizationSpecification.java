@@ -13,8 +13,15 @@ public class OrganizationSpecification {
             Predicate predicate = builder.conjunction(); // Başlangıçta boş bir predicate
 
             if (query.getName() != null) {
-                predicate = builder.and(predicate, builder.like(root.get("name"), "%" + query.getName() + "%"));
+                predicate = builder.and(
+                        predicate,
+                        builder.like(
+                                builder.lower(root.get("name")),
+                                "%" + query.getName().toLowerCase() + "%"
+                        )
+                );
             }
+
 
             if (query.getAddress() != null) {
                 predicate = builder.and(predicate, builder.like(root.get("address"), "%" + query.getAddress() + "%"));
