@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.homework.service;
 
+import org.example.feedbackstudio.classroom.entitiy.ClassroomUserEntity;
 import org.example.feedbackstudio.homework.model.query.HomeworkQueryDTO;
 import org.example.feedbackstudio.homework.service.Specification.HomeworkSpecification;
 import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
@@ -13,6 +14,8 @@ import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.example.feedbackstudio.classroom.service.ClassroomUserService;
+import org.example.feedbackstudio.classroom.entitiy.ClassroomUserEntity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +33,8 @@ public class HomeworkServiceImpl implements HomeworkService {
     private HomeworkRepository homeworkRepository;
     @Autowired
     private AuthorityService authorityService;
+    @Autowired
+    private ClassroomUserService classroomUserService;
 
     @Override
     public List<HomeworkModel> getAllHomework() {
@@ -39,6 +44,23 @@ public class HomeworkServiceImpl implements HomeworkService {
             models.add(HomeworkConverter.convertToModel(entity));
         }
         return models;
+    }
+    @Override
+    public List<HomeworkModel> getHomeworksByUser(Long userId) {
+        Optional<List<ClassroomUserEntity>> classroomUsersOpt = classroomUserService.getClassroomUsersByUserId(userId);
+
+        if (classroomUsersOpt.isEmpty()) return List.of();
+
+        List<Long> classroomIds = classroomUsersOpt.get().stream()
+                .map(ClassroomUserEntity::getClassroomId)
+                .distinct()
+                .toList();
+
+        List<HomeworkEntity> homeworkEntities = homeworkRepository.findByClassroomIdIn(classroomIds);
+
+        return homeworkEntities.stream()
+                .map(HomeworkConverter::convertToModel)
+                .toList();
     }
 
     @Override
