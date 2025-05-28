@@ -8,7 +8,6 @@ import org.example.feedbackstudio.login.user.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,9 +28,6 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     /**
      * Kullanıcıyı kaydeder, aynı email ve şifreye sahip kullanıcı varsa kara listeye ekler.
      *
@@ -39,21 +35,22 @@ public class UserService {
      * @return Kaydedilen kullanıcı
      */
     public User saveUser(User user) {
+        // Aynı email ve şifre ile kullanıcı var mı kontrol et
         User existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            addToBlacklist(user.getEmail());
+        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+            addToBlacklist(user.getEmail()); // Aynı email ve şifre varsa blackliste ekle
             throw new IllegalArgumentException("Bu e-posta ve şifre zaten kullanılıyor, kullanıcı kara listeye alındı.");
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // şifreyi hashle
-
         if (user.getRoleId() == null && Objects.equals(user.getRole(), "GUEST")) {
+
             user.setRoleId(roleRepository.findByRoleTypeEnumAndOrganizationId(RoleTypeEnum.valueOf(user.getRole()), null).getId());
+            return userRepository.save(user); // Yeni kullanıcıyı kaydet
+
+        } else {
+            return userRepository.save(user);
         }
 
-        return userRepository.save(user);
     }
-
 
     /**
      * Kullanıcıyı ID'ye göre getirir.
@@ -127,7 +124,7 @@ public class UserService {
         }
 
         User user = getUserByEmail(email);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        if (user != null && user.getPassword().equals(password)) { // Şifre kontrolü
             UserDTO u = new UserDTO();
             u.setId(user.getId());
             u.setEmail(user.getEmail());
@@ -136,11 +133,10 @@ public class UserService {
             u.setCreate(null);
             u.setOrganizationId(user.getRoleEntity().getOrganizationId());
             u.setRole(roleRepository.findById(user.getRoleId()).get().getRoleTypeEnum().toString());
-            return u;
+            return u; // Kullanıcı bulunursa döndür
         }
-        return null;
+        return null; // Kullanıcı bulunamazsa veya şifre yanlışsa null döndür
     }
-
 
     /**
      * E-posta adresini Redis üzerinden kara listeye ekler.
