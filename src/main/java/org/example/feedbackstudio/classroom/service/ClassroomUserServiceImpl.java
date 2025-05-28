@@ -54,4 +54,9 @@ public class ClassroomUserServiceImpl implements ClassroomUserService {
         throw new RuntimeException("Güncellenecek kayıt bulunamadı!");
     }
 
+    @Override
+    public Optional<List<ClassroomUserEntity>> getClassroomUsersByUserId(Long userId) {
+        return classroomUserRepository.findAllByUserId(userId);
+    }
+
 }

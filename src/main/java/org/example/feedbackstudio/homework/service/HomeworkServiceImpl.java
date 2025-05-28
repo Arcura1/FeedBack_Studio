@@ -2,6 +2,10 @@ package org.example.feedbackstudio.homework.service;
 
 import org.example.feedbackstudio.homework.model.query.HomeworkQueryDTO;
 import org.example.feedbackstudio.homework.service.Specification.HomeworkSpecification;
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.homework.model.HomeworkModel;
 import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
@@ -24,6 +28,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Autowired
     private HomeworkRepository homeworkRepository;
+    @Autowired
+    private AuthorityService authorityService;
 
     @Override
     public List<HomeworkModel> getAllHomework() {
@@ -91,6 +97,17 @@ public class HomeworkServiceImpl implements HomeworkService {
                 HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
                 return result;
             }
+        }
+
+        for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
+            Authority temp=new Authority();
+            temp.setHomework(HomeworkEntity);
+            temp.setAuthorityType(AuthorityType.ORGANIZATION);
+            temp.setHomewrokId(HomeworkEntity.getId());
+            temp.setDescription("description");
+            temp.setName(HomeworkEntity.getTitle().toLowerCase()+" "+roleType.toString());
+            temp.setEffectTypeEnum(roleType);
+            authorityService.saveAuthority(temp);
         }
         HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
         return result;

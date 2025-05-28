@@ -1,6 +1,10 @@
 package org.example.feedbackstudio.note.pdfInfo.service;
 
 
+import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
+import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.service.AuthorityService;
 import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.note.Model.MixQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
@@ -21,6 +25,8 @@ public class PdfInfoServiceImpl implements PdfInfoService {
     private UserService userService;
     @Autowired
     private HomeworkService homeworkService;
+    @Autowired
+    private AuthorityService authorityService;
 
 
     private final String UPLOAD_DIR = "src/main/resources/static/";
@@ -38,6 +44,17 @@ public class PdfInfoServiceImpl implements PdfInfoService {
         save.setUserId((queryModel.getUserId()));
         pdfInfoRepository.save(save);
 
+
+        for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
+            Authority temp=new Authority();
+            temp.setPdfInfo(save);
+            temp.setAuthorityType(AuthorityType.ORGANIZATION);
+            temp.setOrganizationId(save.getId());
+            temp.setDescription("description");
+            temp.setName(save.getTitle().toLowerCase()+" "+roleType.toString());
+            temp.setEffectTypeEnum(roleType);
+            authorityService.saveAuthority(temp);
+        }
         return save.getId();
     }
 

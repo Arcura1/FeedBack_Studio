@@ -32,6 +32,12 @@ public class ClassroomUserController {
         Optional<ClassroomUserEntity> classroomUser = classroomUserService.getClassroomUserById(id);
         return classroomUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    // 📌 Belirtilen ID'ye sahip sınıf kullanıcısını getir
+    @GetMapping("/byUser/{id}")
+    public ResponseEntity<List<ClassroomUserEntity>>getClassroomUserByUserId(@PathVariable Long id) {
+        Optional<List<ClassroomUserEntity>> classroomUser = classroomUserService.getClassroomUsersByUserId(id);
+        return classroomUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     // 📌 Yeni bir sınıf kullanıcısı ekle
     @PostMapping
