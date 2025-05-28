@@ -20,7 +20,7 @@ public class ClassroomUserEntity {
     private Long id;
 
     // Organization ID doğrudan tutulacak
-    @Column(name = "classroom_id", insertable = true, updatable = false)
+    @Column(name = "classroom_id", insertable = true, updatable = true)
     private Long classroomId;
 
     // Organization entity ile ilişki
@@ -31,7 +31,7 @@ public class ClassroomUserEntity {
 
     // Organization ID doğrudan tutulacak
 
-    @Column(name = "user_id", insertable = true, updatable = false)
+    @Column(name = "user_id", insertable = true, updatable = true)
     private Long userId;
 
     // Organization entity ile ilişki
