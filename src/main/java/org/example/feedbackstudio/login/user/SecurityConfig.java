@@ -117,6 +117,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/classroom-users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/classroom-users/**").permitAll()
 
+                        .requestMatchers(HttpMethod.POST, "/pdfAnalyzer/**").permitAll()
+
                         // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
