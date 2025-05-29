@@ -76,9 +76,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/role-authorities/**").permitAll()
 
                         // Homework işlemleri
-                        .requestMatchers(HttpMethod.GET, "/Homework/getAll").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/Homework/getByUser/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Homework/add").permitAll()
 
                         // Classroom işlemleri
                         .requestMatchers(HttpMethod.GET, "/classrooms/**").permitAll()
@@ -94,8 +91,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/organization/search").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/Homework/getAllByT").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/Homework/add").permitAll()
+                        // Homework işlemleri (artık küçük harfli ve tam tanımlı)
+                        .requestMatchers(HttpMethod.GET, "/homework/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/homework").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/homework/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/homework/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/homework/getAll").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/homework/getByUser/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/homework/add").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/homework/getAllByT").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/homework/del/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/homework/put").permitAll()
 
                         // PDF işlemleri
                         .requestMatchers(HttpMethod.POST, "/pdf/findAllByHU").permitAll()
@@ -112,9 +119,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/highlights/delAll/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/pdf/findByH/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/Homework/del/**").permitAll()
 
-                        // ClassroomUser işlemleri
+                        // ClassroomUser işlemler
                         .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/classroom-users/byUser/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/classroom-users").permitAll()

@@ -125,7 +125,7 @@ public class HomeworkServiceImpl implements HomeworkService {
             Authority temp=new Authority();
             temp.setHomework(HomeworkEntity);
             temp.setAuthorityType(AuthorityType.HOMEWORK);
-            temp.setHomewrokId(HomeworkEntity.getId());
+            temp.setHomeworkId(HomeworkEntity.getId());
             temp.setDescription("description");
             temp.setName(HomeworkEntity.getTitle().toLowerCase()+" "+roleType.toString());
             temp.setEffectTypeEnum(roleType);
@@ -137,8 +137,24 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public HomeworkModel updateHomework(HomeworkQueryModel homework) {
-        return null;
+        if (homework.getId() == null) {
+            throw new IllegalArgumentException("Güncellenecek ödevin ID’si boş olamaz.");
+        }
+
+        HomeworkEntity existingHomework = homeworkRepository.findById(homework.getId())
+                .orElseThrow(() -> new RuntimeException("Ödev bulunamadı: " + homework.getId()));
+
+        // Sadece güncellenebilir alanları değiştir
+        existingHomework.setTitle(homework.getTitle());
+        existingHomework.setDescription(homework.getDescription());
+
+        // Kaydet
+        HomeworkEntity updatedEntity = homeworkRepository.save(existingHomework);
+
+        // Modele dönüştür ve döndür
+        return HomeworkConverter.convertToModel(updatedEntity);
     }
+
 
     @Override
     public void deleteHomework(Long id) {

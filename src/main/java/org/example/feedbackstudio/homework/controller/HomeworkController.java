@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Homework")
+@RequestMapping("/homework")
 @CrossOrigin(origins = "*")
 public class HomeworkController {
 
@@ -42,7 +42,8 @@ public class HomeworkController {
     }
     @PutMapping("/put")
     public ResponseEntity<HomeworkQueryModel> updateHomework(@RequestBody HomeworkQueryModel homework) {
-        homeworkService.updateHomework(homework);
+            homeworkService.updateHomework(homework);
+
         return new ResponseEntity<>(homework, HttpStatus.OK);
     }
     @DeleteMapping("/del/{homeworkId}")

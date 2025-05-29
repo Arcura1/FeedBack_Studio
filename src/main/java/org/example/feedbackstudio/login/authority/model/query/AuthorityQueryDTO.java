@@ -12,7 +12,7 @@ public class AuthorityQueryDTO {
     private Long classroomId;
     private Long classroomUserId;
     private Long pdfInfoId;
-    private Long homewrokId;
+    private Long homeworkId;
     private AuthorityType authorityType;
     private EffectTypeEnum effectTypeEnum;
 }

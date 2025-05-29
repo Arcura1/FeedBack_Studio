@@ -76,11 +76,11 @@ public class Authority {
 
 
     // Organization ID doğrudan tutulacak
-    @Column(name = "homewrok_id", insertable = true, updatable = false)
-    private Long homewrokId;
+    @Column(name = "homework_Id", insertable = true, updatable = false)
+    private Long homeworkId;
 
     // Organization entity ile ilişki
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "homewrok_id", insertable = false, updatable = false)
+    @JoinColumn(name = "homework_id", insertable = false, updatable = false)
     private HomeworkEntity homework;
 }
