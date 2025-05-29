@@ -51,7 +51,7 @@ public class PdfInfoServiceImpl implements PdfInfoService {
             temp.setAuthorityType(AuthorityType.PDF_EDIT);
             temp.setPdfInfoId(save.getId());
             temp.setDescription("description");
-            temp.setName(save.getTitle().toLowerCase()+" "+roleType.toString());
+            temp.setName(save.getTitle().toLowerCase()+" "+roleType.toString()+save.getId());
             temp.setEffectTypeEnum(roleType);
             authorityService.saveAuthority(temp);
         }

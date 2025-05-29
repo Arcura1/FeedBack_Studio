@@ -14,4 +14,5 @@ public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> 
     List<HomeworkEntity> findByClassroomId( Long classroomId);
     List<HomeworkEntity> findByClassroomIdIn(List<Long> classroomIds);
 
+
 }

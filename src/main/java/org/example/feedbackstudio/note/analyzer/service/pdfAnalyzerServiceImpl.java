@@ -3,11 +3,14 @@ package org.example.feedbackstudio.note.analyzer.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.feedbackstudio.RabbitConfig;
+import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.example.feedbackstudio.note.analyzer.model.pdfAnalyzerModel;
+import org.example.feedbackstudio.note.entity.NoteEntity;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.note.pdfInfo.repository.PdfInfoRepository;
+import org.example.feedbackstudio.note.repository.NoteRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +30,13 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
 
     @Autowired
     private PdfInfoRepository pdfInfoRepository;
+    @Autowired
+    private HomeworkRepository homeworkRepository;
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NoteRepository noteRepository;
 
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
@@ -81,7 +88,7 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
         queue.setEncoded(encoded);
         queue.setTitle(pdfInfoEntity.getHomeworkEntity().getTitle());
         queue.setConf(pdfInfoEntity.getHomeworkEntity().getDescription());
-
+        queue.setExamples(getExamplesForqueue(pdfId));
         // RabbitMQ'ya gönder
         try {
             String jsonMessage = objectMapper.writeValueAsString(queue);
@@ -93,13 +100,32 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
 
         return "PDF processing request sent.";
     }
-
-    private List<String> getExamplesForqueue(){
+    private List<String> getExamplesForqueue(Long pdfId) {
         List<String> examples = new ArrayList<>();
 
+        Optional<Long> homeworkIdOpt = pdfInfoRepository.findById(pdfId)
+                .map(PdfInfoEntity::getHomeworkEntityId);
 
+        if (!homeworkIdOpt.isPresent()) {
+            return examples;
+        }
 
+        Long homeworkId = homeworkIdOpt.get();
 
+        List<PdfInfoEntity> pdfList = pdfInfoRepository.findByhomeworkEntity_id(homeworkId);
+
+        // Güvenli şekilde pdfId'li olanı çıkar
+        pdfList.removeIf(pdf -> pdf.getId().equals(pdfId));
+
+        for (PdfInfoEntity pdfInfo : pdfList) {
+            List<NoteEntity> notes = noteRepository.findByPdfInfoEntityId(pdfInfo.getId());
+
+            for (NoteEntity note : notes) {
+                // İfade ve açıklama varsa örnek formatta ekle
+                String formatted = note.getNote();
+                examples.add(formatted);
+            }
+        }
 
         return examples;
     }

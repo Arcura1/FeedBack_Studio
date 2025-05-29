@@ -11,4 +11,5 @@ public interface PdfInfoRepository extends JpaRepository<PdfInfoEntity,Long> {
     PdfInfoEntity findByTitle(String title);
     List<PdfInfoEntity> findByhomeworkEntity_id(Long homeworkEntity_id);
     PdfInfoEntity findByHomeworkEntityIdAndUserId(Long homeworkId, Long userId);
+    List<PdfInfoEntity> findAllByhomeworkEntity_id(Long homeworkId);
 }
