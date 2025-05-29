@@ -1,4 +1,4 @@
-package org.example.feedbackstudio.login.user; // Veya konfigürasyon için tercih ettiğiniz paket
+package org.example.feedbackstudio.login.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,84 +26,68 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // --- Herkese Açık (permitAll) Endpoint'ler ---
-
-                        // Kullanıcı İşlemleri
+                        // Kullanıcı işlemleri
                         .requestMatchers(HttpMethod.POST, "/api/users/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/getAll").permitAll() // UserPage için
-                        .requestMatchers(HttpMethod.GET, "/api/users/{id}").permitAll() // Gerekirse kullanıcı detayı
-                        .requestMatchers(HttpMethod.PUT, "/api/users/update/**").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.POST, "/api/users/search").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.POST, "/api/users/blacklist").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.GET, "/api/users/blacklist/**").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.GET, "/api/users/email/**").permitAll() // UserPage için (şimdilik permitAll)
-                        .requestMatchers(HttpMethod.GET, "/api/users/type/**").permitAll() // UserPage için (şimdilik permitAll)
+                        .requestMatchers(HttpMethod.GET, "/api/users/getAll").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/update/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/search").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/blacklist").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/blacklist/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/email/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/type/**").permitAll()
 
+                        // Rol işlemleri
+                        .requestMatchers(HttpMethod.GET, "/roles").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/roles").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/roles/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/roles/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/roles/query").permitAll()
 
-                        // Rol İşlemleri (RolePageComponent ve diğerleri için)
-                        .requestMatchers(HttpMethod.GET, "/roles").permitAll() // RolePage - loadRoles
-                        .requestMatchers(HttpMethod.POST, "/roles").permitAll() // RolePage - createRole
-                        .requestMatchers(HttpMethod.PUT, "/roles/**").permitAll() // RolePage - updateRole
-                        .requestMatchers(HttpMethod.DELETE, "/roles/**").permitAll() // RolePage - deleteRole
-                        .requestMatchers(HttpMethod.POST, "/roles/query").permitAll() // RolePage - searchRoles, AuthorityRoleComponent - onInputChange
+                        // Yetki işlemleri
+                        .requestMatchers(HttpMethod.POST, "/authorities/query").permitAll()
 
-                        // Yetki İşlemleri (AuthorityPageComponent ve AuthorityRoleComponent için)
-                        .requestMatchers(HttpMethod.POST, "/authorities/query").permitAll() // AuthorityPageComponent - searchAuthorities, AuthorityRoleComponent - fetchAuthorities
-                        // .requestMatchers(HttpMethod.GET, "/authorities").permitAll() // Gerekirse tüm yetkileri listeleme
-                        // .requestMatchers(HttpMethod.POST, "/authorities").permitAll() // Gerekirse yetki oluşturma
-                        // .requestMatchers(HttpMethod.PUT, "/authorities/**").permitAll() // Gerekirse yetki güncelleme
-                        // .requestMatchers(HttpMethod.DELETE, "/authorities/**").permitAll() // Gerekirse yetki silme
+                        // Rol-yetki eşleştirmeleri
+                        .requestMatchers(HttpMethod.GET, "/api/role-authorities").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/role-authorities").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/role-authorities/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/role-authorities/**").permitAll()
 
-                        // Rol-Yetki Eşleştirme İşlemleri (AuthorityRoleComponent için)
-                        .requestMatchers(HttpMethod.GET, "/api/role-authorities").permitAll() // fetchAll
-                        .requestMatchers(HttpMethod.POST, "/api/role-authorities").permitAll() // save (create)
-                        .requestMatchers(HttpMethod.PUT, "/api/role-authorities/**").permitAll() // save (update)
-                        .requestMatchers(HttpMethod.DELETE, "/api/role-authorities/**").permitAll() // delete
+                        // Organizasyon işlemleri
+                        .requestMatchers(HttpMethod.GET, "/organization/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/organization").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/organization/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/organization/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/organization/search").permitAll()
 
-                        // Organizasyon İşlemleri (RolePageComponent ve UserPageComponent için)
-                        .requestMatchers(HttpMethod.POST, "/organization/search").permitAll() // RolePage - onInputChange, UserPage - onInputChange
-                        .requestMatchers(HttpMethod.GET, "/organization/{id}").permitAll() // RolePage - editRole içinde organizasyon adını almak için
-
-                        // Diğer potansiyel public endpoint'ler (Swagger vb.)
-                        // .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-
-                        // OPTIONS isteklerine her zaman izin ver (CORS preflight için önemli)
+                        // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // --- Kimlik Doğrulaması Gerektiren Endpoint'ler ---
-                        // Yukarıda permitAll ile belirtilmeyen TÜM diğer istekler kimlik doğrulama gerektirir.
-                        // Geliştirme tamamlandığında ve login mekanizmanız oturduğunda,
-                        // yukarıdaki permitAll'ların çoğunu kaldırıp buraya düşmelerini sağlayacaksınız.
+                        // Diğer her şey için kimlik doğrulama gerekir
                         .anyRequest().authenticated()
                 );
-        // Eğer JWT tabanlı kimlik doğrulama kullanacaksanız:
-        // http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-        // ve JWT token'ını doğrulamak için bir JwtDecoder bean'i sağlamanız gerekir.
 
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Angular uygulamanızın adresi
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*")); // Geliştirme için tüm başlıklara izin ver
-        configuration.setAllowCredentials(true);
-        // Gerekirse istemcinin erişebileceği response header'ları:
-        // configuration.setExposedHeaders(Arrays.asList("Authorization", "X-Custom-Header"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Tüm yollar ("/**") için bu CORS yapılandırmasını uygula
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
