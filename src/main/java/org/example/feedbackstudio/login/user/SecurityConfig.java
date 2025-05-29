@@ -97,6 +97,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/Homework/getAllByT").permitAll()
                         .requestMatchers(HttpMethod.POST, "/Homework/add").permitAll()
 
+                        // PDF işlemleri
+                        .requestMatchers(HttpMethod.POST, "/pdf/findAllByHU").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pdf/addPdf").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pdf/uploadPdf").permitAll()
+
+
                         // ClassroomUser işlemleri
                         .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/classroom-users/byUser/**").permitAll()
