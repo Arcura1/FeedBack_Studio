@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.classroom.service;
 
+import jakarta.transaction.Transactional;
 import org.example.feedbackstudio.classroom.entitiy.ClassroomUserEntity;
 import org.example.feedbackstudio.classroom.model.ClassroomUserQueyModel;
 import org.example.feedbackstudio.classroom.repository.ClassroomUserRepository;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ClassroomUserServiceImpl implements ClassroomUserService {
 
     private final ClassroomUserRepository classroomUserRepository;
@@ -52,6 +54,11 @@ public class ClassroomUserServiceImpl implements ClassroomUserService {
             return classroomUserRepository.save(entity);
         }
         throw new RuntimeException("Güncellenecek kayıt bulunamadı!");
+    }
+
+    @Override
+    public Optional<List<ClassroomUserEntity>> getClassroomUsersByUserId(Long userId) {
+        return classroomUserRepository.findAllByUserId(userId);
     }
 
 }

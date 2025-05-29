@@ -60,6 +60,12 @@ public class HomeworkController {
         List<HomeworkModel> homeworkList = homeworkService.getHomeworkByTeacher(teacherId);
         return new ResponseEntity<>(homeworkList, HttpStatus.OK);
     }
+    @GetMapping("/getByUser/{userId}")
+    public ResponseEntity<List<HomeworkModel>> getHomeworkByUser(@PathVariable Long userId) {
+        List<HomeworkModel> homeworkList = homeworkService.getHomeworksByUser(userId);
+        return new ResponseEntity<>(homeworkList, HttpStatus.OK);
+    }
+
     @PostMapping("/search")
     public List<HomeworkEntity> searchHomeworks(@RequestBody HomeworkQueryDTO query) {
         return homeworkService.searchHomeworks(query);

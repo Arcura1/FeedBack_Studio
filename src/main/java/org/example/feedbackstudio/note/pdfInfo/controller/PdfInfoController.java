@@ -67,7 +67,7 @@ public class PdfInfoController {
     @PostMapping("/pdfById")
     public ResponseEntity<Resource> getPdfById(@RequestBody PdfShowQueryModel querymodel) {
         // Dosya yolu oluşturuluyor
-        File pdfFile = new File(UPLOAD_DIR + querymodel.getHomeworkId() + "/" + querymodel.getPdfInfoId() + ".pdf");
+            File pdfFile = new File(UPLOAD_DIR + querymodel.getHomeworkId() + "/" + querymodel.getPdfInfoId() + ".pdf");
 
         // Dosyanın var olup olmadığını kontrol et
         if (!pdfFile.exists()) {

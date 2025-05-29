@@ -16,5 +16,6 @@ public interface ClassroomUserService {
 
     void deleteClassroomUser(Long id);
     ClassroomUserEntity updateClassroomUser(Long id, ClassroomUserQueyModel model);
+    Optional<List<ClassroomUserEntity>> getClassroomUsersByUserId(Long userId);
 
 }
