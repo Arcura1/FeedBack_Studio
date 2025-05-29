@@ -103,6 +103,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public String add(NoteQueryModel note) {
         NoteEntity add = new NoteEntity();
+        if(note.getLastAdd()!=null&&note.getLastAdd()){
+            PdfInfoEntity tempa=pdfInfoService.findById(note.getPdfInfoEntityId());
+            tempa.setAnalayzed(true);
+            pdfInfoRepository.save(tempa);
+        }
 
         add.setPdfInfoEntity(pdfInfoService.findById(note.getPdfInfoEntityId()));
         add.setPdfInfoEntityId(note.getPdfInfoEntityId());

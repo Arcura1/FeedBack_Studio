@@ -80,7 +80,7 @@ public class pdfAnalyzerServiceImpl implements pdfAnalayzerService {
         queue.setPdfInfoEntityId(pdfId);
         queue.setEncoded(encoded);
         queue.setTitle(pdfInfoEntity.getHomeworkEntity().getTitle());
-        queue.setConf("yazım hatalarını göz ardı et");
+        queue.setConf(pdfInfoEntity.getHomeworkEntity().getDescription());
 
         // RabbitMQ'ya gönder
         try {
