@@ -33,8 +33,6 @@ public class QueueContainerScalerService {
         // Minimum 1 container olacak şekilde hesaplama
         int requiredContainers = 1 + Math.max(0, (messageCount - 2 + 1) / 2);
 
-        System.out.println("Mesaj sayısı: " + messageCount + ", Gerekli container sayısı: " + requiredContainers);
-
         // Eksikse yeni container başlat
         while (activeContainers.size() < requiredContainers) {
             int newIndex = activeContainers.size() + 1;
