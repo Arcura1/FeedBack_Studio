@@ -81,6 +81,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/organization/search").permitAll()
 
+                        // ClassroomUser işlemleri
+                        .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/classroom-users/byUser/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/classroom-users").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/classroom-users/**").permitAll()
+
+
+
                         .requestMatchers(HttpMethod.GET, "/classrooms/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/classrooms").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/classrooms/**").permitAll()
