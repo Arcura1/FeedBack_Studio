@@ -48,8 +48,8 @@ public class PdfInfoServiceImpl implements PdfInfoService {
         for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
             Authority temp=new Authority();
             temp.setPdfInfo(save);
-            temp.setAuthorityType(AuthorityType.ORGANIZATION);
-            temp.setOrganizationId(save.getId());
+            temp.setAuthorityType(AuthorityType.PDF_EDIT);
+            temp.setPdfInfoId(save.getId());
             temp.setDescription("description");
             temp.setName(save.getTitle().toLowerCase()+" "+roleType.toString());
             temp.setEffectTypeEnum(roleType);
