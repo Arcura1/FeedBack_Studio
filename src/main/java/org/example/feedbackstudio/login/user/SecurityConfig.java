@@ -111,6 +111,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/delAll/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/highlights/delAll/**").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/pdf/findByH/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/Homework/del/**").permitAll()
+
                         // ClassroomUser işlemleri
                         .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/classroom-users/byUser/**").permitAll()
@@ -118,6 +121,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/classroom-users/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/pdfAnalyzer/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/authorities/getByRole/**").permitAll()
+
 
                         // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
