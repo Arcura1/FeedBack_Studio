@@ -3,6 +3,7 @@ package org.example.feedbackstudio.login.user.service;
 import org.example.feedbackstudio.login.role.roleTypeEnum.RoleTypeEnum;
 import org.example.feedbackstudio.login.user.entity.User;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
 
 public class UserSpecifications {
 
@@ -31,8 +32,10 @@ public class UserSpecifications {
     }
 
     public static Specification<User> hasPassword(String password) {
-        return (root, query, cb) -> password == null ? null :
-                cb.equal(root.get("password"), password);
+        if (StringUtils.hasText(password)) {
+            System.err.println("UserSpecifications.hasPassword: Şifreye göre arama güvenlik nedeniyle desteklenmiyor ve yoksayılıyor.");
+        }
+        return (root, query, cb) -> null; // Her zaman true (etkisiz) bir koşul döndür
     }
 
     public static Specification<User> hasRole(String role) {
