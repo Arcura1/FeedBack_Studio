@@ -12,7 +12,7 @@ public class QueueContainerScalerService {
     private final PdfProcessorQueueService queueService;
     private final DockerContainerService containerService;
 
-    // Hangi container'lar açık, takip ediyoruz
+    // Aktif container isimleri
     private final Set<String> activeContainers = new HashSet<>();
 
     public QueueContainerScalerService(PdfProcessorQueueService queueService,
@@ -21,7 +21,7 @@ public class QueueContainerScalerService {
         this.containerService = containerService;
     }
 
-    // Her 10 saniyede bir kontrol eder
+    // Her 10 saniyede bir kontrol et
     @Scheduled(fixedRate = 10000)
     public void scaleContainers() {
         int messageCount = queueService.getMessageCount();
@@ -30,12 +30,12 @@ public class QueueContainerScalerService {
             return;
         }
 
-        // Hesaplama: 2 mesaj için 2 container, sonra her +2 mesaj için +1 container
-        int requiredContainers = 2 + Math.max(0, (messageCount - 2 + 1) / 2);
+        // Minimum 1 container olacak şekilde hesaplama
+        int requiredContainers = 1 + Math.max(0, (messageCount - 2 + 1) / 2);
 
         System.out.println("Mesaj sayısı: " + messageCount + ", Gerekli container sayısı: " + requiredContainers);
 
-        // Açık container sayısı yetersizse, eksik olanları başlat
+        // Eksikse yeni container başlat
         while (activeContainers.size() < requiredContainers) {
             int newIndex = activeContainers.size() + 1;
             String containerName = "my-python-app-" + newIndex;
@@ -46,11 +46,12 @@ public class QueueContainerScalerService {
             }
         }
 
-        // Gerekenden fazla container varsa, fazla olanları durdur (manuel olarak burada `--rm` kullanıyorsan bu adım opsiyonel olur)
+        // Fazlaysa durdur
         while (activeContainers.size() > requiredContainers) {
             int toStopIndex = activeContainers.size();
             String containerName = "my-python-app-" + toStopIndex;
-            boolean stopped = containerService.stopContainer(containerName); // docker stop + remove
+
+            boolean stopped = containerService.stopContainer(containerName);
             if (stopped) {
                 activeContainers.remove(containerName);
             }
