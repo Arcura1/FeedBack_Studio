@@ -124,7 +124,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
             Authority temp=new Authority();
             temp.setHomework(HomeworkEntity);
-            temp.setAuthorityType(AuthorityType.ORGANIZATION);
+            temp.setAuthorityType(AuthorityType.HOMEWORK);
             temp.setHomewrokId(HomeworkEntity.getId());
             temp.setDescription("description");
             temp.setName(HomeworkEntity.getTitle().toLowerCase()+" "+roleType.toString());
