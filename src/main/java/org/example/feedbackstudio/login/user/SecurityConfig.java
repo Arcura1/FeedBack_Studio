@@ -81,6 +81,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/organization/search").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/classrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/classrooms").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/classrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/classrooms/**").permitAll()
                         // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
