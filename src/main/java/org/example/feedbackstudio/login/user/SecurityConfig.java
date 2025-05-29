@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+
                         // Kullanıcı işlemleri
                         .requestMatchers(HttpMethod.POST, "/api/users/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
@@ -68,18 +69,33 @@ public class SecurityConfig {
                         // Yetki işlemleri
                         .requestMatchers(HttpMethod.POST, "/authorities/query").permitAll()
 
-                        // Rol-yetki eşleştirmeleri
+                        // Rol-yetki eşleştirme
                         .requestMatchers(HttpMethod.GET, "/api/role-authorities").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/role-authorities").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/role-authorities/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/role-authorities/**").permitAll()
 
-                        // Organizasyon işlemleri
+                        // Homework işlemleri
+                        .requestMatchers(HttpMethod.GET, "/Homework/getAll").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/Homework/getByUser/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Homework/add").permitAll()
+
+                        // Classroom işlemleri
+                        .requestMatchers(HttpMethod.GET, "/classrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/classrooms").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/classrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/classrooms/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/classrooms/byUserId/**").permitAll()
+
+                        // Organization işlemleri
                         .requestMatchers(HttpMethod.GET, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/organization").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/organization/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/organization/search").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/Homework/getAllByT").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/Homework/add").permitAll()
 
                         // ClassroomUser işlemleri
                         .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
@@ -87,16 +103,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/classroom-users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/classroom-users/**").permitAll()
 
-
-
-                        .requestMatchers(HttpMethod.GET, "/classrooms/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/classrooms").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/classrooms/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/classrooms/**").permitAll()
                         // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Diğer her şey için kimlik doğrulama gerekir
+                        // Geriye kalan tüm istekler için authentication gerekir
                         .anyRequest().authenticated()
                 );
 
