@@ -102,6 +102,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/pdf/addPdf").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pdf/uploadPdf").permitAll()
 
+                        .requestMatchers(HttpMethod.POST, "/pdf/pdfById").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/viewAll/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/highlights/viewH/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/highlights").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/add").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/view").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/delAll/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/highlights/delAll/**").permitAll()
 
                         // ClassroomUser işlemleri
                         .requestMatchers(HttpMethod.GET, "/classroom-users").permitAll()
