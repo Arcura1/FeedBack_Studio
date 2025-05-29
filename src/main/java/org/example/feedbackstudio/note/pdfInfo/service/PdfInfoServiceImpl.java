@@ -85,6 +85,11 @@ public class PdfInfoServiceImpl implements PdfInfoService {
         return pdfInfoRepository.findByhomeworkEntity_id(homevork);
     }
 
+    @Override
+    public void deleteById(Long Id) {
+        pdfInfoRepository.deleteById(Id);
+    }
+
 
     public MixQueryModel convertToMixQueryModel(PdfInfoEntity pdfInfoEntity) {
         MixQueryModel mixQueryModel = new MixQueryModel();

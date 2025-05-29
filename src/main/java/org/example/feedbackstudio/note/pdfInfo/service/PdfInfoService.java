@@ -11,6 +11,7 @@ public interface PdfInfoService {
     PdfInfoEntity findById(Long Id);
     PdfInfoEntity findAllByHU(MixQueryModel queryModel);
     List<PdfInfoEntity> findByHomevork(Long homevork);
+    void deleteById(Long Id);
     // Convert PdfInfoEntity to MixQueryModel
     MixQueryModel convertToMixQueryModel(PdfInfoEntity pdfInfoEntity); // Yeni metodu ekliyoruz
 }

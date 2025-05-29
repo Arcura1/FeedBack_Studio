@@ -120,7 +120,12 @@ public class PdfInfoController {
         return new ResponseEntity<>(pdfInfoModel,HttpStatus.OK);
     }
 
-
+    // --- DELETE ---
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
+        pdfInfoService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
     @CrossOrigin(origins = "*")
