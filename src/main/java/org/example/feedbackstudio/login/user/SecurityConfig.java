@@ -69,11 +69,11 @@ public class SecurityConfig {
                         // Yetki işlemleri
                         .requestMatchers(HttpMethod.POST, "/authorities/query").permitAll()
 
-                        // Rol-yetki eşleştirme
-                        .requestMatchers(HttpMethod.GET, "/api/role-authorities").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/role-authorities").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/role-authorities/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/role-authorities/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/role-authorities").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/role-authorities/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/role-authorities").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/role-authorities/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/role-authorities/**").permitAll()
 
                         // Homework işlemleri
                         .requestMatchers(HttpMethod.GET, "/Homework/getAll").permitAll()
