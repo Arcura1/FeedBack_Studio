@@ -15,106 +15,102 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder; // EKLENDİ
+import org.springframework.util.StringUtils; // EKLENDİ (String boş mu kontrolü için)
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
     private UserService userService;
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleRepository roleRepository; // Bu bağımlılıklar UserController'da gerekli mi?
+    // Genellikle servis katmanı bu tür işlemleri yapar.
     @Autowired
-    private RoleService roleService;
+    private RoleService roleService;   // UserController'ın doğrudan repository veya başka servislere
+    // erişmesi yerine tüm iş mantığını UserService'e devretmesi daha iyi bir tasarım olabilir.
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // UserService üzerinden erişmek daha iyi olur.
 
-    // Kullanıcı oluşturma
+    @Autowired
+    private PasswordEncoder passwordEncoder; // PasswordEncoder'ı enjekte et
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        // Blacklist kontrolü
-        if (userService.isEmailBlacklisted(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Bu e-posta adresi kara listede: " + user.getEmail());
+        try {
+            // Blacklist kontrolü userService.saveUser içine taşınabilir veya burada kalabilir.
+            if (userService.isEmailBlacklisted(user.getEmail())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Bu e-posta adresi kara listede: " + user.getEmail());
+            }
+            User savedUser = userService.saveUser(user); // saveUser şifreyi hash'leyecek
+            return ResponseEntity.ok(savedUser); // Genellikle DTO dönmek daha iyi.
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(savedUser);
     }
 
-    // Kullanıcı ID'ye göre getirme
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    // Kullanıcı ID'ye göre getirme
-
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getAllUsers() {
         Optional<List<User>> users = userService.getUsers();
-
-        if (users.isPresent()) {
-            return ResponseEntity.ok(users.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Veya boş liste dönülebilir
-        }
+        return users.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
     }
 
-
-    // Kullanıcıyı e-posta ile getirme
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         User user = userService.getUserByEmail(email);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-
     @GetMapping("/type/{type}")
     public ResponseEntity<List<UserDTO>> getUserByType(@PathVariable RoleTypeEnum type) {
         Optional<List<UserDTO>> result = userService.getUserByType(type);
-
-        if (result.isPresent() && !result.get().isEmpty()) {
-            return ResponseEntity.ok(result.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Boş bir yanıt döndür
-        }
+        return result.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // Kullanıcı girişi
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
 
-        if (userService.isEmailBlacklisted(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Bu e-posta adresi kara listede: " + email);
-        }
+        try {
+            // Eğer mevcut şifreleri migrate etmek istiyorsanız loginAndMigratePassword kullanın:
+            // UserDTO user = userService.loginAndMigratePassword(email, password);
 
-        UserDTO user = userService.login(email, password);
-        if (user != null) {
-            return ResponseEntity.ok(user); // Giriş başarılı
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("E-posta veya şifre hatalı.");
+            // Sadece normal login için:
+            UserDTO user = userService.login(email, password);
+
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("E-posta veya şifre hatalı.");
+            }
+        } catch (IllegalArgumentException e) { // Kara liste veya diğer iş mantığı hataları için
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 
-    // Kullanıcıyı ID'ye göre silme
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // E-postayı kara listeye ekleme
     @PostMapping("/blacklist")
     public ResponseEntity<String> addToBlacklist(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -122,21 +118,19 @@ public class UserController {
         return ResponseEntity.ok("E-posta kara listeye eklendi: " + email);
     }
 
-    // Kara listeyi kontrol etme
     @GetMapping("/blacklist/{email}")
-    @Cacheable("blacklist") // Redis cache kullanımı
+    @Cacheable("blacklist")
     public ResponseEntity<String> checkBlacklist(@PathVariable String email) {
         boolean isBlacklisted = userService.isEmailBlacklisted(email);
-        if (isBlacklisted) {
-            return ResponseEntity.ok("E-posta kara listede.");
-        } else {
-            return ResponseEntity.ok("E-posta kara listede değil.");
-        }
+        return ResponseEntity.ok(isBlacklisted ? "E-posta kara listede." : "E-posta kara listede değil.");
     }
-    // Kullanıcıyı güncelleme
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        Optional<User> existingUserOptional = userService.getUserById(id);
+        // Güncelleme işlemini de UserService'e taşımak daha temiz olur.
+        // Şimdilik Controller'da bırakıyorum.
+
+        Optional<User> existingUserOptional = userRepository.findById(id); // userService.getUserById(id) daha iyi olur.
 
         if (existingUserOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");
@@ -144,41 +138,63 @@ public class UserController {
 
         User existingUser = existingUserOptional.get();
 
-        // Burada güncellenecek alanları manuel olarak set ediyorsun
-        existingUser.setFirstName(updatedUser.getFirstName());
-        existingUser.setLastName(updatedUser.getLastName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setRole(updatedUser.getRole());
-        Optional<roleEntity> temp = roleService.getRoleById(updatedUser.getRoleId());
+        // Alanları güncelle (null kontrolleri eklenebilir)
+        if (updatedUser.getFirstName() != null) existingUser.setFirstName(updatedUser.getFirstName());
+        if (updatedUser.getLastName() != null) existingUser.setLastName(updatedUser.getLastName());
 
-        if (temp.isPresent()) {
-            existingUser.setRoleEntity(temp.get());
-            existingUser.setRoleId(temp.get().getId());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rol bulunamadı.");
+        // E-posta güncelleniyorsa ve yeni e-posta başkası tarafından kullanılmıyorsa
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().equalsIgnoreCase(existingUser.getEmail())) {
+            if (userRepository.findByEmail(updatedUser.getEmail()) != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bu e-posta adresi zaten başkası tarafından kullanılıyor.");
+            }
+            existingUser.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getPhone() != null) existingUser.setPhone(updatedUser.getPhone()); // Telefon için de unique kontrolü gerekebilir
+
+        // ŞİFRE GÜNCELLEME: Eğer istekte yeni bir şifre varsa (boş değilse), hash'leyerek güncelle
+        if (StringUtils.hasText(updatedUser.getPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+        // Eğer updatedUser.getPassword() null veya boşsa, mevcut şifreye dokunulmaz.
+
+        // Rol güncelleme
+        if (updatedUser.getRole() != null) existingUser.setRole(updatedUser.getRole()); // Bu string rolü ne kadar anlamlı? RoleId/RoleEntity daha önemli.
+        if (updatedUser.getRoleId() != null) {
+            Optional<roleEntity> tempRole = roleService.getRoleById(updatedUser.getRoleId());
+            if (tempRole.isPresent()) {
+                existingUser.setRoleEntity(tempRole.get());
+                existingUser.setRoleId(tempRole.get().getId());
+                // String 'role' alanını da senkronize et:
+                existingUser.setRole(tempRole.get().getRoleTypeEnum().name());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Belirtilen rol ID (" + updatedUser.getRoleId() + ") ile rol bulunamadı.");
+            }
         }
 
-
-
-        User saved=userRepository.save(existingUser);
-//        User savedUser = userService.saveUser(existingUser);
-        return ResponseEntity.ok(saved);
+        User savedUser = userRepository.save(existingUser); // userService.saveUser(existingUser) daha iyi olabilir (eğer saveUser içinde ek mantıklar varsa)
+        return ResponseEntity.ok(savedUser); // DTO dönmek daha iyi.
     }
 
     @PostMapping("/search")
     public List<User> searchUsers(@RequestBody UserQueryModel query) {
+        // Şifre ile arama (UserSpecifications.hasPassword) BCrypt ile artık doğrudan çalışmaz.
+        // Bu özelliği ya kaldırın ya da şifre alanını arama kriterlerinden çıkarın.
+        if (StringUtils.hasText(query.getPassword())) {
+            // Uyarı loglayabilir veya istemciye bilgi verebilirsiniz.
+            System.out.println("UYARI: Şifreye göre arama, güvenlik nedeniyle desteklenmemektedir.");
+            query.setPassword(null); // Şifre filtresini devre dışı bırak
+        }
+
         Specification<User> spec = Specification
                 .where(UserSpecifications.hasId(query.getId()))
                 .and(UserSpecifications.hasFirstName(query.getFirstName()))
                 .and(UserSpecifications.hasLastName(query.getLastName()))
                 .and(UserSpecifications.hasEmail(query.getEmail()))
                 .and(UserSpecifications.hasPhone(query.getPhone()))
-                .and(UserSpecifications.hasPassword(query.getPassword()))
+                .and(UserSpecifications.hasPassword(query.getPassword())) // Artık null veya etkisiz olacak
                 .and(UserSpecifications.hasRole(query.getRole()))
                 .and(UserSpecifications.hasRoleId(query.getRoleId()))
                 .and(UserSpecifications.hasRoleType(query.getRoleType()));
-
 
         return userRepository.findAll(spec);
     }
