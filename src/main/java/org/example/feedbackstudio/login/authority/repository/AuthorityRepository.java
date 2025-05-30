@@ -13,6 +13,7 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long>, Jpa
     void deleteAllByOrganizationId(Long organizationId);
     void deleteAllByPdfInfoId(Long pdfInfoId);
     List<Authority> findAllByPdfInfoId(Long pdfInfoId);
+    List<Authority> findAllByHomeworkId(Long pdfInfoId);
 
     @Query(value = """
     SELECT a.*

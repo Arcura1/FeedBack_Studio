@@ -6,13 +6,16 @@ import org.example.feedbackstudio.homework.service.Specification.HomeworkSpecifi
 import org.example.feedbackstudio.login.authority.authorityenum.AuthorityType;
 import org.example.feedbackstudio.login.authority.authorityenum.EffectTypeEnum;
 import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
 import org.example.feedbackstudio.login.authority.service.AuthorityService;
+import org.example.feedbackstudio.login.role.repository.RoleAuthorityRepository;
 import org.example.feedbackstudio.login.user.service.UserService;
 import org.example.feedbackstudio.homework.model.HomeworkModel;
 import org.example.feedbackstudio.homework.model.HomeworkQueryModel;
 import org.example.feedbackstudio.homework.entitiy.HomeworkEntity;
 import org.example.feedbackstudio.homework.repository.HomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.example.feedbackstudio.classroom.service.ClassroomUserService;
 import org.example.feedbackstudio.classroom.entitiy.ClassroomUserEntity;
@@ -21,14 +24,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HomeworkServiceImpl implements HomeworkService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
-
+    @Autowired
+    private RoleAuthorityRepository roleAuthorityRepository;
     @Autowired
     private HomeworkRepository homeworkRepository;
     @Autowired
@@ -158,6 +165,20 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public void deleteHomework(Long id) {
+
+
+        List<Authority> authorities = authorityRepository.findAllByHomeworkId(id);
+        if (!authorities.isEmpty()) {
+            List<Long> authorityIds = authorities.stream()
+                    .map(Authority::getId)
+                    .collect(Collectors.toList());
+
+            // Tüm role-authority ilişkilerini sil
+            roleAuthorityRepository.deleteAllByAuthorityIdIn(authorityIds);
+
+            // Authority’leri sil
+            authorityRepository.deleteAll(authorities);
+        }
         HomeworkEntity homeworkEntityOptional=null;
         homeworkEntityOptional= homeworkRepository.findById(id).get();
 

@@ -143,7 +143,6 @@ public class PdfInfoController {
     public ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
 
         List<Authority> authorities = authorityRepository.findAllByPdfInfoId(id);
-
         if (!authorities.isEmpty()) {
             List<Long> authorityIds = authorities.stream()
                     .map(Authority::getId)
