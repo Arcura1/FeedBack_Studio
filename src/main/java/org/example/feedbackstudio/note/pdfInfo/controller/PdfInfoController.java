@@ -1,10 +1,15 @@
 package org.example.feedbackstudio.note.pdfInfo.controller;
 
+import org.example.feedbackstudio.login.authority.entity.Authority;
+import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
+import org.example.feedbackstudio.login.role.repository.RoleAuthorityRepository;
 import org.example.feedbackstudio.note.pdfInfo.model.PdfInfoModel;
 import org.example.feedbackstudio.note.Model.PdfShowQueryModel;
 import org.example.feedbackstudio.note.Model.PdfUploadQueryModel;
 import org.example.feedbackstudio.note.pdfInfo.entitiy.PdfInfoEntity;
 import org.example.feedbackstudio.homework.repository.HomeworkRepository;
+import org.example.feedbackstudio.note.repository.NoteRepository;
+import org.example.feedbackstudio.note.service.HighlightService;
 import org.example.feedbackstudio.note.service.NoteService;
 import org.example.feedbackstudio.note.pdfInfo.service.PdfInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,18 @@ public class PdfInfoController {
 
     @Autowired
     private HomeworkRepository homeworkRepository;
+
+    @Autowired
+    private NoteRepository noteRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private RoleAuthorityRepository roleAuthorityRepository;
+
+    @Autowired
+    private HighlightService highlightService;
 
     @Autowired
     org.example.feedbackstudio.MessageSender messageSender;
@@ -123,6 +140,13 @@ public class PdfInfoController {
     // --- DELETE ---
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
+        List<Authority>temp=authorityRepository.findAllByPdfInfoId(id);
+        temp.stream().forEach(authority -> {
+            roleAuthorityRepository.deleteAllByAuthorityId(authority.getId());
+        });
+        authorityRepository.deleteAllByPdfInfoId(id);
+        noteService.delByPdfinfo(id);
+        highlightService.deleteHighlightByPd(id);
         pdfInfoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

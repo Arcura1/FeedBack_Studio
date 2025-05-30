@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface RoleAuthorityRepository extends JpaRepository<roleAuthorityEntitiy, Long>, JpaSpecificationExecutor<roleEntity> {
+    void deleteAllByAuthorityId(Long authorityId);
 }

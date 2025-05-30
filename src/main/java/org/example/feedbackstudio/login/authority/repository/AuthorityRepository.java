@@ -11,6 +11,8 @@ import java.util.List;
 public interface AuthorityRepository extends JpaRepository<Authority, Long>, JpaSpecificationExecutor<Authority> {
     void deleteAllByClassroomId(Long classroomId);
     void deleteAllByOrganizationId(Long organizationId);
+    void deleteAllByPdfInfoId(Long pdfInfoId);
+    List<Authority> findAllByPdfInfoId(Long pdfInfoId);
 
     @Query(value = """
     SELECT a.*
