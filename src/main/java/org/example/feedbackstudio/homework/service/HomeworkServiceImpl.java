@@ -118,16 +118,6 @@ public class HomeworkServiceImpl implements HomeworkService {
 
         homeworkRepository.save(HomeworkEntity);
         File folder = new File("src/main/resources/static/"+HomeworkEntity.getId());
-
-        // Klasör oluştur
-        if (!folder.exists()) {
-            boolean created = folder.mkdir(); // mkdir() tek bir klasör oluşturur
-            if (created) {
-                HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
-                return result;
-            }
-        }
-
         for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
             Authority temp=new Authority();
             temp.setHomework(HomeworkEntity);
@@ -138,6 +128,16 @@ public class HomeworkServiceImpl implements HomeworkService {
             temp.setEffectTypeEnum(roleType);
             authorityService.saveAuthority(temp);
         }
+        // Klasör oluştur
+        if (!folder.exists()) {
+            boolean created = folder.mkdir(); // mkdir() tek bir klasör oluşturur
+            if (created) {
+                HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
+                return result;
+            }
+        }
+
+
         HomeworkModel result =HomeworkConverter.convertToModel(HomeworkEntity);
         return result;
     }
