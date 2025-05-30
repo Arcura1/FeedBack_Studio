@@ -4,6 +4,7 @@ import org.example.feedbackstudio.login.authority.entity.Authority;
 import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryDTO;
 import org.example.feedbackstudio.login.authority.model.query.AuthorityQueryModel;
 import org.example.feedbackstudio.login.authority.service.AuthorityService;
+import org.example.feedbackstudio.login.user.dao.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class AuthorityController {
 
     private final AuthorityService authorityService;
+    private final UserRepository userRepository;
 
-    public AuthorityController(AuthorityService authorityService) {
+    public AuthorityController(AuthorityService authorityService, UserRepository userRepository) {
         this.authorityService = authorityService;
+        this.userRepository = userRepository;
     }
 
     // 📌 Create - Yeni Yetki Ekleme
@@ -45,7 +48,8 @@ public class AuthorityController {
 
     @GetMapping("/getByRole/{id}")
     public ResponseEntity<List<Authority>> getAuthoritiesByRoleId(@PathVariable Long id) {
-        List<Authority> authorities = authorityService.getAuthByRole(id);
+
+        List<Authority> authorities = authorityService.getAuthByRole(userRepository.findById(id).get().getRoleId());
         if (authorities.isEmpty()) {
             return ResponseEntity.noContent().build(); // 204
         }
