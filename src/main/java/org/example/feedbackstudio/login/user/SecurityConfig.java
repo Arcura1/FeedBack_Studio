@@ -110,6 +110,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/pdf/uploadPdf").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/pdf/pdfById").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/pdf/pdfById").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/pdf/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/viewAll/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/highlights/viewH/**").permitAll()
