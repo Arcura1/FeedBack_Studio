@@ -57,6 +57,13 @@ public class organizationRestController {
                 temp.setName(roleTypeEnum.name()+" "+savedOrganization.getName());
                 temp.setDescription(roleTypeEnum.name());
                 this.roleService.saveRole(temp);
+                if(temp.getRoleTypeEnum()==RoleTypeEnum.EXECUTIVE){
+                    User executive = new User();
+                    executive = userRepository.findById(savedOrganization.getId()).get();
+                    executive.setRoleId(temp.getId());
+                    executive.setRoleEntity(temp);
+                    userRepository.save(executive);
+                }
         }
         for (EffectTypeEnum roleType : EffectTypeEnum.values()) {
             Authority temp=new Authority();
@@ -67,11 +74,9 @@ public class organizationRestController {
             temp.setName(savedOrganization.getName().toLowerCase()+" "+roleType.toString());
             temp.setEffectTypeEnum(roleType);
             authorityService.saveAuthority(temp);
-        }
-        User executive = new User();
-        executive = userRepository.findById(savedOrganization.getId()).get();
 
-        executive.getRole();
+        }
+
         return ResponseEntity.ok(savedOrganization);
     }
 
