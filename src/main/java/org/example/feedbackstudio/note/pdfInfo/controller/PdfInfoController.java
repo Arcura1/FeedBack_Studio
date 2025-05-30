@@ -1,5 +1,6 @@
 package org.example.feedbackstudio.note.pdfInfo.controller;
 
+import jakarta.transaction.Transactional;
 import org.example.feedbackstudio.login.authority.entity.Authority;
 import org.example.feedbackstudio.login.authority.repository.AuthorityRepository;
 import org.example.feedbackstudio.login.role.repository.RoleAuthorityRepository;
@@ -27,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pdf")
@@ -136,21 +138,35 @@ public class PdfInfoController {
         pdfInfoModel.setSetId(pdfInfoService.add(queryModel));
         return new ResponseEntity<>(pdfInfoModel,HttpStatus.OK);
     }
-
-    // --- DELETE ---
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClassroom(@PathVariable Long id) {
-        List<Authority>temp=authorityRepository.findAllByPdfInfoId(id);
-        temp.stream().forEach(authority -> {
-            roleAuthorityRepository.deleteAllByAuthorityId(authority.getId());
-        });
-        authorityRepository.deleteAllByPdfInfoId(id);
+
+        List<Authority> authorities = authorityRepository.findAllByPdfInfoId(id);
+
+        if (!authorities.isEmpty()) {
+            List<Long> authorityIds = authorities.stream()
+                    .map(Authority::getId)
+                    .collect(Collectors.toList());
+
+            // Tüm role-authority ilişkilerini sil
+            roleAuthorityRepository.deleteAllByAuthorityIdIn(authorityIds);
+
+            // Authority’leri sil
+            authorityRepository.deleteAll(authorities);
+        }
+
+        // Notları sil
         noteService.delByPdfinfo(id);
+
+        // Highlight'ları sil
         highlightService.deleteHighlightByPd(id);
+
+        // PdfInfo’yu sil
         pdfInfoService.deleteById(id);
+
         return ResponseEntity.noContent().build();
     }
-
 
     @CrossOrigin(origins = "*")
     @PostMapping("/uploadPdf")

@@ -5,6 +5,9 @@ import org.example.feedbackstudio.login.role.entity.roleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Collection;
+
 public interface RoleAuthorityRepository extends JpaRepository<roleAuthorityEntitiy, Long>, JpaSpecificationExecutor<roleEntity> {
     void deleteAllByAuthorityId(Long authorityId);
+    void deleteAllByAuthorityIdIn(Collection<Long> authorityIds);
 }
